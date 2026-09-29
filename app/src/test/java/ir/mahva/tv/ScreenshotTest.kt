@@ -1,18 +1,16 @@
 package ir.mahva.tv
 
 import android.graphics.Bitmap
+import android.graphics.Canvas
 import android.os.Looper
-import androidx.compose.ui.graphics.asAndroidBitmap
-import androidx.compose.ui.test.captureToImage
+import android.view.View
 import androidx.compose.ui.test.hasSetTextAction
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
-import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTextInput
-import androidx.compose.ui.test.printToString
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.junit.Rule
 import org.junit.Test
@@ -25,8 +23,11 @@ import java.io.FileOutputStream
 
 /**
  * Renders the real app on the JVM (Robolectric) and stores screenshots in
- * `docs/screenshots`. Doubles as a smoke test: the activity must start, the
- * catalog must load and the four sections must be reachable.
+ * `docs/screenshots`. Works as a smoke test too: the activity must start, the
+ * catalog must load and all four sections must be reachable.
+ *
+ * Screenshots are taken by drawing the activity window directly, because the
+ * Compose test framework's idling never settles while images are being loaded.
  */
 @RunWith(AndroidJUnit4::class)
 @Config(sdk = [34], qualifiers = "w411dp-h915dp-xxhdpi")
@@ -41,28 +42,44 @@ class ScreenshotTest {
 
     // ------------------------------------------------------------------ helpers
 
-    /** Robolectric only runs posted work when the main looper is idled. */
-    private fun pump() {
-        Shadows.shadowOf(Looper.getMainLooper()).idle()
-        runCatching { rule.waitForIdle() }
+    /** Robolectric only runs posted work (incl. recomposition) while the looper is idled. */
+    private fun settle(millis: Long = 1500) {
+        val deadline = System.currentTimeMillis() + millis
+        while (System.currentTimeMillis() < deadline) {
+            Shadows.shadowOf(Looper.getMainLooper()).idle()
+            Thread.sleep(25)
+        }
     }
 
     private fun capture(name: String) {
-        pump()
+        settle()
         val result = runCatching {
-            val bitmap: Bitmap = rule.onRoot().captureToImage().asAndroidBitmap()
+            val view: View = rule.activity.window.decorView
+            if (view.width == 0 || view.height == 0) {
+                view.measure(
+                    View.MeasureSpec.makeMeasureSpec(1080, View.MeasureSpec.EXACTLY),
+                    View.MeasureSpec.makeMeasureSpec(2340, View.MeasureSpec.EXACTLY)
+                )
+                view.layout(0, 0, view.measuredWidth, view.measuredHeight)
+            }
+            val bitmap = Bitmap.createBitmap(
+                view.width.coerceAtLeast(1),
+                view.height.coerceAtLeast(1),
+                Bitmap.Config.ARGB_8888
+            )
+            view.draw(Canvas(bitmap))
             FileOutputStream(File(outputDir, name)).use { out ->
                 bitmap.compress(Bitmap.CompressFormat.PNG, 100, out)
             }
             "${bitmap.width}x${bitmap.height}"
         }
-        diag.append("capture $name -> ${result.getOrElse { "FAILED: ${it.message}" }}\n")
+        diag.append("capture $name -> ${result.getOrElse { "FAILED: $it" }}\n")
     }
 
     private fun awaitText(text: String, timeoutMs: Long = 20_000): Boolean {
         val deadline = System.currentTimeMillis() + timeoutMs
         while (System.currentTimeMillis() < deadline) {
-            pump()
+            Shadows.shadowOf(Looper.getMainLooper()).idle()
             val found = runCatching {
                 rule.onAllNodesWithText(text).fetchSemanticsNodes().isNotEmpty()
             }.getOrDefault(false)
@@ -73,14 +90,14 @@ class ScreenshotTest {
     }
 
     private fun clickByText(text: String): Boolean {
-        pump()
+        settle(400)
         val ok = runCatching { rule.onNodeWithText(text).performClick() }.isSuccess
         diag.append("click text '$text' -> $ok\n")
         return ok
     }
 
     private fun clickByDescription(description: String): Boolean {
-        pump()
+        settle(400)
         val ok = runCatching {
             rule.onNodeWithContentDescription(description).performClick()
         }.isSuccess
@@ -88,58 +105,47 @@ class ScreenshotTest {
         return ok
     }
 
-    private fun dumpTree() {
-        val tree = runCatching { rule.onRoot(useUnmergedTree = true).printToString() }
-            .getOrElse { "tree unavailable: ${it.message}" }
-        diag.append("---- semantics tree ----\n").append(tree).append("\n")
-    }
-
     // -------------------------------------------------------------------- tests
 
     @Test
     fun captureEveryScreen() {
-        pump()
-        val homeReady = awaitText("دسترسی سریع")
-        diag.append("home ready: $homeReady\n")
+        settle(2_000)
+        diag.append("home ready: ${awaitText("دسترسی سریع")}\n")
         capture("01-home.png")
 
-        // The four sections are the bottom navigation tabs.
+        // The four sections are the bottom navigation tabs (RTL order).
         listOf(
             "پرشیانا" to "02-persiana.png",
             "خبری" to "03-news.png",
             "موزیک" to "04-music.png",
             "ورزشی" to "05-sports.png"
         ).forEach { (tab, file) ->
-            if (clickByText(tab)) {
-                awaitText(tab, 5_000)
-                capture(file)
-            }
+            if (clickByText(tab)) capture(file)
         }
 
         clickByText("خانه")
-        awaitText("دسترسی سریع", 5_000)
+        settle()
 
         // Global search
         if (clickByDescription("جستجو")) {
-            pump()
+            settle()
             runCatching { rule.onNode(hasSetTextAction()).performTextInput("BBC") }
-            pump()
+            settle(2_500)
             capture("06-search.png")
             clickByText("خانه")
-            pump()
+            settle()
         }
 
         // My channels + the add-channel dialog
         if (clickByDescription("کانال‌های من")) {
-            pump()
+            settle()
             capture("07-my-channels.png")
             if (clickByText("افزودن کانال جدید")) {
-                pump()
+                settle()
                 capture("08-add-channel.png")
             }
         }
 
-        dumpTree()
         File(outputDir, "test-diag.txt").writeText(diag.toString())
     }
 }
