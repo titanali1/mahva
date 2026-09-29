@@ -1,0 +1,27 @@
+# renders & working files
+out/
+work/
+*.mp4
+*.m4a
+*.mov
+!examples/**/*.mp4
+
+# python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+env/
+*.egg-info/
+build/
+dist/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# os / editors
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp

@@ -1,0 +1,15 @@
+# --- core -------------------------------------------------------------------
+pillow>=10.0
+arabic-reshaper>=3.0
+python-bidi>=0.4.2
+
+# --- ffmpeg (bundled binary, no system install needed) ----------------------
+imageio-ffmpeg>=0.4.9
+
+# --- web UI (optional, only needed for `mahva serve`) -----------------------
+fastapi>=0.110
+uvicorn[standard]>=0.27
+python-multipart>=0.0.9
+
+# --- free neural voice-over (optional) --------------------------------------
+edge-tts>=6.1.9

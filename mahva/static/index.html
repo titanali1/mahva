@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>مهوا — ساخت ویدیو از متن و تصویر</title>
+<link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+<header class="topbar">
+  <div class="brand">
+    <div class="logo">مهوا</div>
+    <div class="tagline">ساخت ویدیوی طولانی از متن و تصویر — بدون هزینهٔ API</div>
+  </div>
+  <div class="chips" id="status-chips"></div>
+</header>
+
+<main class="layout">
+  <!-- editor -->
+  <section class="panel editor">
+    <div class="panel-head">
+      <h2>۱. متن سِناوریو</h2>
+      <div class="panel-actions">
+        <button class="btn ghost" id="btn-sample">متن نمونه</button>
+        <select id="example-select" class="select small"><option value="">نمونه‌های آماده…</option></select>
+        <button class="btn ghost" id="btn-insert-scene">افزودن صحنه</button>
+      </div>
+    </div>
+    <textarea id="script" spellcheck="false" placeholder="متن خود را اینجا بنویسید…"></textarea>
+    <div class="editor-hint">
+      <code>#</code> عنوان کل ویدیو · <code>##</code> صحنهٔ جدید · <code>@image نام-فایل.jpg</code> تصویر صحنه ·
+      <code>@duration 8</code> مدت صحنه · <code>- </code> فهرست‌های نقطه‌ای
+    </div>
+
+    <div class="dropzone" id="dropzone">
+      <input type="file" id="file-input" accept="image/*" multiple hidden>
+      <div class="dz-text">تصاویر را اینجا رها کنید یا کلیک کنید (jpg / png / webp)</div>
+      <ul class="file-list" id="file-list"></ul>
+    </div>
+
+    <div class="row">
+      <label class="file-label">
+        <input type="file" id="music-input" accept="audio/*" hidden>
+        <span class="btn ghost">🎵 موسیقی پس‌زمینه</span>
+      </label>
+      <span id="music-name" class="muted">انتخاب نشده</span>
+    </div>
+
+    <div class="stats" id="stats"></div>
+    <div class="previews" id="previews"></div>
+  </section>
+
+  <!-- settings -->
+  <section class="panel settings">
+    <div class="panel-head"><h2>۲. تنظیمات</h2></div>
+
+    <div class="field-grid">
+      <label>قاب
+        <select id="preset-size" class="select"></select>
+      </label>
+      <label>کیفیت
+        <select id="quality" class="select">
+          <option value="fast">سریع (حجم کم)</option>
+          <option value="balanced" selected>متعادل</option>
+          <option value="high">کیفیت بالا</option>
+        </select>
+      </label>
+      <label>تم رنگی
+        <select id="theme" class="select"></select>
+      </label>
+      <label>فونت
+        <select id="font" class="select"></select>
+      </label>
+      <label>ترنزیشن
+        <select id="transition" class="select"></select>
+      </label>
+      <label>مدت ترنزیشن (ثانیه)
+        <input type="number" id="transition-duration" class="input" value="0.6" min="0" max="2" step="0.1">
+      </label>
+      <label>حرکت تصویر (Ken Burns)
+        <select id="kenburns" class="select">
+          <option value="auto">خودکار</option>
+          <option value="in">زوم به داخل</option>
+          <option value="out">زوم به بیرون</option>
+          <option value="pan-right">پن راست</option>
+          <option value="pan-left">پن چپ</option>
+          <option value="none">بدون حرکت</option>
+        </select>
+      </label>
+      <label>فریم بر ثانیه
+        <select id="fps" class="select">
+          <option value="24">۲۴</option>
+          <option value="30" selected>۳۰</option>
+          <option value="60">۶۰</option>
+        </select>
+      </label>
+    </div>
+
+    <details class="group" open>
+      <summary>صداگذاری</summary>
+      <div class="field-grid">
+        <label>موتور صدا
+          <select id="voice-engine" class="select"></select>
+        </label>
+        <label>صدا
+          <select id="voice" class="select"></select>
+        </label>
+        <label>سرعت گفتار
+          <select id="rate" class="select">
+            <option value="-15%">کند (−۱۵٪)</option>
+            <option value="+0%" selected>معمولی</option>
+            <option value="+10%">تند (+۱۰٪)</option>
+            <option value="+25%">خیلی تند (+۲۵٪)</option>
+          </select>
+        </label>
+        <label>بلندی صدا
+          <input type="number" id="voice-volume" class="input" value="1" min="0" max="2" step="0.05">
+        </label>
+        <label>بلندی موسیقی
+          <input type="number" id="music-volume" class="input" value="0.07" min="0" max="1" step="0.01">
+        </label>
+        <label>سکوت ابتدا/انتهای صحنه
+          <input type="number" id="scene-pad" class="input" value="0.65" min="0" max="5" step="0.05">
+        </label>
+      </div>
+      <label class="check"><input type="checkbox" id="no-voice"> بدون صدا (فقط متن و تصویر)</label>
+    </details>
+
+    <details class="group">
+      <summary>تنظیمات پیشرفته</summary>
+      <div class="field-grid">
+        <label>کوتاه‌ترین مدت صحنه
+          <input type="number" id="min-scene" class="input" value="3" min="0.5" step="0.5">
+        </label>
+        <label>بلندترین مدت صحنه
+          <input type="number" id="max-scene" class="input" value="120" min="3" step="1">
+        </label>
+        <label>نام فایل خروجی
+          <input type="text" id="out-name" class="input" value="video.mp4">
+        </label>
+        <label>زبان متن
+          <select id="language" class="select">
+            <option value="fa" selected>فارسی</option>
+            <option value="en">انگلیسی</option>
+            <option value="ar">عربی</option>
+          </select>
+        </label>
+      </div>
+      <label class="check"><input type="checkbox" id="force"> رندر از ابتدا (نادیده گرفتن حافظهٔ موقت)</label>
+      <label class="check"><input type="checkbox" id="preview-mode"> رندر آزمایشی سریع (کیفیت پایین)</label>
+    </details>
+
+    <div class="render-box">
+      <button class="btn primary wide" id="btn-render">🎬 ساخت ویدیو</button>
+      <button class="btn ghost wide" id="btn-cancel" style="display:none">لغو</button>
+      <div class="progress"><div class="bar" id="bar"></div></div>
+      <div class="progress-label" id="progress-label">آماده</div>
+    </div>
+
+    <details class="group log-group">
+      <summary>گزارش اجرا</summary>
+      <pre class="log" id="log"></pre>
+    </details>
+
+    <div class="result" id="result" hidden>
+      <video id="video" controls playsinline></video>
+      <div class="row">
+        <a class="btn ghost" id="download" download>⬇️ دانلود ویدیو</a>
+        <span class="muted" id="result-info"></span>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="footer">
+  مهوا · اوپن‌سورس و آفلاین — ffmpeg + Pillow + صدای رایگان. متن و تصاویر شما جایی آپلود نمی‌شود.
+</footer>
+
+<script src="/static/app.js"></script>
+</body>
+</html>
