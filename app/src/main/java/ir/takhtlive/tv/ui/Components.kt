@@ -34,7 +34,6 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.LanguageRange
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -361,6 +360,3 @@ fun SignatureFooter(
 fun parseColor(hex: String, fallback: Color): Color = runCatching {
     Color(android.graphics.Color.parseColor(hex))
 }.getOrElse { fallback }
-
-/** BCP-47 language range of the current interface language (for text rendering). */
-fun languageRangeOf(code: String): LanguageRange = LanguageRange(code)

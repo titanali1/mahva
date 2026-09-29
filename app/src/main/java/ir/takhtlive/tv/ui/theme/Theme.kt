@@ -105,7 +105,7 @@ private val TakhtTypography = Typography(
 
 /** Resolves the theme mode into an actual light/dark decision. */
 @Composable
-fun TakhtThemeMode.resolveIsDark(): Boolean = when (this) {
+fun AppThemeMode.resolveIsDark(): Boolean = when (this) {
     AppThemeMode.DARK -> true
     AppThemeMode.LIGHT -> false
     AppThemeMode.SYSTEM -> isSystemInDarkTheme()
