@@ -1,0 +1,47 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "mahva"
+version = "1.0.0"
+description = "Build long videos from text + images with zero API cost (ffmpeg + Pillow + free TTS)"
+readme = "README.md"
+requires-python = ">=3.9"
+license = { text = "MIT" }
+authors = [{ name = "Mahva contributors" }]
+keywords = ["video", "ffmpeg", "persian", "rtl", "text-to-video", "ken-burns", "tts", "free"]
+classifiers = [
+  "Programming Language :: Python :: 3",
+  "License :: OSI Approved :: MIT License",
+  "Topic :: Multimedia :: Video",
+  "Natural Language :: Persian",
+]
+dependencies = [
+  "pillow>=10.0",
+  "arabic-reshaper>=3.0",
+  "python-bidi>=0.4.2",
+  "imageio-ffmpeg>=0.4.9",
+]
+
+[project.optional-dependencies]
+web = ["fastapi>=0.110", "uvicorn[standard]>=0.27", "python-multipart>=0.0.9"]
+voice = ["edge-tts>=6.1.9"]
+dev = ["pytest>=7.4", "requests>=2.31"]
+
+[project.scripts]
+mahva = "mahva.cli:main"
+
+[project.urls]
+Homepage = "https://github.com/titanali1/mahva"
+
+[tool.setuptools]
+packages = ["mahva"]
+
+[tool.setuptools.package-data]
+mahva = ["static/*", "static/fonts/*"]
+
+[tool.pytest.ini_options]
+markers = ["slow: renders a real video through ffmpeg"]
+testpaths = ["tests"]
+addopts = "-q"
