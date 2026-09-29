@@ -1,20 +1,18 @@
 home ready: true
-capture 01-home.png -> FAILED: Condition still not satisfied after 2000 ms
+capture 01-home.png -> 1233x2745
 click text 'پرشیانا' -> true
-capture 02-persiana.png -> FAILED: Condition still not satisfied after 2000 ms
+capture 02-persiana.png -> 1233x2745
 click text 'خبری' -> true
-capture 03-news.png -> FAILED: Condition still not satisfied after 2000 ms
+capture 03-news.png -> 1233x2745
 click text 'موزیک' -> true
-capture 04-music.png -> FAILED: Condition still not satisfied after 2000 ms
+capture 04-music.png -> 1233x2745
 click text 'ورزشی' -> true
-capture 05-sports.png -> FAILED: Condition still not satisfied after 2000 ms
+capture 05-sports.png -> 1233x2745
 click text 'خانه' -> true
 click desc 'جستجو' -> true
-capture 06-search.png -> FAILED: Condition still not satisfied after 2000 ms
+capture 06-search.png -> 1233x2745
 click text 'خانه' -> true
 click desc 'کانال‌های من' -> true
-capture 07-my-channels.png -> FAILED: Condition still not satisfied after 2000 ms
+capture 07-my-channels.png -> 1233x2745
 click text 'افزودن کانال جدید' -> true
-capture 08-add-channel.png -> FAILED: Compose did not get idle after 124481 attempts in 60 SECONDS. Please check your measure/layout lambdas, they may be causing an infinite composition loop. Or set Espresso's master idling policy if you require a longer timeout. The following Idle Conditions failed .
----- semantics tree ----
-tree unavailable: Compose did not get idle after 123219 attempts in 60 SECONDS. Please check your measure/layout lambdas, they may be causing an infinite composition loop. Or set Espresso's master idling policy if you require a longer timeout. The following Idle Conditions failed .
+capture 08-add-channel.png -> 1233x2745
