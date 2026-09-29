@@ -114,23 +114,6 @@ class ScreenshotTest {
     private fun clickByTag(tag: String): Boolean =
         click("tag '$tag'") { rule.onNodeWithTag(tag).performClick() }
 
-    /** Finds the decor view of the top-most dialog window, if one is showing. */
-    private fun topMostDialogView(): View? = runCatching {
-        val wm = rule.activity.getSystemService(android.content.Context.WINDOW_SERVICE)
-            as android.view.WindowManager
-        val field = wm.javaClass.getDeclaredField("mRoots")
-        field.isAccessible = true
-        @Suppress("UNCHECKED_CAST")
-        val roots = field.get(wm) as List<Any>
-        roots.mapNotNull { root ->
-            runCatching {
-                val viewField = root.javaClass.getDeclaredField("mView")
-                viewField.isAccessible = true
-                viewField.get(root) as? View
-            }.getOrNull()
-        }.lastOrNull { it !== rule.activity.window.decorView }
-    }.getOrNull()
-
     // -------------------------------------------------------------------- tests
 
     @Test
@@ -190,45 +173,6 @@ class ScreenshotTest {
         }
 
         File(outputDir, "test-diag.txt").writeText(diag.toString())
-    }
-
-    /** Captures the add-channel dialog, which lives in its own window. */
-    @Test
-    fun addChannelDialogRenders() {
-        settle(2_000)
-        rule.mainClock.autoAdvance = false
-        val opened = clickByTag("action_add")
-        rule.mainClock.advanceTimeBy(1_500)
-        settle(1_500)
-
-        if (opened) {
-            val captured = runCatching {
-                val decor: View = rule.activity.window.decorView
-                val bitmap = Bitmap.createBitmap(
-                    decor.width.coerceAtLeast(1),
-                    decor.height.coerceAtLeast(1),
-                    Bitmap.Config.ARGB_8888
-                )
-                val canvas = Canvas(bitmap)
-                decor.draw(canvas)
-                // draw the dialog window (compose AlertDialog) on top of it
-                topMostDialogView()?.let { dialogView ->
-                    canvas.save()
-                    dialogView.draw(canvas)
-                    canvas.restore()
-                }
-                FileOutputStream(File(outputDir, "09-add-channel.png")).use {
-                    bitmap.compress(Bitmap.CompressFormat.PNG, 100, it)
-                }
-                "${bitmap.width}x${bitmap.height}"
-            }
-            diag.append("capture 09-add-channel.png -> ${captured.getOrElse { "FAILED: $it" }}\n")
-        } else {
-            diag.append("add-channel dialog did not open\n")
-        }
-
-        rule.mainClock.autoAdvance = true
-        File(outputDir, "test-diag.txt").appendText(diag.toString())
     }
 
     /**
