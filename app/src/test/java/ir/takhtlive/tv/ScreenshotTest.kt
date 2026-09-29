@@ -6,9 +6,10 @@ import android.os.Looper
 import android.view.View
 import androidx.compose.ui.test.hasSetTextAction
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
+import androidx.compose.ui.test.onAllNodesWithContentDescription
 import androidx.compose.ui.test.onAllNodesWithText
-import androidx.compose.ui.test.onNodeWithContentDescription
-import androidx.compose.ui.test.onNodeWithText
+import androidx.compose.ui.test.onFirst
+import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTextInput
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -95,21 +96,23 @@ class ScreenshotTest {
         return false
     }
 
-    private fun clickByText(text: String): Boolean {
-        settle(400)
-        val ok = runCatching { rule.onNodeWithText(text).performClick() }.isSuccess
-        diag.append("click text '$text' -> $ok\n")
-        return ok
+    private fun click(what: String, action: () -> Unit): Boolean {
+        settle(500)
+        val result = runCatching(action)
+        diag.append("click $what -> ${if (result.isSuccess) "ok" else "FAILED: ${result.exceptionOrNull()?.message?.take(180)}"}\n")
+        return result.isSuccess
     }
 
-    private fun clickByDescription(description: String): Boolean {
-        settle(400)
-        val ok = runCatching {
-            rule.onNodeWithContentDescription(description).performClick()
-        }.isSuccess
-        diag.append("click desc '$description' -> $ok\n")
-        return ok
-    }
+    private fun clickByText(text: String): Boolean =
+        click("text '$text'") { rule.onAllNodesWithText(text).onFirst().performClick() }
+
+    private fun clickByDescription(description: String): Boolean =
+        click("desc '$description'") {
+            rule.onAllNodesWithContentDescription(description).onFirst().performClick()
+        }
+
+    private fun clickByTag(tag: String): Boolean =
+        click("tag '$tag'") { rule.onNodeWithTag(tag).performClick() }
 
     // -------------------------------------------------------------------- tests
 
@@ -125,21 +128,21 @@ class ScreenshotTest {
 
         // Each of the four sections of the app, reached from the bottom bar.
         listOf(
-            Triple("پرشیانا", "کانال‌های گروه پرشیانا", "02-persiana.png"),
-            Triple("خبری", "شبکه‌های خبری ایران و جهان", "03-news.png"),
-            Triple("موزیک", "کانال‌های موسیقی و کلیپ", "04-music.png"),
-            Triple("ورزشی", "کانال‌های ورزشی و مسابقات زنده", "05-sports.png")
-        ).forEach { (tab, expected, file) ->
-            if (clickByText(tab)) {
+            Triple("tab_persiana", "کانال‌های گروه پرشیانا", "02-persiana.png"),
+            Triple("tab_news", "شبکه‌های خبری ایران و جهان", "03-news.png"),
+            Triple("tab_music", "کانال‌های موسیقی و کلیپ", "04-music.png"),
+            Triple("tab_sports", "کانال‌های ورزشی و مسابقات زنده", "05-sports.png")
+        ).forEach { (tag, expected, file) ->
+            if (clickByTag(tag)) {
                 val ready = awaitText(expected, 15_000)
-                diag.append("section '$tab' ready: $ready\n")
+                diag.append("section '$tag' ready: $ready\n")
                 capture(file)
             }
         }
 
         // Open the first channel of the current section to show the player UI.
         val channelName = "شبکه ورزش"
-        if (clickByText(channelName)) {
+        if (clickByText("شبکه ورزش")) {
             val playerOpen = awaitText(channelName, 15_000)
             diag.append("player open: $playerOpen\n")
             settle(1_500)
@@ -148,11 +151,11 @@ class ScreenshotTest {
             settle()
         }
 
-        clickByText("خانه")
+        clickByTag("tab_home")
         awaitText("دسترسی سریع", 10_000)
 
         // Global search
-        if (clickByDescription("جستجو")) {
+        if (clickByTag("action_search")) {
             settle()
             awaitText("نام کانال را بنویسید…", 10_000)
             runCatching { rule.onNode(hasSetTextAction()).performTextInput("BBC") }
@@ -165,7 +168,7 @@ class ScreenshotTest {
         }
 
         // My channels + the add-channel dialog
-        if (clickByDescription("کانال‌های من")) {
+        if (clickByTag("action_library")) {
             settle()
             awaitText("کانال‌های من", 10_000)
             capture("08-my-channels.png")
@@ -177,17 +180,21 @@ class ScreenshotTest {
         }
 
         // The hamburger menu with the language and theme settings
-        if (clickByDescription("منو")) {
+        if (clickByTag("action_menu")) {
             settle(2_500)
             capture("10-drawer.png")
-            // switch to English, then to light theme, and capture both
-            if (clickByText("English")) {
-                settle(2_500)
+            // switch to English, then to the light theme, and capture both
+            if (clickByTag("lang_en")) {
+                settle(3_000)
                 capture("11-english.png")
             }
-            if (clickByText("Light")) {
-                settle(2_500)
+            if (clickByTag("theme_light")) {
+                settle(3_000)
                 capture("12-light-theme.png")
+            }
+            if (clickByTag("lang_ar")) {
+                settle(3_000)
+                capture("13-arabic.png")
             }
         }
 

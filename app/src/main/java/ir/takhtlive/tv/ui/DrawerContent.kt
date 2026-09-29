@@ -38,6 +38,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -145,6 +146,7 @@ fun TakhtDrawerContent(
                 FilterChip(
                     selected = language == entry,
                     onClick = { onLanguageChange(entry) },
+                    modifier = Modifier.testTag("lang_${entry.code}"),
                     label = { Text(entry.label) },
                     leadingIcon = if (language == entry) {
                         { Icon(Icons.Filled.Check, contentDescription = null, Modifier.size(16.dp)) }
@@ -180,6 +182,7 @@ fun TakhtDrawerContent(
                 FilterChip(
                     selected = themeMode == entry,
                     onClick = { onThemeChange(entry) },
+                    modifier = Modifier.testTag("theme_${entry.id}"),
                     label = { Text(themeLabels[entry] ?: entry.id) },
                     leadingIcon = if (themeMode == entry) {
                         { Icon(Icons.Filled.Check, contentDescription = null, Modifier.size(16.dp)) }

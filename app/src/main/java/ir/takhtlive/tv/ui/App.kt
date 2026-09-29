@@ -38,6 +38,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import ir.takhtlive.tv.R
@@ -218,7 +219,10 @@ fun TakhtLiveApp(
                     },
                     navigationIcon = {
                         val strings = LocalAppStrings.current
-                        IconButton(onClick = { scope.launch { drawerState.open() } }) {
+                        IconButton(
+                            onClick = { scope.launch { drawerState.open() } },
+                            modifier = Modifier.testTag(TAG_MENU)
+                        ) {
                             Icon(
                                 imageVector = Icons.Filled.Menu,
                                 contentDescription = strings.menu
@@ -233,13 +237,22 @@ fun TakhtLiveApp(
                             tint = MaterialTheme.colorScheme.primary,
                             modifier = Modifier.padding(end = 6.dp)
                         )
-                        IconButton(onClick = { navigate(Screen.Search) }) {
+                        IconButton(
+                            onClick = { navigate(Screen.Search) },
+                            modifier = Modifier.testTag(TAG_SEARCH)
+                        ) {
                             Icon(Icons.Filled.Search, contentDescription = strings.search)
                         }
-                        IconButton(onClick = { navigate(Screen.Library) }) {
+                        IconButton(
+                            onClick = { navigate(Screen.Library) },
+                            modifier = Modifier.testTag(TAG_LIBRARY)
+                        ) {
                             Icon(Icons.Filled.Favorite, contentDescription = strings.myChannels)
                         }
-                        IconButton(onClick = { showAddDialog = true }) {
+                        IconButton(
+                            onClick = { showAddDialog = true },
+                            modifier = Modifier.testTag(TAG_ADD)
+                        ) {
                             Icon(Icons.Filled.Add, contentDescription = strings.addChannel)
                         }
                     },
@@ -353,6 +366,7 @@ private fun TakhtBottomBar(selected: String, onSelect: (String) -> Unit) {
             NavigationBarItem(
                 selected = selected == item.id,
                 onClick = { onSelect(item.id) },
+                modifier = Modifier.testTag("tab_${item.id}"),
                 icon = {
                     val painter = item.painterRes?.let { painterResource(it) }
                     val imageVector = item.imageVector
@@ -374,6 +388,12 @@ private fun TakhtBottomBar(selected: String, onSelect: (String) -> Unit) {
         }
     }
 }
+
+/** Test tags used by the instrumentation/Robolectric tests. */
+internal const val TAG_MENU = "action_menu"
+internal const val TAG_SEARCH = "action_search"
+internal const val TAG_LIBRARY = "action_library"
+internal const val TAG_ADD = "action_add"
 
 private data class BottomBarItem(
     val id: String,
