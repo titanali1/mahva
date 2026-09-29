@@ -20,6 +20,7 @@ import org.robolectric.annotation.Config
 import org.robolectric.annotation.GraphicsMode
 import java.io.File
 import java.io.FileOutputStream
+import java.time.Duration
 
 /**
  * Renders the real app on the JVM (Robolectric) and stores screenshots in
@@ -42,12 +43,18 @@ class ScreenshotTest {
 
     // ------------------------------------------------------------------ helpers
 
-    /** Robolectric only runs posted work (incl. recomposition) while the looper is idled. */
+    /**
+     * Robolectric only runs posted work while its (virtual) clock is advanced.
+     * Recomposition happens on Choreographer frame callbacks, which are posted a
+     * little into the future, so the clock has to be advanced, not just idled.
+     */
     private fun settle(millis: Long = 1500) {
-        val deadline = System.currentTimeMillis() + millis
-        while (System.currentTimeMillis() < deadline) {
-            Shadows.shadowOf(Looper.getMainLooper()).idle()
-            Thread.sleep(25)
+        val looper = Shadows.shadowOf(Looper.getMainLooper())
+        var remaining = millis
+        while (remaining > 0) {
+            looper.idleFor(Duration.ofMillis(50))
+            Thread.sleep(10)
+            remaining -= 50
         }
     }
 
@@ -79,12 +86,11 @@ class ScreenshotTest {
     private fun awaitText(text: String, timeoutMs: Long = 20_000): Boolean {
         val deadline = System.currentTimeMillis() + timeoutMs
         while (System.currentTimeMillis() < deadline) {
-            Shadows.shadowOf(Looper.getMainLooper()).idle()
+            settle(100)
             val found = runCatching {
                 rule.onAllNodesWithText(text).fetchSemanticsNodes().isNotEmpty()
             }.getOrDefault(false)
             if (found) return true
-            Thread.sleep(50)
         }
         return false
     }
@@ -116,7 +122,6 @@ class ScreenshotTest {
         settle(2_000)
         diag.append("home ready: ${awaitText("دسترسی سریع")}\n")
         capture("01-home.png")
-        capture("01-home.png")
 
         // Each of the four sections of the app, reached from the bottom bar.
         listOf(
@@ -129,14 +134,15 @@ class ScreenshotTest {
                 val ready = awaitText(expected, 15_000)
                 diag.append("section '$tab' ready: $ready\n")
                 capture(file)
-                capture(file)
             }
         }
 
         // Open the first channel of the current section to show the player UI.
         val channelName = "شبکه ورزش"
         if (clickByText(channelName)) {
-            settle(4_000)
+            val playerOpen = awaitText(channelName, 15_000)
+            diag.append("player open: $playerOpen\n")
+            settle(1_500)
             capture("06-player.png")
             clickByDescription("بازگشت")
             settle()
@@ -150,8 +156,7 @@ class ScreenshotTest {
             settle()
             awaitText("نام کانال را بنویسید…", 10_000)
             runCatching { rule.onNode(hasSetTextAction()).performTextInput("BBC") }
-            settle(3_000)
-            capture("07-search.png")
+            settle(2_000)
             capture("07-search.png")
             clickByDescription("بازگشت")
             settle()

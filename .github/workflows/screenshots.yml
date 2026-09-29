@@ -56,7 +56,8 @@ jobs:
           emulator-options: -no-window -no-snapshot -no-boot-anim -gpu swiftshader_indirect
           script: |
             set +e
-            mkdir -p docs/screenshots/emulator
+            mkdir -p docs/screenshots/emulator ci-logs
+            exec > >(tee ci-logs/emulator.log) 2>&1
             adb wait-for-device
             echo "boot completed: $(adb shell getprop sys.boot_completed)"
 
@@ -94,21 +95,36 @@ jobs:
             adb logcat -d | grep -i -E "mahva|AndroidRuntime|ExoPlayer" | tail -40
             ls -la docs/screenshots/emulator
 
-      - name: Commit emulator screenshots
+      - name: Commit emulator screenshots and log
         if: always()
         run: |
           set +e
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          if [ -f ci-logs/emulator.log ]; then
+            tail -c 20000 ci-logs/emulator.log > ci-logs/emulator-tail.log
+            mv ci-logs/emulator-tail.log ci-logs/emulator.log
+            git add -f ci-logs/emulator.log
+            while IFS= read -r line; do
+              case "$line" in
+                *error*|*Error*|*ERROR*|*failed*|*Failed*|*FAILED*)
+                  clean=$(printf '%s' "$line" | tr -d '\r' | sed 's/%/%25/g' | cut -c1-900)
+                  echo "::error::$clean" ;;
+              esac
+            done < ci-logs/emulator.log
+          fi
+
           if [ -d docs/screenshots/emulator ] && [ -n "$(ls -A docs/screenshots/emulator 2>/dev/null)" ]; then
-            git config user.name "github-actions[bot]"
-            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
             git add -f docs/screenshots/emulator
-            git diff --cached --quiet && echo "no changes" && exit 0
-            git commit -m "Update emulator screenshots [skip ci]"
-            for attempt in 1 2 3; do
-              git pull --rebase --autostash origin "${GITHUB_REF_NAME}" && \
-                git push origin "HEAD:${GITHUB_REF_NAME}" && break
-              sleep 5
-            done
           else
             echo "::warning::no emulator screenshots were produced"
           fi
+
+          git diff --cached --quiet && echo "nothing to commit" && exit 0
+          git commit -m "Update emulator run artifacts [skip ci]"
+          for attempt in 1 2 3; do
+            git pull --rebase --autostash origin "${GITHUB_REF_NAME}" && \
+              git push origin "HEAD:${GITHUB_REF_NAME}" && break
+            sleep 5
+          done
