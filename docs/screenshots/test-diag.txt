@@ -30,5 +30,3 @@ click tag 'theme_light' -> ok
 capture 12-light-theme.png -> 1233x2745
 click tag 'lang_ar' -> ok
 capture 13-arabic.png -> 1233x2745
-click tag 'action_add' -> ok
-capture 09-add-channel.png -> 1233x2745
