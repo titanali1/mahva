@@ -1,4 +1,4 @@
-name: Screenshots & smoke test
+name: Emulator smoke test
 
 on:
   workflow_dispatch:
@@ -6,7 +6,7 @@ on:
     branches:
       - 'arena/**'
     paths-ignore:
-      - 'docs/screenshots/**'
+      - 'docs/**'
       - '**.md'
 
 permissions:
@@ -14,7 +14,7 @@ permissions:
 
 jobs:
   emulator:
-    name: Install + launch on emulator, capture screenshots
+    name: Install + launch the APK on an emulator
     runs-on: ubuntu-latest
     timeout-minutes: 60
 
@@ -44,6 +44,8 @@ jobs:
           sudo udevadm trigger --name-match=kvm
 
       - name: Boot emulator, install the app and take screenshots
+        id: emulator
+        continue-on-error: true
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: 34
@@ -54,52 +56,59 @@ jobs:
           emulator-options: -no-window -no-snapshot -no-boot-anim -gpu swiftshader_indirect
           script: |
             set +e
-            mkdir -p docs/screenshots
-            adb install -r app/build/outputs/apk/debug/app-debug.apk
+            mkdir -p docs/screenshots/emulator
+            adb wait-for-device
+            echo "boot completed: $(adb shell getprop sys.boot_completed)"
+
+            if ! adb install -r app/build/outputs/apk/debug/app-debug.apk; then
+              echo "::error::adb install failed"
+              exit 0
+            fi
+
             adb shell am start -n ir.mahva.tv/.MainActivity
             sleep 20
-            adb exec-out screencap -p > docs/screenshots/01-home.png
+            adb exec-out screencap -p > docs/screenshots/emulator/01-home.png
 
-            # Bottom navigation tabs (5 items, RTL: home is right-most)
+            # Bottom navigation tabs (5 items; RTL layout means home is right-most)
             for pair in "756:02-persiana" "540:03-news" "324:04-music" "108:05-sports"; do
               x="${pair%%:*}"; name="${pair##*:}"
               adb shell input tap "$x" 2182
               sleep 8
-              adb exec-out screencap -p > "docs/screenshots/$name.png"
+              adb exec-out screencap -p > "docs/screenshots/emulator/$name.png"
             done
 
-            # Open the first channel card of the current (sports) section
+            # Open the first channel card of the current section (sports)
             adb shell input tap 830 700
-            sleep 14
-            adb exec-out screencap -p > docs/screenshots/06-player.png
+            sleep 15
+            adb exec-out screencap -p > docs/screenshots/emulator/06-player.png
 
             adb shell input keyevent KEYCODE_BACK
             sleep 3
             adb shell input tap 972 2182
             sleep 6
-            adb exec-out screencap -p > docs/screenshots/07-home-again.png
+            adb exec-out screencap -p > docs/screenshots/emulator/07-home-again.png
 
-            echo "--- crash log (if any) ---"
-            adb logcat -d -b crash | tail -40
-            echo "--- app log ---"
-            adb logcat -d | grep -i -E "mahva|AndroidRuntime" | tail -40
-            ls -la docs/screenshots
+            echo "--- crashes ---"
+            adb logcat -d -b crash | tail -30
+            echo "--- mahva log ---"
+            adb logcat -d | grep -i -E "mahva|AndroidRuntime|ExoPlayer" | tail -40
+            ls -la docs/screenshots/emulator
 
-      - name: Upload screenshots
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: mahva-screenshots
-          path: docs/screenshots/*.png
-          if-no-files-found: warn
-          retention-days: 30
-
-      - name: Commit screenshots back to the branch
+      - name: Commit emulator screenshots
         if: always()
         run: |
           set +e
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add -f docs/screenshots
-          git commit -m "Add emulator screenshots [skip ci]"
-          git push
+          if [ -d docs/screenshots/emulator ] && [ -n "$(ls -A docs/screenshots/emulator 2>/dev/null)" ]; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add -f docs/screenshots/emulator
+            git diff --cached --quiet && echo "no changes" && exit 0
+            git commit -m "Update emulator screenshots [skip ci]"
+            for attempt in 1 2 3; do
+              git pull --rebase --autostash origin "${GITHUB_REF_NAME}" && \
+                git push origin "HEAD:${GITHUB_REF_NAME}" && break
+              sleep 5
+            done
+          else
+            echo "::warning::no emulator screenshots were produced"
+          fi

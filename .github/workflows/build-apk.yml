@@ -14,7 +14,7 @@ jobs:
   build:
     name: Build installable APK
     runs-on: ubuntu-latest
-    timeout-minutes: 45
+    timeout-minutes: 60
 
     steps:
       - name: Checkout
@@ -38,6 +38,15 @@ jobs:
           set -o pipefail
           ./gradlew --no-daemon --console=plain --stacktrace :app:assembleDebug 2>&1 | tee build-debug.log
 
+      # Renders the real UI on the JVM (Robolectric) and writes screenshots to
+      # docs/screenshots. Also acts as a smoke test for the whole app.
+      - name: Run unit tests and capture screenshots
+        id: unit_tests
+        continue-on-error: true
+        run: |
+          set -o pipefail
+          ./gradlew --no-daemon --console=plain --stacktrace :app:testDebugUnitTest 2>&1 | tee build-tests.log
+
       - name: Build release APK
         id: build_release
         if: steps.build_debug.outcome == 'success'
@@ -45,25 +54,43 @@ jobs:
           set -o pipefail
           ./gradlew --no-daemon --console=plain --stacktrace :app:assembleRelease 2>&1 | tee build-release.log
 
-      # Compiler errors are surfaced as check-run annotations, which are
-      # readable through the REST API even when the raw logs are not.
-      - name: Report compiler errors
-        if: failure()
+      # Failures are surfaced as check-run annotations, which stay readable even
+      # when the raw job logs are not reachable.
+      - name: Report compiler and test errors
+        if: failure() || steps.unit_tests.outcome == 'failure'
         run: |
           set +e
           cat build-debug.log build-release.log 2>/dev/null \
             | grep -E "^(e:|error:|Execution failed|\* What went wrong:|Caused by:)" \
-            | head -45 > errors.txt
+            | head -30 > errors.txt
+          cat build-tests.log 2>/dev/null \
+            | grep -E "(FAILED|AssertionError|Exception|expected:|error:|at ir\.mahva\.tv)" \
+            | head -30 >> errors.txt
           if [ ! -s errors.txt ]; then
-            tail -c 4000 build-debug.log 2>/dev/null | head -45 > errors.txt
+            tail -c 3000 build-debug.log 2>/dev/null >> errors.txt
           fi
           while IFS= read -r line; do
             clean=$(printf '%s' "$line" | tr -d '\r' | sed 's/%/%25/g' | cut -c1-900)
             echo "::error::$clean"
           done < errors.txt
 
+      - name: Commit screenshots back to the branch
+        if: always()
+        run: |
+          set +e
+          ls -la docs/screenshots || true
+          if [ -d docs/screenshots ] && [ -n "$(ls -A docs/screenshots 2>/dev/null)" ]; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add -f docs/screenshots
+            git diff --cached --quiet && echo "no screenshot changes" && exit 0
+            git commit -m "Update app screenshots [skip ci]"
+            git pull --rebase --autostash origin "${GITHUB_REF_NAME}" || true
+            git push origin "HEAD:${GITHUB_REF_NAME}"
+          fi
+
       - name: Collect APKs
-        if: success()
+        if: steps.build_debug.outcome == 'success'
         run: |
           mkdir -p out
           cp app/build/outputs/apk/debug/app-debug.apk "out/mahva-tv-debug.apk"
@@ -71,7 +98,7 @@ jobs:
           ls -lh out
 
       - name: Upload APK artifacts
-        if: success()
+        if: steps.build_debug.outcome == 'success'
         uses: actions/upload-artifact@v4
         with:
           name: mahva-tv-apk
