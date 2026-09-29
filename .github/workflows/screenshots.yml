@@ -37,63 +37,143 @@ jobs:
           chmod +x ./gradlew
           ./gradlew --no-daemon --console=plain :app:assembleDebug
 
-      - name: Set up Android SDK
-        uses: android-actions/setup-android@v3
-
       - name: Enable KVM
         run: |
+          sudo mkdir -p /etc/udev/rules.d
           echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' \
             | sudo tee /etc/udev/rules.d/99-kvm4all.rules
-          sudo udevadm control --reload-rules
-          sudo udevadm trigger --name-match=kvm
+          sudo udevadm control --reload-rules || true
+          sudo udevadm trigger --name-match=kvm || true
 
-      - name: Install emulator and system image
+      # Locates (or installs) the Android SDK tools and exports them through
+      # GITHUB_ENV / GITHUB_OUTPUT. Everything is written to ci-logs/env.txt,
+      # which gets committed, so failures stay diagnosable.
+      - name: Locate the Android SDK tools
+        id: locate
         run: |
+          set +e
           mkdir -p ci-logs docs/screenshots/emulator
           {
-            echo "ANDROID_SDK_ROOT=$ANDROID_SDK_ROOT"
-            echo "ANDROID_HOME=$ANDROID_HOME"
+            echo "ANDROID_SDK_ROOT=${ANDROID_SDK_ROOT:-unset}"
+            echo "ANDROID_HOME=${ANDROID_HOME:-unset}"
             echo "PATH=$PATH"
             echo "--- which ---"
-            for tool in sdkmanager avdmanager adb emulator; do
+            for tool in sdkmanager avdmanager adb emulator java; do
               printf '%s -> %s\n' "$tool" "$(command -v "$tool" || echo NOT_FOUND)"
             done
-            echo "--- sdk layout ---"
-            ls "$ANDROID_SDK_ROOT" 2>&1
-            ls "$ANDROID_SDK_ROOT/cmdline-tools" 2>&1
+            echo "--- candidate SDK roots ---"
+            for candidate in "$ANDROID_SDK_ROOT" "$ANDROID_HOME" /usr/local/lib/android/sdk \
+                             /opt/android-sdk "$HOME/Android/Sdk"; do
+              [ -n "$candidate" ] && echo "$candidate: $(ls -d "$candidate" 2>/dev/null || echo missing)"
+            done
+            echo "--- find sdkmanager / emulator ---"
+            find / -maxdepth 7 -name sdkmanager -type f 2>/dev/null | head -5
+            find / -maxdepth 7 -path "*emulator/emulator" -type f 2>/dev/null | head -5
           } > ci-logs/env.txt
 
-          yes | sdkmanager --licenses > ci-logs/sdkmanager.log 2>&1
-          sdkmanager --install "platform-tools" "emulator" \
-            "system-images;android-34;google_apis;x86_64" >> ci-logs/sdkmanager.log 2>&1
-          tail -5 ci-logs/sdkmanager.log
-          echo "--- installed packages ---" >> ci-logs/env.txt
-          sdkmanager --list_installed >> ci-logs/env.txt 2>&1
+          SDK=""
+          for candidate in "$ANDROID_SDK_ROOT" "$ANDROID_HOME" /usr/local/lib/android/sdk \
+                           /opt/android-sdk "$HOME/Android/Sdk"; do
+            if [ -n "$candidate" ] && [ -d "$candidate" ]; then SDK="$candidate"; break; fi
+          done
+          if [ -z "$SDK" ]; then
+            SDK="$(find / -maxdepth 7 -path "*emulator/emulator" -type f 2>/dev/null \
+                   | head -1 | xargs dirname 2>/dev/null | xargs dirname 2>/dev/null)"
+          fi
+          if [ -z "$SDK" ]; then SDK="$HOME/android-sdk"; mkdir -p "$SDK"; fi
+          echo "SDK_ROOT=$SDK" >> ci-logs/env.txt
+
+          CMDLINE_BIN=""
+          for candidate in "$SDK/cmdline-tools/latest/bin" "$SDK/cmdline-tools/bin" "$SDK/bin"; do
+            if [ -x "$candidate/sdkmanager" ]; then CMDLINE_BIN="$candidate"; break; fi
+          done
+          if [ -z "$CMDLINE_BIN" ]; then
+            existing="$(find / -maxdepth 7 -name sdkmanager -type f 2>/dev/null | head -1)"
+            [ -n "$existing" ] && CMDLINE_BIN="$(dirname "$existing")"
+          fi
+
+          EMULATOR_BIN="$SDK/emulator/emulator"
+          [ -x "$EMULATOR_BIN" ] || EMULATOR_BIN="$(find / -maxdepth 7 -path "*emulator/emulator" -type f 2>/dev/null | head -1)"
+
+          {
+            echo "CMDLINE_BIN=$CMDLINE_BIN"
+            echo "EMULATOR_BIN=$EMULATOR_BIN"
+          } >> ci-logs/env.txt
+
+          echo "SDK_ROOT=$SDK" >> "$GITHUB_ENV"
+          echo "CMDLINE_BIN=$CMDLINE_BIN" >> "$GITHUB_ENV"
+          echo "EMULATOR_BIN=$EMULATOR_BIN" >> "$GITHUB_ENV"
+          echo "SDK_ROOT=$SDK" >> "$GITHUB_OUTPUT"
+          echo "CMDLINE_BIN=$CMDLINE_BIN" >> "$GITHUB_OUTPUT"
+          echo "EMULATOR_BIN=$EMULATOR_BIN" >> "$GITHUB_OUTPUT"
+          tail -8 ci-logs/env.txt
+
+      - name: Install emulator and system image when missing
+        run: |
+          set +e
+          {
+            echo "--- install step ---"
+            if [ -x "$EMULATOR_BIN" ]; then
+              echo "emulator already present: $EMULATOR_BIN"
+            else
+              echo "downloading Android command line tools"
+              mkdir -p "$SDK_ROOT/cmdline-tools"
+              curl -sSLo /tmp/cmdline-tools.zip \
+                https://dl.google.com/android/repository/commandlinetools-linux-11076708_latest.zip
+              unzip -q -o /tmp/cmdline-tools.zip -d /tmp/cmdline-tools-unpacked
+              rm -rf "$SDK_ROOT/cmdline-tools/latest"
+              mv /tmp/cmdline-tools-unpacked/cmdline-tools "$SDK_ROOT/cmdline-tools/latest"
+              CMDLINE_BIN="$SDK_ROOT/cmdline-tools/latest/bin"
+              echo "CMDLINE_BIN=$CMDLINE_BIN" >> "$GITHUB_ENV"
+            fi
+
+            if [ -n "$CMDLINE_BIN" ] && [ -x "$CMDLINE_BIN/sdkmanager" ]; then
+              yes | "$CMDLINE_BIN/sdkmanager" --sdk_root="$SDK_ROOT" --licenses
+              "$CMDLINE_BIN/sdkmanager" --sdk_root="$SDK_ROOT" --install \
+                "platform-tools" "emulator" "system-images;android-34;google_apis;x86_64"
+              "$CMDLINE_BIN/sdkmanager" --sdk_root="$SDK_ROOT" --list_installed
+            else
+              echo "sdkmanager not available, assuming the runner image ships the SDK"
+            fi
+          } >> ci-logs/env.txt 2>&1
+          tail -20 ci-logs/env.txt
 
       - name: Boot the emulator
         run: |
-          EMULATOR_BIN="${ANDROID_SDK_ROOT}/emulator/emulator"
-          test -x "$EMULATOR_BIN" || EMULATOR_BIN="$(command -v emulator)"
-          echo "using emulator binary: $EMULATOR_BIN" | tee -a ci-logs/env.txt
-          echo no | avdmanager create avd -n mahva -k "system-images;android-34;google_apis;x86_64" \
-            -d pixel_5 --force > ci-logs/avdmanager.log 2>&1
-          avdmanager list avd >> ci-logs/avdmanager.log 2>&1
-          nohup "$EMULATOR_BIN" -avd mahva -no-window -no-audio -no-boot-anim -no-snapshot \
-            -gpu swiftshader_indirect -camera-back none -camera-front none \
-            > ci-logs/emulator-boot.log 2>&1 &
-          adb wait-for-device
-          for i in $(seq 1 90); do
-            state=$(adb shell getprop sys.boot_completed 2>/dev/null | tr -d '\r')
-            echo "attempt $i: sys.boot_completed='$state'"
-            [ "$state" = "1" ] && break
-            sleep 5
-          done
-          adb shell getprop sys.boot_completed
-          adb shell wm size
+          set +e
+          export PATH="$CMDLINE_BIN:$SDK_ROOT/platform-tools:$SDK_ROOT/emulator:$PATH"
+          : > ci-logs/emulator-boot.log
+          {
+            echo "SDK_ROOT=$SDK_ROOT"
+            echo "emulator: $(command -v emulator || echo "$EMULATOR_BIN")"
+            echo "adb: $(command -v adb)"
+
+            AVD_NAME=mahva
+            echo no | avdmanager create avd -n "$AVD_NAME" \
+              -k "system-images;android-34;google_apis;x86_64" -d pixel_5 --force
+            avdmanager list avd
+
+            nohup emulator -avd "$AVD_NAME" -no-window -no-audio -no-boot-anim -no-snapshot \
+              -gpu swiftshader_indirect -camera-back none -camera-front none \
+              >> ci-logs/emulator-boot.log 2>&1 &
+
+            adb start-server
+            adb wait-for-device
+            for i in $(seq 1 90); do
+              state=$(adb shell getprop sys.boot_completed 2>/dev/null | tr -d '\r')
+              echo "attempt $i: sys.boot_completed='$state'"
+              [ "$state" = "1" ] && break
+              sleep 5
+            done
+            adb shell getprop sys.boot_completed
+            adb shell wm size
+          } >> ci-logs/emulator-boot.log 2>&1
+          tail -15 ci-logs/emulator-boot.log
 
       - name: Install the app, drive the UI and capture screenshots
         run: |
-          mkdir -p docs/screenshots/emulator ci-logs
+          set +e
+          export PATH="$CMDLINE_BIN:$SDK_ROOT/platform-tools:$SDK_ROOT/emulator:$PATH"
           {
             echo "--- install ---"
             adb install -r app/build/outputs/apk/debug/app-debug.apk
@@ -135,17 +215,9 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
           if [ -f ci-logs/emulator.log ]; then
-            tail -c 60000 ci-logs/emulator.log > ci-logs/emulator-tail.log
-            mv ci-logs/emulator-tail.log ci-logs/emulator.log
-            git add -f ci-logs/emulator.log
-            grep -i -E "error|failed|exception|crash" ci-logs/emulator.log | head -20 | while IFS= read -r line; do
-              clean=$(printf '%s' "$line" | tr -d '\r' | sed 's/%/%25/g' | cut -c1-900)
-              echo "::warning::$clean"
-            done
+            tail -c 60000 ci-logs/emulator.log > /tmp/t.log && mv /tmp/t.log ci-logs/emulator.log
           fi
-
-          git add -f ci-logs/sdkmanager.log ci-logs/avdmanager.log \
-            ci-logs/emulator-boot.log ci-logs/env.txt 2>/dev/null
+          git add -f ci-logs/emulator.log ci-logs/env.txt ci-logs/emulator-boot.log 2>/dev/null
 
           if [ -d docs/screenshots/emulator ] && [ -n "$(ls -A docs/screenshots/emulator 2>/dev/null)" ]; then
             git add -f docs/screenshots/emulator
