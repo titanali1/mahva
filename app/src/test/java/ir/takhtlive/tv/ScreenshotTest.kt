@@ -161,9 +161,7 @@ class ScreenshotTest {
             runCatching { rule.onNode(hasSetTextAction()).performTextInput("BBC") }
             settle(2_000)
             capture("07-search.png")
-            clickByDescription("بازگشت")
-            settle()
-            clickByText("خانه")
+            clickByTag("tab_home")
             settle()
         }
 
@@ -179,25 +177,31 @@ class ScreenshotTest {
             }
         }
 
-        // The hamburger menu with the language and theme settings
-        if (clickByTag("action_menu")) {
-            settle(2_500)
-            capture("10-drawer.png")
-            // switch to English, then to the light theme, and capture both
-            if (clickByTag("lang_en")) {
-                settle(3_000)
-                capture("11-english.png")
-            }
-            if (clickByTag("theme_light")) {
-                settle(3_000)
-                capture("12-light-theme.png")
-            }
-            if (clickByTag("lang_ar")) {
-                settle(3_000)
-                capture("13-arabic.png")
-            }
+        File(outputDir, "test-diag.txt").writeText(diag.toString())
+    }
+
+    /**
+     * The hamburger menu: language and theme settings.
+     * The drawer animates, so the test clock is advanced manually here.
+     */
+    @Test
+    fun drawerLanguageAndThemeSettings() {
+        settle(2_000)
+        rule.mainClock.autoAdvance = false
+
+        fun captureAfter(action: () -> Boolean, file: String) {
+            val ok = action()
+            rule.mainClock.advanceTimeBy(1_200)
+            settle(1_200)
+            if (ok) capture(file)
         }
 
-        File(outputDir, "test-diag.txt").writeText(diag.toString())
+        captureAfter({ clickByTag("action_menu") }, "10-drawer.png")
+        captureAfter({ clickByTag("lang_en") }, "11-english.png")
+        captureAfter({ clickByTag("theme_light") }, "12-light-theme.png")
+        captureAfter({ clickByTag("lang_ar") }, "13-arabic.png")
+
+        rule.mainClock.autoAdvance = true
+        File(outputDir, "test-diag.txt").appendText(diag.toString())
     }
 }
