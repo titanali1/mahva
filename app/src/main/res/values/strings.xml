@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">ماهوا</string>
+    <string name="app_tagline">پخش زندهٔ کانال‌های ماهواره‌ای</string>
+
+    <string name="tab_home">خانه</string>
+    <string name="tab_persiana">پرشیانا</string>
+    <string name="tab_news">خبری</string>
+    <string name="tab_music">موزیک</string>
+    <string name="tab_sports">ورزشی</string>
+
+    <string name="search_hint">جستجوی کانال…</string>
+    <string name="live">زنده</string>
+    <string name="retry">تلاش دوباره</string>
+    <string name="add_channel">افزودن کانال</string>
+</resources>

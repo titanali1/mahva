@@ -1,0 +1,995 @@
+{
+  "version": 2,
+  "updated": "2026-09-29",
+  "note": "Channel list curated from iptv-org/iptv (categories) and Samhouston010/persian-tv playlists.",
+  "sources": [
+    "https://github.com/iptv-org/iptv",
+    "https://github.com/Samhouston010/persian-tv"
+  ],
+  "categories": [
+    {
+      "id": "persiana",
+      "title": "پرشیانا گروپ",
+      "subtitle": "کانال‌های گروه پرشیانا",
+      "emoji": "📺",
+      "color": "#7C4DFF"
+    },
+    {
+      "id": "news",
+      "title": "خبری",
+      "subtitle": "شبکه‌های خبری ایران و جهان",
+      "emoji": "📰",
+      "color": "#00B0FF"
+    },
+    {
+      "id": "music",
+      "title": "موزیک",
+      "subtitle": "کانال‌های موسیقی و کلیپ",
+      "emoji": "🎵",
+      "color": "#FF4081"
+    },
+    {
+      "id": "sports",
+      "title": "ورزشی",
+      "subtitle": "کانال‌های ورزشی و مسابقات زنده",
+      "emoji": "⚽",
+      "color": "#00E676"
+    }
+  ],
+  "channels": [
+    {
+      "id": "persiana-family",
+      "name": "پرشیانا فمیلی",
+      "nameEn": "Persiana Family",
+      "category": "persiana",
+      "logo": "https://cdn.jsdelivr.net/gh/Samhouston010/persian-tv@master/logos/persiana/family.png",
+      "url": "https://familyhls.persiana.live/hls/stream.m3u8",
+      "quality": "HD"
+    },
+    {
+      "id": "persiana-series",
+      "name": "پرشیانا سریال",
+      "nameEn": "Persiana Series",
+      "category": "persiana",
+      "logo": "https://cdn.jsdelivr.net/gh/Samhouston010/persian-tv@master/logos/persiana/series.png",
+      "url": "https://onehls.persiana.live/hls/stream.m3u8",
+      "quality": "HD"
+    },
+    {
+      "id": "persiana-cinema",
+      "name": "پرشیانا سینما",
+      "nameEn": "Persiana Cinema",
+      "category": "persiana",
+      "logo": "https://cdn.jsdelivr.net/gh/Samhouston010/persian-tv@master/logos/persiana/cinema.png",
+      "url": "https://cinehls.persiana.live/hls/stream.m3u8",
+      "quality": "HD"
+    },
+    {
+      "id": "persiana-iranian",
+      "name": "پرشیانا ایرانی",
+      "nameEn": "Persiana Iranian",
+      "category": "persiana",
+      "logo": "https://cdn.jsdelivr.net/gh/Samhouston010/persian-tv@master/logos/persiana/iranian.png",
+      "url": "https://irhls.persiana.live/hls/stream.m3u8",
+      "quality": "HD"
+    },
+    {
+      "id": "persiana-korea",
+      "name": "پرشیانا کره",
+      "nameEn": "Persiana Korea",
+      "category": "persiana",
+      "logo": "https://cdn.jsdelivr.net/gh/Samhouston010/persian-tv@master/logos/persiana/korea.png",
+      "url": "https://korhls.persiana.live/hls/stream.m3u8",
+      "quality": "HD"
+    },
+    {
+      "id": "persiana-plus",
+      "name": "پرشیانا پلاس",
+      "nameEn": "Persiana+",
+      "category": "persiana",
+      "logo": "https://cdn.jsdelivr.net/gh/Samhouston010/persian-tv@master/logos/persiana/plus.png",
+      "url": "https://euhls.persiana.live/hls/stream.m3u8",
+      "quality": "HD"
+    },
+    {
+      "id": "persiana-comedy",
+      "name": "پرشیانا کمدی",
+      "nameEn": "Persiana Comedy",
+      "category": "persiana",
+      "logo": "https://cdn.jsdelivr.net/gh/Samhouston010/persian-tv@master/logos/persiana/comedy.png",
+      "url": "https://comedyhls.persiana.live/hls/stream.m3u8",
+      "quality": "HD"
+    },
+    {
+      "id": "persiana-reality",
+      "name": "پرشیانا ریالیتی",
+      "nameEn": "Persiana Reality",
+      "category": "persiana",
+      "logo": "https://cdn.jsdelivr.net/gh/Samhouston010/persian-tv@master/logos/persiana/reality.png",
+      "url": "https://realhls.persiana.live/hls/stream.m3u8",
+      "quality": "HD"
+    },
+    {
+      "id": "persiana-turkiye",
+      "name": "پرشیانا ترکیه",
+      "nameEn": "Persiana Türkiye",
+      "category": "persiana",
+      "logo": "https://cdn.jsdelivr.net/gh/Samhouston010/persian-tv@master/logos/persiana/turkey.png",
+      "url": "https://turkhls.persiana.live/hls/stream.m3u8",
+      "quality": "HD"
+    },
+    {
+      "id": "persiana-medical",
+      "name": "پرشیانا مدیکال",
+      "nameEn": "Persiana Medical",
+      "category": "persiana",
+      "logo": "https://cdn.jsdelivr.net/gh/Samhouston010/persian-tv@master/logos/persiana/medical.png",
+      "url": "https://phd2hls.persiana.live/hls/stream.m3u8",
+      "quality": "HD"
+    },
+    {
+      "id": "persiana-docs",
+      "name": "پرشیانا مستند",
+      "nameEn": "Persiana Docs",
+      "category": "persiana",
+      "logo": "https://cdn.jsdelivr.net/gh/Samhouston010/persian-tv@master/logos/persiana/docs.png",
+      "url": "https://scihls.persiana.live/hls/stream.m3u8",
+      "quality": "HD"
+    },
+    {
+      "id": "persiana-junior",
+      "name": "پرشیانا جونیور",
+      "nameEn": "Persiana Junior",
+      "category": "persiana",
+      "logo": "https://cdn.jsdelivr.net/gh/Samhouston010/persian-tv@master/logos/persiana/junior.png",
+      "url": "https://junhls.persiana.live/hls/stream.m3u8",
+      "quality": "HD"
+    },
+    {
+      "id": "persiana-fight",
+      "name": "پرشیانا فایت",
+      "nameEn": "Persiana Fight",
+      "category": "persiana",
+      "logo": "https://cdn.jsdelivr.net/gh/Samhouston010/persian-tv@master/logos/persiana/fight.png",
+      "url": "https://fighthls.persiana.live/hls/stream.m3u8",
+      "quality": "HD"
+    },
+    {
+      "id": "persiana-music",
+      "name": "پرشیانا موزیک",
+      "nameEn": "Persiana Music",
+      "category": "persiana",
+      "logo": "https://cdn.jsdelivr.net/gh/Samhouston010/persian-tv@master/logos/persiana/music.png",
+      "url": "https://musichls.persiana.live/hls/stream.m3u8",
+      "quality": "HD"
+    },
+    {
+      "id": "persiana-nostalgia",
+      "name": "پرشیانا نستالژی",
+      "nameEn": "Persiana Nostalgia",
+      "category": "persiana",
+      "logo": "https://cdn.jsdelivr.net/gh/Samhouston010/persian-tv@master/logos/persiana/nostalgia.png",
+      "url": "https://noshls.persiana.live/hls/stream.m3u8",
+      "quality": "HD"
+    },
+    {
+      "id": "persiana-sonati",
+      "name": "پرشیانا سنتی",
+      "nameEn": "Persiana Sonnati",
+      "category": "persiana",
+      "logo": "https://cdn.jsdelivr.net/gh/Samhouston010/persian-tv@master/logos/persiana/folk.png",
+      "url": "https://sonhls.persiana.live/hls/stream.m3u8",
+      "quality": "HD"
+    },
+    {
+      "id": "persiana-setmix",
+      "name": "پرشیانا ست‌میکس",
+      "nameEn": "Persiana SetMix",
+      "category": "persiana",
+      "logo": "https://cdn.jsdelivr.net/gh/Samhouston010/persian-tv@master/logos/persiana/setmix.png",
+      "url": "https://setmixhls.persiana.live/hls/stream.m3u8",
+      "quality": "HD"
+    },
+    {
+      "id": "persiana-travel",
+      "name": "پرشیانا سفر",
+      "nameEn": "Persiana Travel",
+      "category": "persiana",
+      "logo": "https://cdn.jsdelivr.net/gh/Samhouston010/persian-tv@master/logos/persiana/travel.png",
+      "url": "https://ptravelhls.persiana.live/hls/stream.m3u8",
+      "quality": "HD"
+    },
+    {
+      "id": "persiana-podcast",
+      "name": "پرشیانا پادکست",
+      "nameEn": "Persiana Podcast",
+      "category": "persiana",
+      "logo": "https://cdn.jsdelivr.net/gh/Samhouston010/persian-tv@master/logos/persiana/podcast.png",
+      "url": "https://podhls.persiana.live/hls/stream.m3u8",
+      "quality": "HD"
+    },
+    {
+      "id": "persiana-rap",
+      "name": "پرشیانا رپ",
+      "nameEn": "Persiana Rap",
+      "category": "persiana",
+      "logo": "https://cdn.jsdelivr.net/gh/Samhouston010/persian-tv@master/logos/persiana/rap.png",
+      "url": "https://raphls.persiana.live/hls/stream.m3u8",
+      "quality": "HD"
+    },
+    {
+      "id": "persiana-china",
+      "name": "پرشیانا چین",
+      "nameEn": "Persiana China",
+      "category": "persiana",
+      "logo": "https://cdn.jsdelivr.net/gh/Samhouston010/persian-tv@master/logos/persiana/china.png",
+      "url": "https://chinahls.persiana.live/hls/stream.m3u8",
+      "quality": "HD"
+    },
+    {
+      "id": "persiana-voyage",
+      "name": "پرشیانا وویاژ",
+      "nameEn": "Persiana Voyage",
+      "category": "persiana",
+      "logo": "https://cdn.jsdelivr.net/gh/Samhouston010/persian-tv@master/logos/persiana/voyage.png",
+      "url": "https://voyhls.persiana.live/hls/stream.m3u8",
+      "quality": "HD"
+    },
+    {
+      "id": "mbc-persia",
+      "name": "ام‌بی‌سی پرشیا",
+      "nameEn": "MBC Persia",
+      "category": "persiana",
+      "logo": "https://upload.wikimedia.org/wikipedia/commons/8/8f/MBC_Persia_Logo.png",
+      "url": "https://shd-gcp-live.edgenextcdn.net/live/bitmovin-mbc-persia/818ee8e4b592dc497608f066d825bfb4/index.m3u8",
+      "quality": "HD"
+    },
+    {
+      "id": "fx-tv-1",
+      "name": "اف‌ایکس تی‌وی ۱",
+      "nameEn": "FX TV 1",
+      "category": "persiana",
+      "logo": "https://cdn.jsdelivr.net/gh/Samhouston010/persian-tv@master/logos/fx1.png",
+      "url": "https://fxtvhls.wns.live/hls/stream.m3u8",
+      "quality": "HD"
+    },
+    {
+      "id": "mtc-tv",
+      "name": "ام‌تی‌سی تی‌وی",
+      "nameEn": "MTC TV",
+      "category": "persiana",
+      "logo": "https://i.imgur.com/JxoAR4j.png",
+      "url": "https://mtchls.wns.live/hls/stream.m3u8",
+      "quality": "HD"
+    },
+    {
+      "id": "ava-family",
+      "name": "آوا فمیلی",
+      "nameEn": "AVA Family",
+      "category": "persiana",
+      "logo": "https://cdn.jsdelivr.net/gh/Samhouston010/persian-tv@master/logos/avafamily.png",
+      "url": "https://familyhls.avatv.live/hls/stream.m3u8",
+      "quality": "HD"
+    },
+    {
+      "id": "bbc-persian",
+      "name": "بی‌بی‌سی فارسی",
+      "nameEn": "BBC Persian",
+      "category": "news",
+      "logo": "https://upload.wikimedia.org/wikipedia/en/4/44/BBC_News_Persian_Logo.jpg",
+      "url": "https://vs-hls-pushb-ww-live.akamaized.net/x=4/i=urn:bbc:pips:service:bbc_persian_tv/t=3840/v=pv14/b=5070016/main.m3u8",
+      "quality": "HD"
+    },
+    {
+      "id": "iran-international",
+      "name": "ایران اینترنشنال",
+      "nameEn": "Iran International",
+      "category": "news",
+      "logo": "https://i.imgur.com/55RpaF3.png",
+      "url": "https://hlspackager.akamaized.net/live/DB/IRAN_INTERNATIONAL/HLS/IRAN_INTERNATIONAL.m3u8",
+      "quality": "HD"
+    },
+    {
+      "id": "voa-persian",
+      "name": "صدای آمریکا",
+      "nameEn": "VOA Persian",
+      "category": "news",
+      "logo": "https://i.imgur.com/TmqComb.png",
+      "url": "https://voa-ingest.akamaized.net/hls/live/2033876/tvmc07/playlist.m3u8",
+      "quality": "HD"
+    },
+    {
+      "id": "radio-farda",
+      "name": "رادیو فردا",
+      "nameEn": "Radio Farda TV",
+      "category": "news",
+      "logo": "https://raw.githubusercontent.com/picons/picons/master/build-source/logos/radiofarda.default.svg",
+      "url": "https://rferl-ingest.akamaized.net/hls/live/2121768/tvmc01/playlist.m3u8",
+      "quality": "HD"
+    },
+    {
+      "id": "simaye-azadi",
+      "name": "سیمای آزادی",
+      "nameEn": "Simaye Azadi",
+      "category": "news",
+      "logo": "https://www.iranntv.com/images/logo.png",
+      "url": "https://simaytv.akamaized.net/hls/live/a162cb6c-3be1-4e57-87dc-a75a50b3b8d9/simayhls/index.m3u8",
+      "quality": "HD"
+    },
+    {
+      "id": "al-alam",
+      "name": "العالم فارسی",
+      "nameEn": "Al Alam",
+      "category": "news",
+      "logo": "https://i.imgur.com/Zdi31dy.png",
+      "url": "https://live2.alalam.ir/alalam.m3u8",
+      "quality": "SD"
+    },
+    {
+      "id": "press-tv",
+      "name": "پرس تی‌وی",
+      "nameEn": "Press TV",
+      "category": "news",
+      "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fb/Press_TV_logo.svg/960px-Press_TV_logo.svg.png",
+      "url": "https://live.presstv.ir/hls/presstv.m3u8",
+      "quality": "HD"
+    },
+    {
+      "id": "hispan-tv",
+      "name": "هیسپان تی‌وی",
+      "nameEn": "Hispan TV",
+      "category": "news",
+      "logo": "https://upload.wikimedia.org/wikipedia/commons/9/9f/Hispantv_logo.jpg",
+      "url": "https://cdnlive.presstv.ir/live/smil:live.smil/playlist.m3u8",
+      "quality": "HD"
+    },
+    {
+      "id": "setareh-tv",
+      "name": "ستاره تی‌وی",
+      "nameEn": "Setareh TV",
+      "category": "news",
+      "logo": "https://cdn.jsdelivr.net/gh/Samhouston010/persian-tv@master/logos/setarehtv.png",
+      "url": "https://setarehhls.wns.live/hls/stream.m3u8",
+      "quality": "HD"
+    },
+    {
+      "id": "aljazeera-en",
+      "name": "الجزیره انگلیسی",
+      "nameEn": "Al Jazeera English",
+      "category": "news",
+      "logo": "https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/united-kingdom/aljazeera-uk.png",
+      "url": "https://live-hls-apps-aje-fa.getaj.net/AJE/index.m3u8",
+      "quality": "HD"
+    },
+    {
+      "id": "aljazeera-ar",
+      "name": "الجزیره عربی",
+      "nameEn": "Al Jazeera Arabic",
+      "category": "news",
+      "logo": "https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/united-kingdom/aljazeera-uk.png",
+      "url": "https://live-hls-apps-aja-fa.getaj.net/AJA/01.m3u8",
+      "quality": "HD"
+    },
+    {
+      "id": "bbc-news",
+      "name": "بی‌بی‌سی نیوز",
+      "nameEn": "BBC World News",
+      "category": "news",
+      "logo": "http://schedulesdirect-api20141201-logos.s3.dualstack.us-east-1.amazonaws.com/stationLogos/s89542_dark_360w_270h.png",
+      "url": "https://vs-hls-push-ww-live.akamaized.net/x=4/i=urn:bbc:pips:service:bbc_news_channel_hd/t=3840/v=pv14/b=5070016/main.m3u8",
+      "quality": "HD"
+    },
+    {
+      "id": "sky-news",
+      "name": "اسکای نیوز",
+      "nameEn": "Sky News",
+      "category": "news",
+      "logo": "https://images.pluto.tv/channels/55b285cd2665de274553d66f/colorLogoPNG.png",
+      "url": "https://jmp2.uk/plu-55b285cd2665de274553d66f.m3u8",
+      "quality": "HD"
+    },
+    {
+      "id": "cnn",
+      "name": "سی‌ان‌ان",
+      "nameEn": "CNN",
+      "category": "news",
+      "logo": "https://tvpnlogopeu.samsungcloud.tv/platform/image/sourcelogo/vc/00/02/34/GBBD8000016N_20260609T043642SQUARE.png",
+      "url": "https://jmp2.uk/stvp-GBBD8000016N",
+      "quality": "HD"
+    },
+    {
+      "id": "cnbc",
+      "name": "سی‌ان‌بی‌سی",
+      "nameEn": "CNBC",
+      "category": "news",
+      "logo": "https://tvpnlogopeu.samsungcloud.tv/platform/image/sourcelogo/vc/00/02/34/GBBD3600001NO_20260317T034210SQUARE.png",
+      "url": "https://jmp2.uk/stvp-GBBD3600001NO",
+      "quality": "HD"
+    },
+    {
+      "id": "bloomberg",
+      "name": "بلومبرگ",
+      "nameEn": "Bloomberg TV+",
+      "category": "news",
+      "logo": "https://images.pluto.tv/channels/54ff7ba69222cb1c2624c584/colorLogoPNG_1756948295813.png",
+      "url": "https://jmp2.uk/plu-54ff7ba69222cb1c2624c584.m3u8",
+      "quality": "HD"
+    },
+    {
+      "id": "dw-english",
+      "name": "دویچه وله",
+      "nameEn": "DW English",
+      "category": "news",
+      "logo": "https://www.dw.com/images/icons/favicon-540x540.png",
+      "url": "https://i.mjh.nz/.r/dw-news.m3u8",
+      "quality": "HD"
+    },
+    {
+      "id": "france24-en",
+      "name": "فرانس ۲۴",
+      "nameEn": "France 24 English",
+      "category": "news",
+      "logo": "https://xstreamcp-assets-msp.streamready.in/assets/LIVETV/LIVECHANNEL/LIVETV_LIVETVCHANNEL_FRANCE_24/images/LOGO_HD/image.png",
+      "url": "https://live.france24.com/hls/live/2037218-b/F24_EN_HI_HLS/master_5000.m3u8",
+      "quality": "HD"
+    },
+    {
+      "id": "euronews",
+      "name": "یورونیوز",
+      "nameEn": "Euronews English",
+      "category": "news",
+      "logo": "https://jiotvimages.cdn.jio.com/dare_images/images/Euro_News.png",
+      "url": "https://jmp2.uk/plu-61de96114757070008d33cae.m3u8",
+      "quality": "HD"
+    },
+    {
+      "id": "trt-world",
+      "name": "تی‌آر‌تی ورلد",
+      "nameEn": "TRT World",
+      "category": "news",
+      "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/27/TRT_World.svg/960px-TRT_World.svg.png",
+      "url": "https://tv-trtworld.medya.trt.com.tr/master.m3u8",
+      "quality": "HD"
+    },
+    {
+      "id": "cna",
+      "name": "سی‌ان‌ای",
+      "nameEn": "CNA",
+      "category": "news",
+      "logo": "https://i.imgur.com/awIDugE.png",
+      "url": "https://d2e1asnsl7br7b.cloudfront.net/7782e205e72f43aeb4a48ec97f66ebbe/index.m3u8",
+      "quality": "HD"
+    },
+    {
+      "id": "abc-news-au",
+      "name": "ای‌بی‌سی استرالیا",
+      "nameEn": "ABC News Australia",
+      "category": "news",
+      "logo": "https://i.imgur.com/BrW7gk8.png",
+      "url": "https://abc-news-dmd-streams-1.akamaized.net/out/v1/701126012d044971b3fa89406a440133/index.m3u8",
+      "quality": "HD"
+    },
+    {
+      "id": "nbc-news-now",
+      "name": "ان‌بی‌سی نیوز ناو",
+      "nameEn": "NBC News NOW",
+      "category": "news",
+      "logo": "https://i.imgur.com/JZt2qh5.png",
+      "url": "https://d1bl6tskrpq9ze.cloudfront.net/hls/master.m3u8?ads.xumo_channelId=99984003",
+      "quality": "HD"
+    },
+    {
+      "id": "i24news-en",
+      "name": "آی‌۲۴ نیوز",
+      "nameEn": "i24NEWS English",
+      "category": "news",
+      "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/79/LOGO_i24NEWS.png/960px-LOGO_i24NEWS.png",
+      "url": "https://i24newsenglish-cdn.encoders.immergo.tv/master.m3u8",
+      "quality": "HD"
+    },
+    {
+      "id": "al-arabiya",
+      "name": "العربیه",
+      "nameEn": "Al Arabiya",
+      "category": "news",
+      "logo": "https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/united-arab-emirates/al-arabiya-ae.png",
+      "url": "https://live.alarabiya.net/alarabiapublish/alarabiya.smil/playlist.m3u8",
+      "quality": "HD"
+    },
+    {
+      "id": "sky-news-arabia",
+      "name": "اسکای نیوز عربی",
+      "nameEn": "Sky News Arabia",
+      "category": "news",
+      "logo": "https://i.imgur.com/SvjU4h6.png",
+      "url": "https://live-stream.skynewsarabia.com/c-horizontal-channel/horizontal-stream/index.m3u8",
+      "quality": "HD"
+    },
+    {
+      "id": "al-hadath",
+      "name": "الحدث",
+      "nameEn": "Al Hadath",
+      "category": "news",
+      "logo": "https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/united-arab-emirates/al-arabiya-al-hadath-ae.png",
+      "url": "https://av.alarabiya.net/alarabiapublish/alhadath.smil/playlist.m3u8",
+      "quality": "HD"
+    },
+    {
+      "id": "nhk-world",
+      "name": "ان‌اچ‌کی ژاپن",
+      "nameEn": "NHK World-Japan",
+      "category": "news",
+      "logo": "https://jiotvimages.cdn.jio.com/dare_images/images/NHK_World_Japan.png",
+      "url": "https://masterpl.hls.nhkworld.jp/hls/w/live/smarttv.m3u8",
+      "quality": "HD"
+    },
+    {
+      "id": "cgtn",
+      "name": "سی‌جی‌تی‌ان",
+      "nameEn": "CGTN",
+      "category": "news",
+      "logo": "https://images-1.rakuten.tv/storage/global-live-channel/translation/artwork/82a28e14-7f41-4a39-b6b9-57de69feb0ef.jpeg",
+      "url": "https://amg00405-rakutentv-cgtn-rakuten-i9tar.amagi.tv/master.m3u8",
+      "quality": "HD"
+    },
+    {
+      "id": "pmc-royale",
+      "name": "پی‌ام‌سی رویال",
+      "nameEn": "PMC Royale",
+      "category": "music",
+      "logo": "https://cdn.jsdelivr.net/gh/Samhouston010/persian-tv@master/logos/pmcroyale.png",
+      "url": "https://pmcrohls.wns.live/hls/stream.m3u8",
+      "quality": "HD"
+    },
+    {
+      "id": "pmc",
+      "name": "پی‌ام‌سی",
+      "nameEn": "PMC",
+      "category": "music",
+      "logo": "https://raw.githubusercontent.com/picons/picons/master/build-source/logos/pmc.default.svg",
+      "url": "https://pmchls.wns.live/hls/stream.m3u8",
+      "quality": "HD"
+    },
+    {
+      "id": "radio-javan",
+      "name": "رادیو جوان",
+      "nameEn": "Radio Javan TV",
+      "category": "music",
+      "logo": "https://www.parsatv.com/index_files/channels/rjtv.png",
+      "url": "https://rjtvhls.wns.live/hls/stream.m3u8",
+      "quality": "HD"
+    },
+    {
+      "id": "avang-tv",
+      "name": "آونگ تی‌وی",
+      "nameEn": "Avang TV",
+      "category": "music",
+      "logo": "https://www.parsatv.com/index_files/channels/avang.png",
+      "url": "https://hls.avang.live/hls/stream.m3u8",
+      "quality": "HD"
+    },
+    {
+      "id": "navahang",
+      "name": "نواهنگ",
+      "nameEn": "Navahang TV",
+      "category": "music",
+      "logo": "https://i.imgur.com/YteKXJy.png",
+      "url": "https://hls.navahang.live/hls/stream.m3u8",
+      "quality": "HD"
+    },
+    {
+      "id": "sun-music",
+      "name": "سان موزیک",
+      "nameEn": "Sun Music",
+      "category": "music",
+      "logo": "https://raw.githubusercontent.com/picons/picons/master/build-source/logos/sunmusic.default.png",
+      "url": "https://hls.sunmusic.live/hls/stream.m3u8",
+      "quality": "HD"
+    },
+    {
+      "id": "t2-tv",
+      "name": "تی‌۲ تی‌وی",
+      "nameEn": "T2 TV",
+      "category": "music",
+      "logo": "https://i.imgur.com/Wu8MBb7.png",
+      "url": "https://t2hls.wns.live/hls/stream.m3u8",
+      "quality": "HD"
+    },
+    {
+      "id": "4u-tv",
+      "name": "فور یو تی‌وی",
+      "nameEn": "4U TV",
+      "category": "music",
+      "logo": "https://www.parsatv.com/index_files/channels/4u.png",
+      "url": "https://hls.4utv.live/hls/stream.m3u8",
+      "quality": "HD"
+    },
+    {
+      "id": "biz-music",
+      "name": "بیز موزیک",
+      "nameEn": "BIZ Music",
+      "category": "music",
+      "logo": "https://i.ibb.co/DfsCJwk/Uz-biz-music-5462.jpg",
+      "url": "https://stream8.cinerama.uz/1212/tracks-v1a1/mono.m3u8",
+      "quality": "HD"
+    },
+    {
+      "id": "vevo-pop",
+      "name": "وِوو پاپ",
+      "nameEn": "Vevo Pop",
+      "category": "music",
+      "logo": "https://i.imgur.com/dZHktKR.png",
+      "url": "https://d128y56w6v2kax.cloudfront.net/playlist/amg00056-vevotv-vevopopau-samsungau/playlist.m3u8",
+      "quality": "HD"
+    },
+    {
+      "id": "vevo-90s",
+      "name": "وِوو دهه ۹۰",
+      "nameEn": "Vevo '90s",
+      "category": "music",
+      "logo": "https://images.pluto.tv/channels/5fd7bb1f86d94a000796e2c2/featuredImage.jpg",
+      "url": "https://amg00056-vevotv-vevo90saunz-samsungau-n6a0d.amagi.tv/playlist/amg00056-vevotv-vevo90saunz-samsungau/playlist.m3u8",
+      "quality": "HD"
+    },
+    {
+      "id": "vevo-hiphop",
+      "name": "وِوو هیپ‌هاپ",
+      "nameEn": "Vevo Hip Hop",
+      "category": "music",
+      "logo": "https://i.imgur.com/Lbc9cYw.png",
+      "url": "https://d3vgs3ro3x6v8a.cloudfront.net/Vevo_Hip_Hop.m3u8",
+      "quality": "HD"
+    },
+    {
+      "id": "vevo-retro-rock",
+      "name": "وِوو راک کلاسیک",
+      "nameEn": "Vevo Retro Rock",
+      "category": "music",
+      "logo": "https://i.imgur.com/H1Aap4E.png",
+      "url": "https://d2lyea6if8kkz9.cloudfront.net/playlist/amg00056-vevotv-vevoretrorockau-samsungau/playlist.m3u8",
+      "quality": "HD"
+    },
+    {
+      "id": "mtv-biggest-pop",
+      "name": "ام‌تی‌وی پاپ",
+      "nameEn": "MTV Biggest Pop",
+      "category": "music",
+      "logo": "https://images.pluto.tv/channels/6047fbdbbb776a0007e7f2ff/colorLogoPNG.png",
+      "url": "https://jmp2.uk/plu-5d14fd1a252d35decbc4080c.m3u8",
+      "quality": "HD"
+    },
+    {
+      "id": "yo-mtv",
+      "name": "یو! ام‌تی‌وی",
+      "nameEn": "Yo! MTV",
+      "category": "music",
+      "logo": "https://images.pluto.tv/channels/654102ed770cf1000866c307/colorLogoPNG.png",
+      "url": "https://jmp2.uk/plu-5d14fc31252d35decbc4080b.m3u8",
+      "quality": "HD"
+    },
+    {
+      "id": "mtv-classic",
+      "name": "ام‌تی‌وی کلاسیک",
+      "nameEn": "MTV Classic",
+      "category": "music",
+      "logo": "https://images.pluto.tv/channels/66a01dcb8561260008b0a41d/colorLogoPNG.png",
+      "url": "https://jmp2.uk/plu-654100b4bdf3cf0008aa49c7.m3u8",
+      "quality": "HD"
+    },
+    {
+      "id": "xite-hits",
+      "name": "زایت هیتس",
+      "nameEn": "XITE Hits",
+      "category": "music",
+      "logo": "https://i.imgur.com/N51Rp7E.png",
+      "url": "https://d726x48n2pd5h.cloudfront.net/XITE_Hits.m3u8",
+      "quality": "HD"
+    },
+    {
+      "id": "xite-rock",
+      "name": "زایت راک",
+      "nameEn": "XITE Rock x Metal",
+      "category": "music",
+      "logo": "https://i.imgur.com/uIIUIuN.png",
+      "url": "https://d198ro05q94rc4.cloudfront.net/XITE_Rock_On.m3u8",
+      "quality": "HD"
+    },
+    {
+      "id": "now-80s",
+      "name": "ناو ۸۰s",
+      "nameEn": "Now 80s",
+      "category": "music",
+      "logo": "https://i.imgur.com/YyPnMeB.png",
+      "url": "https://lightningnow80-samsungau.amagi.tv/playlist.m3u8",
+      "quality": "HD"
+    },
+    {
+      "id": "now-90s00s",
+      "name": "ناو ۹۰ و ۰۰",
+      "nameEn": "Now 90s00s",
+      "category": "music",
+      "logo": "https://images.pluto.tv/channels/660c209e19ca71000846cf38/colorLogoPNG.png",
+      "url": "https://amg01076-amg01076c19-rakuten-gb-8653.playouts.now.amagi.tv/playlist/amg01076-lightning-now90s00s-rakutengb/playlist.m3u8",
+      "quality": "HD"
+    },
+    {
+      "id": "trace-urban",
+      "name": "تریس اربن",
+      "nameEn": "Trace Urban",
+      "category": "music",
+      "logo": "https://i.imgur.com/DLIbUMx.png",
+      "url": "https://lightning-traceurban-samsungau.amagi.tv/playlist.m3u8",
+      "quality": "HD"
+    },
+    {
+      "id": "deluxe-music",
+      "name": "دلوکس موزیک",
+      "nameEn": "Deluxe Music",
+      "category": "music",
+      "logo": "https://i.imgur.com/HimuPPb.png",
+      "url": "https://sdn-global-live-streaming-packager-cache.3qsdn.com/13456/13456_264_live.m3u8",
+      "quality": "HD"
+    },
+    {
+      "id": "deluxe-dance",
+      "name": "دلوکس دنس",
+      "nameEn": "Deluxe Dance",
+      "category": "music",
+      "logo": "https://i.imgur.com/Qu7t15Y.png",
+      "url": "https://sdn-global-live-streaming-packager-cache.3qsdn.com/64733/64733_264_live.m3u8",
+      "quality": "HD"
+    },
+    {
+      "id": "deluxe-rap",
+      "name": "دلوکس رپ",
+      "nameEn": "Deluxe Rap",
+      "category": "music",
+      "logo": "https://i.imgur.com/s3h67hx.png",
+      "url": "https://sdn-global-live-streaming-packager-cache.3qsdn.com/65183/65183_264_live.m3u8",
+      "quality": "HD"
+    },
+    {
+      "id": "kiss-kiss-tv",
+      "name": "کیس کیس تی‌وی",
+      "nameEn": "Kiss Kiss TV",
+      "category": "music",
+      "logo": "https://i.imgur.com/ja6c2YZ.png",
+      "url": "https://58f12ffd2447a.streamlock.net/KKMulti/livestream/playlist.m3u8",
+      "quality": "HD"
+    },
+    {
+      "id": "stingray-djazz",
+      "name": "استینگری جاز",
+      "nameEn": "Stingray DJAZZ",
+      "category": "music",
+      "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/14/Stingray_Djazz.png/960px-Stingray_Djazz.png",
+      "url": "https://lotus.stingray.com/manifest/djazz-djaads-montreal/samsungtvplus/master.m3u8",
+      "quality": "HD"
+    },
+    {
+      "id": "stingray-classic-rock",
+      "name": "استینگری کلاسیک راک",
+      "nameEn": "Stingray Classic Rock",
+      "category": "music",
+      "logo": "https://i.imgur.com/FBgu8yB.png",
+      "url": "https://lotus.stingray.com/manifest/ose-101ads-montreal/samsungtvplus/master.m3u8",
+      "quality": "HD"
+    },
+    {
+      "id": "varzesh-tv",
+      "name": "شبکه ورزش",
+      "nameEn": "Varzesh TV",
+      "category": "sports",
+      "logo": "https://upload.wikimedia.org/wikipedia/fa/thumb/f/f5/Iribvarzesh2022.png/960px-Iribvarzesh2022.png",
+      "url": "https://ncdn.telewebion.ir/varzesh/live/playlist.m3u8",
+      "quality": "HD"
+    },
+    {
+      "id": "bein-xtra",
+      "name": "بی‌این اسپورتس",
+      "nameEn": "beIN SPORTS XTRA",
+      "category": "sports",
+      "logo": "https://i.ibb.co/HT49GPmB/XTRA-2.png",
+      "url": "https://bein-xtra-bein.amagi.tv/playlist.m3u8",
+      "quality": "HD"
+    },
+    {
+      "id": "fifa-plus",
+      "name": "فیفا پلاس",
+      "nameEn": "FIFA+",
+      "category": "sports",
+      "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9c/FIFA%2B_(2025).svg/960px-FIFA%2B_(2025).svg.png",
+      "url": "https://jmp2.uk/plu-660c29b5aec9680008f5b4a4.m3u8",
+      "quality": "HD"
+    },
+    {
+      "id": "fifa-plus-women",
+      "name": "فیفا پلاس زنان",
+      "nameEn": "FIFA+ Women",
+      "category": "sports",
+      "logo": "https://i.imgur.com/xy9ZxVO.png",
+      "url": "https://cffda8ff.wurl.com/master/f36d25e7e52f1ba8d7e56eb859c636563214f541/U2Ftc3VuZy1nYl9GSUZBUGx1c3dvbWVuX0hMUw/playlist.m3u8",
+      "quality": "HD"
+    },
+    {
+      "id": "red-bull-tv",
+      "name": "رد بُل تی‌وی",
+      "nameEn": "Red Bull TV",
+      "category": "sports",
+      "logo": "https://images.pluto.tv/channels/5e7cb84a172a0f0007da69e4/colorLogoPNG.png",
+      "url": "https://3ea22335.wurl.com/master/f36d25e7e52f1ba8d7e56eb859c636563214f541/UmFrdXRlblRWLWdiX1JlZEJ1bGxUVl9ITFM/playlist.m3u8",
+      "quality": "HD"
+    },
+    {
+      "id": "dazn-combat",
+      "name": "دازن کامبت",
+      "nameEn": "DAZN Combat",
+      "category": "sports",
+      "logo": "https://i.postimg.cc/VsW3Jsrz/logo-DAZN-Combat.png",
+      "url": "https://jmp2.uk/plu-64d626ac9b414d000820e2fc.m3u8",
+      "quality": "SD"
+    },
+    {
+      "id": "dazn-darts",
+      "name": "دازن دارتس",
+      "nameEn": "DAZN Darts",
+      "category": "sports",
+      "logo": "https://images.pluto.tv/channels/64b67f0424ade50008a3be17/colorLogoPNG.png",
+      "url": "https://jmp2.uk/plu-64b67f0424ade50008a3be17.m3u8",
+      "quality": "SD"
+    },
+    {
+      "id": "fight-network",
+      "name": "فایت نتورک",
+      "nameEn": "Fight Network",
+      "category": "sports",
+      "logo": "https://i.imgur.com/vlKPZHR.png",
+      "url": "https://d12a2vxqkkh1bo.cloudfront.net/hls/main.m3u8",
+      "quality": "HD"
+    },
+    {
+      "id": "fightbox",
+      "name": "فایت‌باکس",
+      "nameEn": "FightBox",
+      "category": "sports",
+      "logo": "https://i.imgur.com/mRsnztA.png",
+      "url": "https://webtvstream.bhtelecom.ba/fightbox.m3u8",
+      "quality": "HD"
+    },
+    {
+      "id": "premier-sports",
+      "name": "پریمیر اسپورتس",
+      "nameEn": "Premier Sports",
+      "category": "sports",
+      "logo": "https://i.imgur.com/BURPHzI.png",
+      "url": "https://amg19223-amg19223c3-amgplt0351.playout.now3.amagi.tv/playlist/amg19223-amg19223c3-amgplt0351/playlist.m3u8",
+      "quality": "HD"
+    },
+    {
+      "id": "tennis-channel",
+      "name": "تنیس چنل",
+      "nameEn": "Tennis Channel",
+      "category": "sports",
+      "logo": "https://i.imgur.com/tsljAnY.png",
+      "url": "https://cdn-ue1-prod.tsv2.amagi.tv/linear/amg01444-tennischannelth-tennischannelnl-samsungnl/playlist.m3u8",
+      "quality": "HD"
+    },
+    {
+      "id": "tennis-channel-2",
+      "name": "تنیس چنل ۲",
+      "nameEn": "Tennis Channel +2",
+      "category": "sports",
+      "logo": "https://i.imgur.com/tsljAnY.png",
+      "url": "https://jmp2.uk/plu-681109b688b9d85d0938c6ba.m3u8",
+      "quality": "HD"
+    },
+    {
+      "id": "golf-channel",
+      "name": "گلف چنل",
+      "nameEn": "Golf Channel",
+      "category": "sports",
+      "logo": "https://www.sms.cz/kategorie/televize/bmp/loga/velka/golfchannel.png",
+      "url": "https://dash4.antik.sk/live/test_golf_channel/playlist.m3u8",
+      "quality": "HD"
+    },
+    {
+      "id": "olympic-channel",
+      "name": "المپیک چنل",
+      "nameEn": "Olympic Channel",
+      "category": "sports",
+      "logo": "https://i.imgur.com/wPQVVtj.png",
+      "url": "https://ocshls-2-olympicchannel.akamaized.net/ocshls/OCTV_1.m3u8",
+      "quality": "HD"
+    },
+    {
+      "id": "nfl-channel",
+      "name": "ان‌اف‌ال",
+      "nameEn": "NFL Channel",
+      "category": "sports",
+      "logo": "https://i.imgur.com/mPGtwAP.png",
+      "url": "https://jmp2.uk/plu-5ced7d5df64be98e07ed47b6.m3u8",
+      "quality": "HD"
+    },
+    {
+      "id": "nbc-sports-now",
+      "name": "ان‌بی‌سی اسپورتس",
+      "nameEn": "NBC Sports NOW",
+      "category": "sports",
+      "logo": "https://i.imgur.com/EzNf2Yx.png",
+      "url": "https://d1m1xk35ma8qfl.cloudfront.net/master.m3u8",
+      "quality": "HD"
+    },
+    {
+      "id": "fubo-sports",
+      "name": "فوبو اسپورتس",
+      "nameEn": "Fubo Sports Network",
+      "category": "sports",
+      "logo": "https://i.imgur.com/qFNRJLb.png",
+      "url": "https://dnf08l6u6uxnz.cloudfront.net/master.m3u8",
+      "quality": "HD"
+    },
+    {
+      "id": "tsn-the-ocho",
+      "name": "تی‌اس‌ان اوچو",
+      "nameEn": "TSN The Ocho",
+      "category": "sports",
+      "logo": "https://tvpnlogopus.samsungcloud.tv/platform/image/sourcelogo/vc/00/02/34/CA1400003R3_20240709T002034SQUARE.png",
+      "url": "https://d3pnbvng3bx2nj.cloudfront.net/v1/master/3722c60a815c199d9c0ef36c5b73da68a62b09d1/cc-rds8g35qfqrnv/TSN_The_Ocho.m3u8",
+      "quality": "HD"
+    },
+    {
+      "id": "espn8-the-ocho",
+      "name": "ای‌اس‌پی‌ان اوچو",
+      "nameEn": "ESPN8: The Ocho",
+      "category": "sports",
+      "logo": "https://images.fubo.tv/channel-config-ui/station-logos/on-dark/espn_8_the_ocho_bw.png",
+      "url": "https://d3b6q2ou5kp8ke.cloudfront.net/ESPNTheOcho.m3u8",
+      "quality": "HD"
+    },
+    {
+      "id": "mutv",
+      "name": "مان‌یونایتد تی‌وی",
+      "nameEn": "MUTV",
+      "category": "sports",
+      "logo": "https://d2n0069hmnqmmx.cloudfront.net/epgdata/1.0/newchanlogos/512/512/skychb1834.png",
+      "url": "https://fastly.live.brightcove.com/6374054671112/eu-west-1/6058004203001/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJob3N0IjoiYXplMnp5LmVncmVzcy55ODN1ZWIiLCJhY2NvdW50X2lkIjoiNjA1ODAwNDIwMzAwMSIsImVobiI6ImZhc3RseS5saXZlLmJyaWdodGNvdmUuY29tIiwiaXNzIjoiYmxpdmUtcGxheWJhY2stc291cmNlLWFwaSIsInN1YiI6InBhdGhtYXB0b2tlbiIsImF1ZCI6WyI2MDU4MDA0MjAzMDAxIl0sImp0aSI6IjYzNzQwNTQ2NzExMTIifQ.3FmuTna3DAmY7xlhK5fk6LMrosrtrR5VsU2QOgYO5y4/playlist-hls.m3u8",
+      "quality": "HD"
+    },
+    {
+      "id": "mlb-channel",
+      "name": "ام‌ال‌بی",
+      "nameEn": "MLB Channel",
+      "category": "sports",
+      "logo": "https://i.imgur.com/ym3su2J.png",
+      "url": "https://pb-2y9ox4r1fy550.akamaized.net/playlist.m3u8",
+      "quality": "HD"
+    },
+    {
+      "id": "trace-sport-stars",
+      "name": "تریس اسپورت",
+      "nameEn": "Trace Sport Stars",
+      "category": "sports",
+      "logo": "https://i.imgur.com/FabFP5A.png",
+      "url": "https://lightning-tracesport-samsungau.amagi.tv/playlist.m3u8",
+      "quality": "HD"
+    },
+    {
+      "id": "cbc-sport",
+      "name": "سی‌بی‌سی اسپرت",
+      "nameEn": "CBC Sport",
+      "category": "sports",
+      "logo": "https://i.imgur.com/3mEdjuq.png",
+      "url": "https://mn-nl.mncdn.com/cbcsports_live/cbcsports/playlist.m3u8",
+      "quality": "HD"
+    },
+    {
+      "id": "adjarasport-1",
+      "name": "آجاراسپورت",
+      "nameEn": "Adjarasport 1",
+      "category": "sports",
+      "logo": "https://i.imgur.com/SVV5xHC.png",
+      "url": "https://live20.bozztv.com/dvrfl05/gin-adjara/index.m3u8",
+      "quality": "HD"
+    }
+  ]
+}
