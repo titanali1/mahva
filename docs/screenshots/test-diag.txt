@@ -1,19 +1,31 @@
 home ready: true
 capture 01-home.png -> 1233x2745
-click text 'پرشیانا' -> true
-section 'پرشیانا' ready: true
+click tag 'tab_persiana' -> ok
+section 'tab_persiana' ready: true
 capture 02-persiana.png -> 1233x2745
-click text 'خبری' -> false
-click text 'موزیک' -> false
-click text 'ورزشی' -> false
-click text 'شبکه ورزش' -> false
-click text 'خانه' -> false
-click desc 'جستجو' -> true
+click tag 'tab_news' -> ok
+section 'tab_news' ready: true
+capture 03-news.png -> 1233x2745
+click tag 'tab_music' -> ok
+section 'tab_music' ready: true
+capture 04-music.png -> 1233x2745
+click tag 'tab_sports' -> ok
+section 'tab_sports' ready: true
+capture 05-sports.png -> 1233x2745
+click text 'شبکه ورزش' -> ok
+player open: true
+capture 06-player.png -> 1233x2745
+click desc 'بازگشت' -> ok
+click tag 'tab_home' -> ok
+click tag 'action_search' -> ok
 capture 07-search.png -> 1233x2745
-click desc 'بازگشت' -> false
-click text 'خانه' -> false
-click desc 'کانال‌های من' -> true
+click desc 'بازگشت' -> FAILED: Failed to inject touch input.
+Can't retrieve node at index '0' of 'ContentDescription = 'بازگشت' (ignoreCase: false)'
+There are no existing nodes for that selector.
+
+click text 'خانه' -> ok
+click tag 'action_library' -> ok
 capture 08-my-channels.png -> 1233x2745
-click text 'افزودن کانال جدید' -> true
+click text 'افزودن کانال جدید' -> ok
 capture 09-add-channel.png -> 1233x2745
-click desc 'منو' -> false
+click tag 'action_menu' -> FAILED: Compose did not get idle after 148364 attempts in 60 SECONDS. Please check your measure/layout lambdas, they may be causing an infinite composition loop. Or set Espresso's master i
