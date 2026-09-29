@@ -60,12 +60,9 @@ jobs:
         if: failure() || steps.unit_tests.outcome == 'failure'
         run: |
           set +e
-          cat build-debug.log build-release.log 2>/dev/null \
-            | grep -E "^(e:|error:|Execution failed|\* What went wrong:|Caused by:)" \
-            | head -30 > errors.txt
-          cat build-tests.log 2>/dev/null \
-            | grep -E "(FAILED|AssertionError|Exception|expected:|error:|at ir\.mahva\.tv)" \
-            | head -30 >> errors.txt
+          cat build-debug.log build-release.log build-tests.log 2>/dev/null \
+            | grep -E "^(e: |error:|Execution failed|\* What went wrong:|Caused by:|> Task .*FAILED|BUILD FAILED)" \
+            | head -45 > errors.txt
           if [ ! -s errors.txt ]; then
             tail -c 3000 build-debug.log 2>/dev/null >> errors.txt
           fi
@@ -73,6 +70,37 @@ jobs:
             clean=$(printf '%s' "$line" | tr -d '\r' | sed 's/%/%25/g' | cut -c1-900)
             echo "::error::$clean"
           done < errors.txt
+
+      # The raw job logs are not always reachable from outside, so the relevant
+      # part of the build output is committed to ci-logs/ instead.
+      - name: Store build logs in the repository
+        if: failure() || steps.unit_tests.outcome == 'failure'
+        run: |
+          set +e
+          mkdir -p ci-logs
+          {
+            echo "### build-debug.log"
+            grep -E "^(e: |error:|Execution failed|> Task .*FAILED|\* What went wrong:)" build-debug.log 2>/dev/null | head -60
+            echo
+            echo "### build-tests.log"
+            grep -E "^(e: |error:|> Task .*FAILED|.*FAILED|.*AssertionError|.*Exception|\* What went wrong:)" build-tests.log 2>/dev/null | head -120
+            echo
+            echo "### build-release.log"
+            grep -E "^(e: |error:|Execution failed|> Task .*FAILED|\* What went wrong:)" build-release.log 2>/dev/null | head -40
+            echo
+            echo "### tail of build-tests.log"
+            tail -c 6000 build-tests.log 2>/dev/null
+            echo
+            echo "### tail of build-debug.log"
+            tail -c 4000 build-debug.log 2>/dev/null
+          } > ci-logs/errors.txt
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -f ci-logs
+          git diff --cached --quiet && echo "no error log changes" && exit 0
+          git commit -m "CI error log [skip ci]"
+          git pull --rebase --autostash origin "${GITHUB_REF_NAME}" || true
+          git push origin "HEAD:${GITHUB_REF_NAME}"
 
       - name: Commit screenshots back to the branch
         if: always()
