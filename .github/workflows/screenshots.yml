@@ -7,6 +7,7 @@ on:
       - 'arena/**'
     paths-ignore:
       - 'docs/**'
+      - 'ci-logs/**'
       - '**.md'
 
 permissions:
@@ -36,72 +37,75 @@ jobs:
           chmod +x ./gradlew
           ./gradlew --no-daemon --console=plain :app:assembleDebug
 
-      - name: Enable KVM for the emulator
+      - name: Enable KVM
         run: |
           echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' \
             | sudo tee /etc/udev/rules.d/99-kvm4all.rules
           sudo udevadm control --reload-rules
           sudo udevadm trigger --name-match=kvm
 
-      - name: Boot emulator, install the app and take screenshots
-        id: emulator
-        continue-on-error: true
-        uses: reactivecircus/android-emulator-runner@v2
-        with:
-          api-level: 34
-          target: google_apis
-          arch: x86_64
-          profile: pixel_5
-          disable-animations: true
-          emulator-options: -no-window -no-snapshot -no-boot-anim -gpu swiftshader_indirect
-          script: |
-            mkdir -p docs/screenshots/emulator ci-logs
-            LOG=ci-logs/emulator.log
-            : > "$LOG"
-            {
-              set +e
-              adb wait-for-device
-              echo "boot completed: $(adb shell getprop sys.boot_completed)"
-              echo "--- install ---"
-              adb install -r app/build/outputs/apk/debug/app-debug.apk || echo "INSTALL_FAILED"
-              echo "--- launch ---"
-              adb shell am start -n ir.mahva.tv/.MainActivity
-              sleep 25
-              adb shell dumpsys window displays | grep -i -E "init=|cur=" | head -5
-              adb exec-out screencap -p > docs/screenshots/emulator/01-home.png
+      - name: Install emulator and system image
+        run: |
+          mkdir -p ci-logs docs/screenshots/emulator
+          yes | sdkmanager --licenses > ci-logs/sdkmanager.log 2>&1
+          sdkmanager --install "platform-tools" "emulator" \
+            "system-images;android-34;google_apis;x86_64" >> ci-logs/sdkmanager.log 2>&1
+          tail -5 ci-logs/sdkmanager.log
 
-              # Bottom navigation tabs, RTL order (home is the right-most item)
-              for pair in "756:02-persiana" "540:03-news" "324:04-music" "108:05-sports"; do
-                x="${pair%%:*}"; name="${pair##*:}"
-                adb shell input tap "$x" 2182
-                sleep 8
-                adb exec-out screencap -p > "docs/screenshots/emulator/$name.png"
-              done
+      - name: Boot the emulator
+        run: |
+          echo no | avdmanager create avd -n mahva -k "system-images;android-34;google_apis;x86_64" \
+            -d pixel_5 --force > ci-logs/avdmanager.log 2>&1
+          nohup emulator -avd mahva -no-window -no-audio -no-boot-anim -no-snapshot \
+            -gpu swiftshader_indirect -camera-back none -camera-front none \
+            > ci-logs/emulator-boot.log 2>&1 &
+          adb wait-for-device
+          for i in $(seq 1 90); do
+            state=$(adb shell getprop sys.boot_completed 2>/dev/null | tr -d '\r')
+            echo "attempt $i: sys.boot_completed='$state'"
+            [ "$state" = "1" ] && break
+            sleep 5
+          done
+          adb shell getprop sys.boot_completed
+          adb shell wm size
 
-              # Open the first channel card of the current section
-              adb shell input tap 830 700
-              sleep 15
-              adb exec-out screencap -p > docs/screenshots/emulator/06-player.png
+      - name: Install the app, drive the UI and capture screenshots
+        run: |
+          mkdir -p docs/screenshots/emulator ci-logs
+          {
+            echo "--- install ---"
+            adb install -r app/build/outputs/apk/debug/app-debug.apk
+            echo "--- launch ---"
+            adb shell am start -n ir.mahva.tv/.MainActivity
+            sleep 30
+            adb exec-out screencap -p > docs/screenshots/emulator/01-home.png
 
-              adb shell input keyevent KEYCODE_BACK
-              sleep 3
-              adb shell input tap 972 2182
-              sleep 6
-              adb exec-out screencap -p > docs/screenshots/emulator/07-home-again.png
+            # Bottom navigation tabs (RTL layout: home is the right-most item)
+            for pair in "756:02-persiana" "540:03-news" "324:04-music" "108:05-sports"; do
+              x="${pair%%:*}"; name="${pair##*:}"
+              echo "--- tapping tab at x=$x ---"
+              adb shell input tap "$x" 2182
+              sleep 8
+              adb exec-out screencap -p > "docs/screenshots/emulator/$name.png"
+            done
 
-              # Tapping a channel must not crash the app
-              echo "--- app process ---"
-              adb shell pidof ir.mahva.tv || echo "APP_NOT_RUNNING"
-              echo "--- crashes ---"
-              adb logcat -d -b crash | tail -40
-              echo "--- app log ---"
-              adb logcat -d | grep -i -E "mahva|AndroidRuntime|ExoPlayer|MediaCodec" | tail -60
-              echo "--- files ---"
-              ls -la docs/screenshots/emulator
-            } 2>&1 | tee -a "$LOG"
-            echo "emulator script finished"
+            echo "--- opening the first channel of the current section ---"
+            adb shell input tap 830 700
+            sleep 20
+            adb exec-out screencap -p > docs/screenshots/emulator/06-player.png
 
-      - name: Commit emulator screenshots and log
+            echo "--- app process (must still be alive) ---"
+            adb shell pidof ir.mahva.tv || echo "APP_NOT_RUNNING"
+
+            echo "--- crashes ---"
+            adb logcat -d -b crash | tail -40
+            echo "--- app log ---"
+            adb logcat -d | grep -i -E "mahva|AndroidRuntime|ExoPlayer|MediaCodec" | tail -60
+            echo "--- files ---"
+            ls -la docs/screenshots/emulator
+          } 2>&1 | tee -a ci-logs/emulator.log
+
+      - name: Commit screenshots and the emulator log
         if: always()
         run: |
           set +e
@@ -109,16 +113,13 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
           if [ -f ci-logs/emulator.log ]; then
-            tail -c 20000 ci-logs/emulator.log > ci-logs/emulator-tail.log
+            tail -c 60000 ci-logs/emulator.log > ci-logs/emulator-tail.log
             mv ci-logs/emulator-tail.log ci-logs/emulator.log
             git add -f ci-logs/emulator.log
-            while IFS= read -r line; do
-              case "$line" in
-                *error*|*Error*|*ERROR*|*failed*|*Failed*|*FAILED*)
-                  clean=$(printf '%s' "$line" | tr -d '\r' | sed 's/%/%25/g' | cut -c1-900)
-                  echo "::error::$clean" ;;
-              esac
-            done < ci-logs/emulator.log
+            grep -i -E "error|failed|exception|crash" ci-logs/emulator.log | head -20 | while IFS= read -r line; do
+              clean=$(printf '%s' "$line" | tr -d '\r' | sed 's/%/%25/g' | cut -c1-900)
+              echo "::warning::$clean"
+            done
           fi
 
           if [ -d docs/screenshots/emulator ] && [ -n "$(ls -A docs/screenshots/emulator 2>/dev/null)" ]; then
