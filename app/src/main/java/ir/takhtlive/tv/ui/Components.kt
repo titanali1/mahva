@@ -336,7 +336,29 @@ fun EmptyState(title: String, subtitle: String, modifier: Modifier = Modifier) {
     }
 }
 
-/** The developer signature shown at the bottom of the app. */
+/** Slim, always visible signature strip at the very bottom of the app. */
+@Composable
+fun SignatureStrip(
+    strings: AppStrings = LocalAppStrings.current,
+    modifier: Modifier = Modifier
+) {
+    Row(
+        modifier = modifier
+            .fillMaxWidth()
+            .background(MaterialTheme.colorScheme.surface)
+            .padding(vertical = 3.dp),
+        horizontalArrangement = Arrangement.Center,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Text(
+            text = "${strings.signaturePrefix} ${strings.signature}",
+            style = MaterialTheme.typography.labelSmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
+        )
+    }
+}
+
+/** The developer signature shown at the bottom of long lists. */
 @Composable
 fun SignatureFooter(
     strings: AppStrings = LocalAppStrings.current,

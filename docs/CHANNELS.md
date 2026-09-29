@@ -1,12 +1,12 @@
-# فهرست کانال‌ها
+# فهرست کانال‌ها — TakhtLive
 
 این فایل به‌صورت خودکار از `app/src/main/assets/channels.json` ساخته می‌شود.
 
-مجموع: **106 کانال** در 4 بخش — آخرین به‌روزرسانی: 2026-09-29
+مجموع: **109 کانال** در 4 بخش
 
-## 📺 پرشیانا گروپ (26 کانال)
+## 📺 پرشیانا گروپ / Persiana Group (26)
 
-| # | کانال | نام لاتین | کیفیت | آدرس پخش |
+| # | کانال | English | کیفیت | آدرس پخش |
 |---|---|---|---|---|
 | 1 | پرشیانا فمیلی | Persiana Family | HD | `https://familyhls.persiana.live/hls/stream.m3u8` |
 | 2 | پرشیانا سریال | Persiana Series | HD | `https://onehls.persiana.live/hls/stream.m3u8` |
@@ -35,9 +35,9 @@
 | 25 | ام‌تی‌سی تی‌وی | MTC TV | HD | `https://mtchls.wns.live/hls/stream.m3u8` |
 | 26 | آوا فمیلی | AVA Family | HD | `https://familyhls.avatv.live/hls/stream.m3u8` |
 
-## 📰 خبری (29 کانال)
+## 📰 خبری / News (32)
 
-| # | کانال | نام لاتین | کیفیت | آدرس پخش |
+| # | کانال | English | کیفیت | آدرس پخش |
 |---|---|---|---|---|
 | 1 | بی‌بی‌سی فارسی | BBC Persian | HD | `https://vs-hls-pushb-ww-live.akamaized.net/x=4/i=urn:bbc:pips:service:bbc_persian_tv/t=3840/v=pv14/b=5070016/main.m3u8` |
 | 2 | ایران اینترنشنال | Iran International | HD | `https://hlspackager.akamaized.net/live/DB/IRAN_INTERNATIONAL/HLS/IRAN_INTERNATIONAL.m3u8` |
@@ -68,10 +68,13 @@
 | 27 | الحدث | Al Hadath | HD | `https://av.alarabiya.net/alarabiapublish/alhadath.smil/playlist.m3u8` |
 | 28 | ان‌اچ‌کی ژاپن | NHK World-Japan | HD | `https://masterpl.hls.nhkworld.jp/hls/w/live/smarttv.m3u8` |
 | 29 | سی‌جی‌تی‌ان | CGTN | HD | `https://amg00405-rakutentv-cgtn-rakuten-i9tar.amagi.tv/master.m3u8` |
+| 30 | انقلاب ملی ایران | Iran National Revolution TV | HD | `https://hls.irannrtv.live/hls/stream.m3u8` |
+| 31 | شبکه کلمه | Kalemeh TV | HD | `https://player.kalemeh.tv/live/ngrp:kalemeh_all/playlist.m3u8` |
+| 32 | اسرائیل فارسی (اسرائیل پارس) | Israel Pars TV | SD | `https://live.pars-israel.com/tmp_hls/iptv/index.m3u8` |
 
-## 🎵 موزیک (27 کانال)
+## 🎵 موزیک / Music (27)
 
-| # | کانال | نام لاتین | کیفیت | آدرس پخش |
+| # | کانال | English | کیفیت | آدرس پخش |
 |---|---|---|---|---|
 | 1 | پی‌ام‌سی رویال | PMC Royale | HD | `https://pmcrohls.wns.live/hls/stream.m3u8` |
 | 2 | پی‌ام‌سی | PMC | HD | `https://pmchls.wns.live/hls/stream.m3u8` |
@@ -101,9 +104,9 @@
 | 26 | استینگری جاز | Stingray DJAZZ | HD | `https://lotus.stingray.com/manifest/djazz-djaads-montreal/samsungtvplus/master.m3u8` |
 | 27 | استینگری کلاسیک راک | Stingray Classic Rock | HD | `https://lotus.stingray.com/manifest/ose-101ads-montreal/samsungtvplus/master.m3u8` |
 
-## ⚽ ورزشی (24 کانال)
+## ⚽ ورزشی / Sports (24)
 
-| # | کانال | نام لاتین | کیفیت | آدرس پخش |
+| # | کانال | English | کیفیت | آدرس پخش |
 |---|---|---|---|---|
 | 1 | شبکه ورزش | Varzesh TV | HD | `https://ncdn.telewebion.ir/varzesh/live/playlist.m3u8` |
 | 2 | بی‌این اسپورتس | beIN SPORTS XTRA | HD | `https://bein-xtra-bein.amagi.tv/playlist.m3u8` |
@@ -132,4 +135,4 @@
 
 ---
 
-منابع: https://github.com/iptv-org/iptv، https://github.com/Samhouston010/persian-tv
+منابع: https://github.com/iptv-org/iptv، https://github.com/Samhouston010/persian-tv، https://github.com/shayanline/iptv-iran

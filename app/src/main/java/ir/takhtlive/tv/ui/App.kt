@@ -265,14 +265,18 @@ fun TakhtLiveApp(
                 )
             },
             bottomBar = {
-                TakhtBottomBar(
-                    selected = when (val s = screen) {
-                        is Screen.Category -> s.id
-                        Screen.Home -> HOME_TAB
-                        else -> ""
-                    },
-                    onSelect = { selectTab(it) }
-                )
+                Column {
+                    TakhtBottomBar(
+                        selected = when (val s = screen) {
+                            is Screen.Category -> s.id
+                            Screen.Home -> HOME_TAB
+                            else -> ""
+                        },
+                        onSelect = { selectTab(it) }
+                    )
+                    // developer signature, always visible at the bottom of the app
+                    SignatureStrip()
+                }
             }
         ) { innerPadding ->
             Box(
