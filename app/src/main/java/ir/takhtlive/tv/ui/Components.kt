@@ -1,4 +1,4 @@
-package ir.mahva.tv.ui
+package ir.takhtlive.tv.ui
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -34,15 +34,19 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.LanguageRange
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
-import ir.mahva.tv.R
-import ir.mahva.tv.data.Channel
-import ir.mahva.tv.ui.theme.MahvaBlue
-import ir.mahva.tv.ui.theme.MahvaPurple
-import ir.mahva.tv.data.ChannelCategory
+import ir.takhtlive.tv.R
+import ir.takhtlive.tv.data.Channel
+import ir.takhtlive.tv.data.ChannelCategory
+import ir.takhtlive.tv.ui.i18n.AppStrings
+import ir.takhtlive.tv.ui.i18n.LocalAppLanguage
+import ir.takhtlive.tv.ui.i18n.LocalAppStrings
+import ir.takhtlive.tv.ui.theme.TakhtBlue
+import ir.takhtlive.tv.ui.theme.TakhtPurple
 
 /** Channel logo with a graceful placeholder when there is no picture. */
 @Composable
@@ -56,7 +60,7 @@ fun ChannelLogo(
         modifier = modifier
             .size(size)
             .clip(RoundedCornerShape(corner))
-            .background(Color.White.copy(alpha = 0.06f)),
+            .background(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.07f)),
         contentAlignment = Alignment.Center
     ) {
         if (channel.logo.isBlank()) {
@@ -81,7 +85,8 @@ fun ChannelLogo(
 }
 
 @Composable
-fun LiveBadge(modifier: Modifier = Modifier, label: String = "زنده") {
+fun LiveBadge(modifier: Modifier = Modifier, label: String? = null) {
+    val strings = LocalAppStrings.current
     Row(
         modifier = modifier
             .clip(RoundedCornerShape(percent = 50))
@@ -97,7 +102,7 @@ fun LiveBadge(modifier: Modifier = Modifier, label: String = "زنده") {
         )
         Spacer(Modifier.width(5.dp))
         Text(
-            text = label,
+            text = label ?: strings.live,
             color = Color.White,
             style = MaterialTheme.typography.labelSmall
         )
@@ -112,7 +117,7 @@ fun QualityChip(quality: String, modifier: Modifier = Modifier) {
         color = MaterialTheme.colorScheme.onSurfaceVariant,
         modifier = modifier
             .clip(RoundedCornerShape(8.dp))
-            .background(Color.White.copy(alpha = 0.08f))
+            .background(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.08f))
             .padding(horizontal = 6.dp, vertical = 2.dp)
     )
 }
@@ -151,6 +156,10 @@ fun ChannelRow(
     onDelete: (() -> Unit)? = null,
     modifier: Modifier = Modifier
 ) {
+    val strings = LocalAppStrings.current
+    val language = LocalAppLanguage.current
+    val secondaryName = if (language.isRtl) channel.nameEn else channel.name
+
     Card(
         modifier = modifier
             .fillMaxWidth()
@@ -169,7 +178,7 @@ fun ChannelRow(
             Spacer(Modifier.width(12.dp))
             Column(modifier = Modifier.weight(1f)) {
                 Text(
-                    text = channel.name,
+                    text = channel.nameFor(language),
                     style = MaterialTheme.typography.titleMedium,
                     color = MaterialTheme.colorScheme.onSurface,
                     maxLines = 1,
@@ -178,10 +187,10 @@ fun ChannelRow(
                 Spacer(Modifier.height(4.dp))
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     QualityChip(channel.quality)
-                    if (channel.nameEn.isNotBlank()) {
+                    if (secondaryName.isNotBlank()) {
                         Spacer(Modifier.width(6.dp))
                         Text(
-                            text = channel.nameEn,
+                            text = secondaryName,
                             style = MaterialTheme.typography.bodySmall,
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
                             maxLines = 1,
@@ -194,7 +203,7 @@ fun ChannelRow(
                 IconButton(onClick = onDelete) {
                     Icon(
                         imageVector = Icons.Filled.Delete,
-                        contentDescription = "حذف کانال",
+                        contentDescription = strings.deleteChannel,
                         tint = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
@@ -202,7 +211,7 @@ fun ChannelRow(
             IconButton(onClick = onToggleFavorite) {
                 Icon(
                     imageVector = if (isFavorite) Icons.Filled.Favorite else Icons.Filled.FavoriteBorder,
-                    contentDescription = "مورد علاقه",
+                    contentDescription = strings.favourite,
                     tint = if (isFavorite) MaterialTheme.colorScheme.tertiary
                     else MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -211,12 +220,12 @@ fun ChannelRow(
                 modifier = Modifier
                     .size(36.dp)
                     .clip(CircleShape)
-                    .background(Brush.linearGradient(listOf(MahvaPurple, MahvaBlue))),
+                    .background(Brush.linearGradient(listOf(TakhtPurple, TakhtBlue))),
                 contentAlignment = Alignment.Center
             ) {
                 Icon(
                     imageVector = Icons.Filled.PlayArrow,
-                    contentDescription = "پخش",
+                    contentDescription = strings.play,
                     tint = Color.White
                 )
             }
@@ -231,6 +240,7 @@ fun ChannelChip(
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val language = LocalAppLanguage.current
     Card(
         modifier = modifier
             .width(108.dp)
@@ -247,7 +257,7 @@ fun ChannelChip(
             ChannelLogo(channel, size = 58.dp)
             Spacer(Modifier.height(8.dp))
             Text(
-                text = channel.name,
+                text = channel.nameFor(language),
                 style = MaterialTheme.typography.labelLarge,
                 color = MaterialTheme.colorScheme.onSurface,
                 maxLines = 2,
@@ -265,7 +275,9 @@ fun CategoryCard(
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val accent = parseColor(category.colorHex, MahvaPurple)
+    val strings = LocalAppStrings.current
+    val language = LocalAppLanguage.current
+    val accent = parseColor(category.colorHex, TakhtPurple)
     Card(
         modifier = modifier
             .width(150.dp)
@@ -288,12 +300,12 @@ fun CategoryCard(
                 Text(text = category.emoji, style = MaterialTheme.typography.titleLarge)
                 Spacer(Modifier.weight(1f))
                 Text(
-                    text = category.title,
+                    text = category.titleFor(language),
                     style = MaterialTheme.typography.titleMedium,
                     color = Color.White
                 )
                 Text(
-                    text = "$channelCount کانال",
+                    text = strings.channelsCount(channelCount),
                     style = MaterialTheme.typography.labelSmall,
                     color = Color.White.copy(alpha = 0.85f)
                 )
@@ -325,7 +337,30 @@ fun EmptyState(title: String, subtitle: String, modifier: Modifier = Modifier) {
     }
 }
 
+/** The developer signature shown at the bottom of the app. */
+@Composable
+fun SignatureFooter(
+    strings: AppStrings = LocalAppStrings.current,
+    modifier: Modifier = Modifier
+) {
+    Column(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(vertical = 18.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Text(
+            text = "✦ ${strings.signaturePrefix} ${strings.signature} ✦",
+            style = MaterialTheme.typography.labelMedium,
+            color = MaterialTheme.colorScheme.primary
+        )
+    }
+}
+
 /** Converts a `#RRGGBB` string from the catalog into a Compose [Color]. */
 fun parseColor(hex: String, fallback: Color): Color = runCatching {
     Color(android.graphics.Color.parseColor(hex))
 }.getOrElse { fallback }
+
+/** BCP-47 language range of the current interface language (for text rendering). */
+fun languageRangeOf(code: String): LanguageRange = LanguageRange(code)

@@ -14,5 +14,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "MahvaTV"
+rootProject.name = "TakhtLive"
 include(":app")

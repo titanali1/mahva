@@ -1,4 +1,4 @@
-package ir.mahva.tv.ui
+package ir.takhtlive.tv.ui
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -23,8 +23,10 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import ir.mahva.tv.data.Channel
-import ir.mahva.tv.data.ChannelCatalog
+import ir.takhtlive.tv.data.Channel
+import ir.takhtlive.tv.data.ChannelCatalog
+import ir.takhtlive.tv.ui.i18n.LocalAppLanguage
+import ir.takhtlive.tv.ui.i18n.LocalAppStrings
 
 /** Searches every channel of every section at once. */
 @Composable
@@ -35,6 +37,8 @@ fun SearchScreen(
     onToggleFavorite: (Channel) -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val strings = LocalAppStrings.current
+    val language = LocalAppLanguage.current
     var query by rememberSaveable { mutableStateOf("") }
     val results = remember(catalog, query) {
         if (query.trim().isEmpty()) emptyList() else catalog.search(query)
@@ -45,12 +49,12 @@ fun SearchScreen(
             value = query,
             onValueChange = { query = it },
             singleLine = true,
-            placeholder = { Text("نام کانال را بنویسید…") },
+            placeholder = { Text(strings.searchPlaceholder) },
             leadingIcon = { Icon(Icons.Filled.Search, contentDescription = null) },
             trailingIcon = {
                 if (query.isNotEmpty()) {
                     IconButton(onClick = { query = "" }) {
-                        Icon(Icons.Filled.Close, contentDescription = "پاک کردن")
+                        Icon(Icons.Filled.Close, contentDescription = strings.clear)
                     }
                 }
             },
@@ -61,11 +65,11 @@ fun SearchScreen(
 
         if (query.isBlank()) {
             EmptyState(
-                title = "جستجو در ${catalog.channels.size} کانال",
-                subtitle = "بخش پرشیانا، خبری، موزیک، ورزشی و کانال‌های شخصی شما جستجو می‌شوند."
+                title = strings.searchTitle(catalog.channels.size),
+                subtitle = strings.searchSubtitle
             )
         } else if (results.isEmpty()) {
-            EmptyState(title = "نتیجه‌ای یافت نشد", subtitle = "املای نام کانال را بررسی کنید.")
+            EmptyState(title = strings.noResults, subtitle = strings.noResultsHint)
         } else {
             LazyColumn(
                 contentPadding = PaddingValues(vertical = 8.dp),
@@ -80,7 +84,7 @@ fun SearchScreen(
                         onToggleFavorite = { onToggleFavorite(channel) }
                     )
                     Text(
-                        text = category?.title ?: "",
+                        text = category?.titleFor(language).orEmpty(),
                         style = MaterialTheme.typography.labelSmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                         modifier = Modifier.padding(start = 84.dp, bottom = 4.dp)

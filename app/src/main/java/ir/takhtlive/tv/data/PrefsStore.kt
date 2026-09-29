@@ -1,4 +1,4 @@
-package ir.mahva.tv.data
+package ir.takhtlive.tv.data
 
 import android.content.Context
 import org.json.JSONArray
@@ -8,7 +8,19 @@ import org.json.JSONObject
 class PrefsStore(context: Context) {
 
     private val prefs =
-        context.applicationContext.getSharedPreferences("mahva_prefs", Context.MODE_PRIVATE)
+        context.applicationContext.getSharedPreferences("takhtlive_prefs", Context.MODE_PRIVATE)
+
+    // --------------------------------------------------------------- appearance
+
+    /** Selected interface language: fa | en | ar */
+    var languageCode: String
+        get() = prefs.getString(KEY_LANGUAGE, "fa") ?: "fa"
+        set(value) = prefs.edit().putString(KEY_LANGUAGE, value).apply()
+
+    /** Selected theme: dark | light | system */
+    var themeModeId: String
+        get() = prefs.getString(KEY_THEME, "dark") ?: "dark"
+        set(value) = prefs.edit().putString(KEY_THEME, value).apply()
 
     // ---------------------------------------------------------------- favourites
 
@@ -90,6 +102,8 @@ class PrefsStore(context: Context) {
                     put("id", c.id)
                     put("name", c.name)
                     put("url", c.url)
+                    put("nameEn", c.nameEn)
+                    put("nameAr", c.nameAr)
                     put("category", c.category)
                 }
             )
@@ -98,6 +112,8 @@ class PrefsStore(context: Context) {
     }
 
     private companion object {
+        const val KEY_LANGUAGE = "language"
+        const val KEY_THEME = "theme_mode"
         const val KEY_FAVORITES = "favorites"
         const val KEY_RECENTS = "recents"
         const val KEY_CUSTOM = "custom_channels"

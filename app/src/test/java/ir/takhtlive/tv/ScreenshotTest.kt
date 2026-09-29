@@ -1,4 +1,4 @@
-package ir.mahva.tv
+package ir.takhtlive.tv
 
 import android.graphics.Bitmap
 import android.graphics.Canvas
@@ -173,6 +173,21 @@ class ScreenshotTest {
                 settle()
                 awaitText("افزودن کانال جدید", 10_000)
                 capture("09-add-channel.png")
+            }
+        }
+
+        // The hamburger menu with the language and theme settings
+        if (clickByDescription("منو")) {
+            settle(2_500)
+            capture("10-drawer.png")
+            // switch to English, then to light theme, and capture both
+            if (clickByText("English")) {
+                settle(2_500)
+                capture("11-english.png")
+            }
+            if (clickByText("Light")) {
+                settle(2_500)
+                capture("12-light-theme.png")
             }
         }
 

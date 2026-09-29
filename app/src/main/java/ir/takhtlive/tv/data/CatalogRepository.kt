@@ -1,4 +1,4 @@
-package ir.mahva.tv.data
+package ir.takhtlive.tv.data
 
 import android.content.Context
 

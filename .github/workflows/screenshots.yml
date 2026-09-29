@@ -148,7 +148,7 @@ jobs:
             echo "emulator: $(command -v emulator || echo "$EMULATOR_BIN")"
             echo "adb: $(command -v adb)"
 
-            AVD_NAME=mahva
+            AVD_NAME=takhtlive
             echo no | avdmanager create avd -n "$AVD_NAME" \
               -k "system-images;android-34;google_apis;x86_64" -d pixel_5 --force
             avdmanager list avd
@@ -178,7 +178,7 @@ jobs:
             echo "--- install ---"
             adb install -r app/build/outputs/apk/debug/app-debug.apk
             echo "--- launch ---"
-            adb shell am start -n ir.mahva.tv/.MainActivity
+            adb shell am start -n ir.takhtlive.tv/.MainActivity
             sleep 30
             adb exec-out screencap -p > docs/screenshots/emulator/01-home.png
 
@@ -197,12 +197,12 @@ jobs:
             adb exec-out screencap -p > docs/screenshots/emulator/06-player.png
 
             echo "--- app process (must still be alive) ---"
-            adb shell pidof ir.mahva.tv || echo "APP_NOT_RUNNING"
+            adb shell pidof ir.takhtlive.tv || echo "APP_NOT_RUNNING"
 
             echo "--- crashes ---"
             adb logcat -d -b crash | tail -40
             echo "--- app log ---"
-            adb logcat -d | grep -i -E "mahva|AndroidRuntime|ExoPlayer|MediaCodec" | tail -60
+            adb logcat -d | grep -i -E "takhtlive|AndroidRuntime|ExoPlayer|MediaCodec" | tail -60
             echo "--- files ---"
             ls -la docs/screenshots/emulator
           } 2>&1 | tee -a ci-logs/emulator.log

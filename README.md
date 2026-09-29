@@ -1,4 +1,4 @@
-# ماهوا — Mahva TV 📺
+# تخت لایو — TakhtLive 📺
 
 اپلیکیشن اندروید برای **پخش آنلاین کانال‌های ماهواره‌ای** با رابط کاربری فارسی و راست‌به‌چپ.
 
@@ -51,21 +51,21 @@
 ## 📥 نصب سریع (بدون دانش برنامه‌نویسی)
 
 1. به بخش **Releases** مخزن بروید:  
-   <https://github.com/titanali1/mahva/releases/latest>
-2. فایل **`mahva-tv-release.apk`** را دانلود کنید.
+   <https://github.com/titanali1/takhtlive/releases/latest>
+2. فایل **`takhtlive-release.apk`** را دانلود کنید.
 3. روی گوشی اندروید، فایل APK را باز کنید و اگر پیام «نصب از منابع ناشناس» آمد، اجازه دهید.
 4. تمام! برنامه نصب می‌شود و می‌توانید کانال‌ها را تماشا کنید.
 
 > فایل APK در هر بار تغییر کد به‌صورت خودکار توسط GitHub Actions ساخته و در Releases منتشر می‌شود
-> (به‌همراه Artifact به نام `mahva-tv-apk`).
+> (به‌همراه Artifact به نام `takhtlive-apk`).
 
 ## 🛠️ ساخت از روی سورس
 
 نیازمندی‌ها: **JDK 17** و **Android SDK (API 35)**.
 
 ```bash
-git clone https://github.com/titanali1/mahva.git
-cd mahva
+git clone https://github.com/titanali1/takhtlive.git
+cd takhtlive
 ./gradlew :app:assembleDebug     # خروجی: app/build/outputs/apk/debug/app-debug.apk
 ./gradlew :app:assembleRelease   # خروجی: app/build/outputs/apk/release/app-release.apk
 ```
@@ -88,7 +88,7 @@ keyPassword=...
 ```
 app/src/main/
 ├── assets/channels.json          فهرست کانال‌ها (بخش‌ها + آدرس پخش + لوگو)
-├── java/ir/mahva/tv/
+├── java/ir/takhtlive/tv/
 │   ├── MainActivity.kt
 │   ├── data/                     مدل داده، خواندن فهرست، تنظیمات کاربر
 │   └── ui/                       صفحه‌ها: خانه، بخش‌ها، پخش‌کننده، جستجو، کانال‌های من

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="mahva_background">#0B0B14</color>
-    <color name="mahva_surface">#12121F</color>
+    <color name="takht_background">#0B0B14</color>
+    <color name="takht_surface">#12121F</color>
     <color name="ic_launcher_background">#1B1240</color>
 </resources>

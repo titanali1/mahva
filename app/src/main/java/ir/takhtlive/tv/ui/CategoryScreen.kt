@@ -1,4 +1,4 @@
-package ir.mahva.tv.ui
+package ir.takhtlive.tv.ui
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -35,8 +35,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import ir.mahva.tv.data.Channel
-import ir.mahva.tv.data.ChannelCategory
+import ir.takhtlive.tv.data.Channel
+import ir.takhtlive.tv.data.ChannelCategory
+import ir.takhtlive.tv.ui.i18n.LocalAppLanguage
+import ir.takhtlive.tv.ui.i18n.LocalAppStrings
 
 /** One of the four sections (پرشیانا / خبری / موزیک / ورزشی) with its channels. */
 @Composable
@@ -48,13 +50,17 @@ fun CategoryScreen(
     onDeleteChannel: (Channel) -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val strings = LocalAppStrings.current
+    val language = LocalAppLanguage.current
     var query by rememberSaveable(category.id) { mutableStateOf("") }
 
     val visible = remember(channels, query) {
         val q = query.trim()
         if (q.isEmpty()) channels
         else channels.filter {
-            it.name.contains(q, ignoreCase = true) || it.nameEn.contains(q, ignoreCase = true)
+            it.name.contains(q, ignoreCase = true) ||
+                it.nameEn.contains(q, ignoreCase = true) ||
+                it.nameAr.contains(q, ignoreCase = true)
         }
     }
 
@@ -72,12 +78,12 @@ fun CategoryScreen(
             Spacer(Modifier.width(8.dp))
             Column(modifier = Modifier.weight(1f)) {
                 Text(
-                    text = category.title,
+                    text = category.titleFor(language),
                     style = MaterialTheme.typography.titleLarge,
                     color = MaterialTheme.colorScheme.onBackground
                 )
                 Text(
-                    text = category.subtitle,
+                    text = category.subtitleFor(language),
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -88,14 +94,14 @@ fun CategoryScreen(
             value = query,
             onValueChange = { query = it },
             singleLine = true,
-            placeholder = { Text("جستجو در ${category.title}…") },
+            placeholder = { Text(strings.searchInSection(category.titleFor(language))) },
             leadingIcon = {
                 Icon(Icons.Filled.Search, contentDescription = null)
             },
             trailingIcon = {
                 if (query.isNotEmpty()) {
                     IconButton(onClick = { query = "" }) {
-                        Icon(Icons.Filled.Close, contentDescription = "پاک کردن")
+                        Icon(Icons.Filled.Close, contentDescription = strings.clear)
                     }
                 }
             },
@@ -106,8 +112,8 @@ fun CategoryScreen(
 
         if (visible.isEmpty()) {
             EmptyState(
-                title = "کانالی پیدا نشد",
-                subtitle = "عبارت دیگری را جستجو کنید یا کانال دلخواه را از خانه اضافه کنید."
+                title = strings.noChannelFound,
+                subtitle = strings.noChannelFoundHint
             )
         } else {
             LazyVerticalGrid(
@@ -120,6 +126,7 @@ fun CategoryScreen(
                 items(visible, key = { it.id }) { channel ->
                     ChannelGridCard(
                         channel = channel,
+                        language = language,
                         onClick = { onOpenChannel(channel) },
                         onDelete = if (channel.custom) {
                             { onDeleteChannel(channel) }
@@ -134,9 +141,11 @@ fun CategoryScreen(
 @Composable
 private fun ChannelGridCard(
     channel: Channel,
+    language: ir.takhtlive.tv.ui.i18n.AppLanguage,
     onClick: () -> Unit,
     onDelete: (() -> Unit)?
 ) {
+    val strings = LocalAppStrings.current
     Card(
         onClick = onClick,
         modifier = Modifier.fillMaxWidth(),
@@ -153,7 +162,7 @@ private fun ChannelGridCard(
                 ChannelLogo(channel, size = 64.dp)
                 Spacer(Modifier.height(8.dp))
                 Text(
-                    text = channel.name,
+                    text = channel.nameFor(language),
                     style = MaterialTheme.typography.titleSmall,
                     color = MaterialTheme.colorScheme.onSurface,
                     maxLines = 1,
@@ -161,7 +170,7 @@ private fun ChannelGridCard(
                 )
                 Spacer(Modifier.height(2.dp))
                 Text(
-                    text = channel.nameEn.ifBlank { "پخش زنده" },
+                    text = channel.nameEn.ifBlank { strings.live },
                     style = MaterialTheme.typography.labelSmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     maxLines = 1,
@@ -184,7 +193,7 @@ private fun ChannelGridCard(
                 ) {
                     Icon(
                         imageVector = Icons.Filled.Close,
-                        contentDescription = "حذف",
+                        contentDescription = strings.delete,
                         tint = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }

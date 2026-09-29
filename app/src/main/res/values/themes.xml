@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="Theme.Mahva" parent="@android:style/Theme.Material.NoActionBar">
-        <item name="android:windowBackground">@color/mahva_background</item>
-        <item name="android:colorBackground">@color/mahva_background</item>
+    <style name="Theme.TakhtLive" parent="@android:style/Theme.Material.NoActionBar">
+        <item name="android:windowBackground">@color/takht_background</item>
+        <item name="android:colorBackground">@color/takht_background</item>
         <item name="android:statusBarColor">@android:color/transparent</item>
         <item name="android:navigationBarColor">@android:color/transparent</item>
         <item name="android:windowLightStatusBar">false</item>

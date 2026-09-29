@@ -1,4 +1,4 @@
-package ir.mahva.tv.ui
+package ir.takhtlive.tv.ui
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -19,7 +19,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import ir.mahva.tv.data.Channel
+import ir.takhtlive.tv.data.Channel
+import ir.takhtlive.tv.ui.i18n.LocalAppStrings
 
 /** "کانال‌های من": user added channels, favourites and recently watched channels. */
 @Composable
@@ -33,6 +34,7 @@ fun LibraryScreen(
     onAddChannel: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val strings = LocalAppStrings.current
     LazyColumn(
         modifier = modifier.fillMaxWidth(),
         contentPadding = PaddingValues(top = 8.dp, bottom = 28.dp),
@@ -41,12 +43,12 @@ fun LibraryScreen(
         item {
             Column(modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)) {
                 Text(
-                    text = "کانال‌های من",
+                    text = strings.myChannelsSection,
                     style = MaterialTheme.typography.titleLarge,
                     color = MaterialTheme.colorScheme.onBackground
                 )
                 Text(
-                    text = "کانال‌های افزوده‌شده، مورد علاقه‌ها و بازدیدهای اخیر",
+                    text = strings.myChannelsSubtitle,
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -54,14 +56,17 @@ fun LibraryScreen(
                 Button(onClick = onAddChannel) {
                     Icon(Icons.Filled.Add, contentDescription = null)
                     Spacer(Modifier.width(8.dp))
-                    Text("افزودن کانال جدید")
+                    Text(strings.addNewChannel)
                 }
             }
         }
 
         if (customChannels.isNotEmpty()) {
             item(key = "title-custom") {
-                SectionTitle(title = "کانال‌های افزوده‌شده", trailing = "${customChannels.size}")
+                SectionTitle(
+                    title = strings.addedChannels,
+                    trailing = strings.channelsCount(customChannels.size)
+                )
             }
             items(customChannels, key = { "custom-${it.id}" }) { channel ->
                 ChannelRow(
@@ -76,7 +81,10 @@ fun LibraryScreen(
 
         if (favoriteChannels.isNotEmpty()) {
             item(key = "title-fav") {
-                SectionTitle(title = "مورد علاقه‌ها", trailing = "${favoriteChannels.size}")
+                SectionTitle(
+                    title = strings.favourites,
+                    trailing = strings.channelsCount(favoriteChannels.size)
+                )
             }
             items(favoriteChannels, key = { "fav-${it.id}" }) { channel ->
                 ChannelRow(
@@ -90,7 +98,10 @@ fun LibraryScreen(
 
         if (recents.isNotEmpty()) {
             item(key = "title-recent") {
-                SectionTitle(title = "اخیراً دیده‌شده", trailing = "${recents.size}")
+                SectionTitle(
+                    title = strings.recentlyWatched,
+                    trailing = strings.channelsCount(recents.size)
+                )
             }
             items(recents, key = { "recent-${it.id}" }) { channel ->
                 ChannelRow(
@@ -102,12 +113,13 @@ fun LibraryScreen(
             }
         }
 
+        item(key = "signature") { SignatureFooter() }
+
         if (customChannels.isEmpty() && favoriteChannels.isEmpty() && recents.isEmpty()) {
             item {
                 EmptyState(
-                    title = "هنوز کانالی اضافه نکرده‌اید",
-                    subtitle = "با دکمهٔ بالا آدرس پخش (m3u8) دلخواه خود را اضافه کنید، " +
-                        "یا از بخش‌های پرشیانا، خبری، موزیک و ورزشی کانال‌ها را نشان کنید."
+                    title = strings.noChannelsYet,
+                    subtitle = strings.noChannelsYetHint
                 )
             }
         }

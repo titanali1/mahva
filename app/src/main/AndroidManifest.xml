@@ -22,7 +22,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:usesCleartextTraffic="true"
-        android:theme="@style/Theme.Mahva">
+        android:theme="@style/Theme.TakhtLive">
 
         <activity
             android:name=".MainActivity"
@@ -31,7 +31,7 @@
             android:label="@string/app_name"
             android:launchMode="singleTop"
             android:supportsPictureInPicture="true"
-            android:theme="@style/Theme.Mahva"
+            android:theme="@style/Theme.TakhtLive"
             android:windowSoftInputMode="adjustResize">
 
             <intent-filter>

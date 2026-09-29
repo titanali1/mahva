@@ -1,4 +1,4 @@
-package ir.mahva.tv.ui
+package ir.takhtlive.tv.ui
 
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
@@ -26,7 +26,9 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.ui.unit.dp
-import ir.mahva.tv.data.ChannelCategory
+import ir.takhtlive.tv.data.ChannelCategory
+import ir.takhtlive.tv.ui.i18n.LocalAppLanguage
+import ir.takhtlive.tv.ui.i18n.LocalAppStrings
 
 /** Lets the user add their own stream (m3u8 / HLS) to the app. */
 @Composable
@@ -35,6 +37,8 @@ fun AddChannelDialog(
     onDismiss: () -> Unit,
     onConfirm: (name: String, url: String, categoryId: String) -> Unit
 ) {
+    val strings = LocalAppStrings.current
+    val language = LocalAppLanguage.current
     var name by remember { mutableStateOf("") }
     var url by remember { mutableStateOf("") }
     var categoryId by remember { mutableStateOf(CUSTOM_CATEGORY) }
@@ -45,11 +49,11 @@ fun AddChannelDialog(
 
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text("افزودن کانال جدید") },
+        title = { Text(strings.addChannelTitle) },
         text = {
             Column {
                 Text(
-                    text = "آدرس پخش زندهٔ کانال (لینک m3u8 یا HLS) را وارد کنید.",
+                    text = strings.addChannelUrlHint,
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -58,7 +62,7 @@ fun AddChannelDialog(
                     value = name,
                     onValueChange = { name = it },
                     singleLine = true,
-                    label = { Text("نام کانال") },
+                    label = { Text(strings.channelName) },
                     modifier = Modifier.fillMaxWidth()
                 )
                 Spacer(Modifier.height(10.dp))
@@ -66,7 +70,7 @@ fun AddChannelDialog(
                     value = url,
                     onValueChange = { url = it },
                     singleLine = true,
-                    label = { Text("آدرس پخش") },
+                    label = { Text(strings.streamUrl) },
                     isError = url.isNotBlank() && !urlLooksValid,
                     keyboardOptions = KeyboardOptions(
                         keyboardType = KeyboardType.Uri,
@@ -77,7 +81,7 @@ fun AddChannelDialog(
                 )
                 Spacer(Modifier.height(14.dp))
                 Text(
-                    text = "این کانال در کدام بخش نمایش داده شود؟",
+                    text = strings.whichSection,
                     style = MaterialTheme.typography.labelMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -90,20 +94,19 @@ fun AddChannelDialog(
                         FilterChip(
                             selected = categoryId == category.id,
                             onClick = { categoryId = category.id },
-                            label = { Text("${category.emoji} ${category.title}") }
+                            label = { Text("${category.emoji} ${category.titleFor(language)}") }
                         )
                     }
                     FilterChip(
                         selected = categoryId == CUSTOM_CATEGORY,
                         onClick = { categoryId = CUSTOM_CATEGORY },
-                        label = { Text("⭐ بدون دستهٔ خاص") }
+                        label = { Text("⭐ ${strings.noSection}") }
                     )
                 }
                 if (!canSubmit && url.isNotBlank()) {
                     Spacer(Modifier.height(8.dp))
                     Text(
-                        text = if (!urlLooksValid) "آدرس باید با http:// یا https:// شروع شود."
-                        else "نام کانال را وارد کنید.",
+                        text = if (!urlLooksValid) strings.urlMustStart else strings.nameRequired,
                         style = MaterialTheme.typography.labelSmall,
                         color = MaterialTheme.colorScheme.error
                     )
@@ -115,11 +118,11 @@ fun AddChannelDialog(
                 onClick = { onConfirm(name, normalizedUrl, categoryId) },
                 enabled = canSubmit
             ) {
-                Text("افزودن", modifier = Modifier.padding(horizontal = 4.dp))
+                Text(strings.add, modifier = Modifier.padding(horizontal = 4.dp))
             }
         },
         dismissButton = {
-            TextButton(onClick = onDismiss) { Text("انصراف") }
+            TextButton(onClick = onDismiss) { Text(strings.cancel) }
         }
     )
 }

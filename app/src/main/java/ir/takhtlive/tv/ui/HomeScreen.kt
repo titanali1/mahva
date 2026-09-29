@@ -1,4 +1,4 @@
-package ir.mahva.tv.ui
+package ir.takhtlive.tv.ui
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
@@ -31,11 +30,13 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import ir.mahva.tv.data.Channel
-import ir.mahva.tv.data.ChannelCatalog
-import ir.mahva.tv.ui.theme.MahvaBlue
-import ir.mahva.tv.ui.theme.MahvaPurple
-import ir.mahva.tv.ui.theme.MahvaTeal
+import ir.takhtlive.tv.data.Channel
+import ir.takhtlive.tv.data.ChannelCatalog
+import ir.takhtlive.tv.ui.i18n.LocalAppLanguage
+import ir.takhtlive.tv.ui.i18n.LocalAppStrings
+import ir.takhtlive.tv.ui.theme.TakhtBlue
+import ir.takhtlive.tv.ui.theme.TakhtPurple
+import ir.takhtlive.tv.ui.theme.TakhtTeal
 
 @Composable
 fun HomeScreen(
@@ -48,6 +49,8 @@ fun HomeScreen(
     onOpenLibrary: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val strings = LocalAppStrings.current
+    val language = LocalAppLanguage.current
     val favoriteChannels = catalog.channels.filter { favorites.contains(it.id) }
     val customChannels = catalog.channels.filter { it.custom }
 
@@ -56,11 +59,14 @@ fun HomeScreen(
         contentPadding = PaddingValues(top = 8.dp, bottom = 24.dp),
         verticalArrangement = Arrangement.spacedBy(2.dp)
     ) {
-        item { HeroBanner(channelCount = catalog.channels.size) }
+        item { HeroBanner(strings.liveChannels(catalog.channels.size)) }
 
         // ------------------------------------------------------- shortcuts row
         item {
-            SectionTitle(title = "دسترسی سریع", trailing = "${catalog.categories.size} بخش")
+            SectionTitle(
+                title = strings.quickAccess,
+                trailing = strings.sectionsCount(catalog.categories.size)
+            )
         }
         item {
             LazyRow(
@@ -74,9 +80,7 @@ fun HomeScreen(
                         onClick = { onOpenCategory(category.id) }
                     )
                 }
-                item(key = "add") {
-                    AddChannelTile(onClick = onAddChannel)
-                }
+                item(key = "add") { AddChannelTile(onClick = onAddChannel) }
             }
         }
 
@@ -84,8 +88,8 @@ fun HomeScreen(
         if (favoriteChannels.isNotEmpty()) {
             item {
                 SectionTitle(
-                    title = "مورد علاقه‌ها",
-                    trailing = "${favoriteChannels.size} کانال"
+                    title = strings.favourites,
+                    trailing = strings.channelsCount(favoriteChannels.size)
                 )
             }
             item { ChannelRail(favoriteChannels, onOpenChannel) }
@@ -93,7 +97,7 @@ fun HomeScreen(
 
         // ------------------------------------------------------------- recents
         if (recents.isNotEmpty()) {
-            item { SectionTitle(title = "اخیراً دیده‌شده") }
+            item { SectionTitle(title = strings.recentlyWatched) }
             item { ChannelRail(recents, onOpenChannel) }
         }
 
@@ -103,8 +107,8 @@ fun HomeScreen(
             if (channels.isEmpty()) return@forEach
             item(key = "title-${category.id}") {
                 SectionTitle(
-                    title = "${category.emoji}  ${category.title}",
-                    trailing = "${channels.size} کانال"
+                    title = "${category.emoji}  ${category.titleFor(language)}",
+                    trailing = strings.channelsCount(channels.size)
                 )
             }
             item(key = "rail-${category.id}") {
@@ -112,7 +116,7 @@ fun HomeScreen(
             }
             item(key = "more-${category.id}") {
                 SeeAllRow(
-                    title = "مشاهدهٔ همهٔ کانال‌های ${category.title}",
+                    title = strings.seeAll(category.titleFor(language)),
                     onClick = { onOpenCategory(category.id) }
                 )
             }
@@ -121,53 +125,59 @@ fun HomeScreen(
         if (catalog.channels.isEmpty()) {
             item {
                 EmptyState(
-                    title = "در حال بارگذاری فهرست کانال‌ها…",
-                    subtitle = "اگر این پیام باقی ماند، برنامه را دوباره باز کنید."
+                    title = strings.loadingChannels,
+                    subtitle = strings.loadingHint
                 )
             }
         }
 
         if (customChannels.isNotEmpty()) {
-            item { SectionTitle(title = "کانال‌های من", trailing = "${customChannels.size} کانال") }
             item {
-                SeeAllRow(title = "مدیریت کانال‌های من", onClick = onOpenLibrary)
+                SectionTitle(
+                    title = strings.myChannelsSection,
+                    trailing = strings.channelsCount(customChannels.size)
+                )
             }
+            item { SeeAllRow(title = strings.manageMyChannels, onClick = onOpenLibrary) }
         }
+
+        // Developer signature, pinned to the bottom of the app's content.
+        item(key = "signature") { SignatureFooter() }
     }
 }
 
 @Composable
-private fun HeroBanner(channelCount: Int) {
+private fun HeroBanner(liveLabel: String) {
+    val strings = LocalAppStrings.current
     Box(
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 16.dp, vertical = 8.dp)
             .clip(RoundedCornerShape(26.dp))
-            .background(
-                Brush.linearGradient(listOf(MahvaPurple, MahvaBlue, MahvaTeal))
-            )
+            .background(Brush.linearGradient(listOf(TakhtPurple, TakhtBlue, TakhtTeal)))
             .padding(18.dp)
     ) {
         Column {
             Text(
-                text = "ماهوا",
+                text = strings.appName,
                 style = MaterialTheme.typography.headlineSmall,
                 color = Color.White
             )
             Spacer(Modifier.height(4.dp))
             Text(
-                text = "پخش زندهٔ کانال‌های ماهواره‌ای؛ پرشیانا، خبری، موزیک و ورزشی",
+                text = strings.heroSubtitle,
                 style = MaterialTheme.typography.bodySmall,
                 color = Color.White.copy(alpha = 0.92f)
             )
             Spacer(Modifier.height(10.dp))
-            LiveBadge(label = "$channelCount کانال زنده")
+            LiveBadge(label = liveLabel)
         }
     }
 }
 
 @Composable
 private fun AddChannelTile(onClick: () -> Unit) {
+    val strings = LocalAppStrings.current
     Card(
         modifier = Modifier
             .width(150.dp)
@@ -188,12 +198,12 @@ private fun AddChannelTile(onClick: () -> Unit) {
             )
             Spacer(Modifier.height(6.dp))
             Text(
-                text = "افزودن کانال",
+                text = strings.addChannelShort,
                 style = MaterialTheme.typography.labelLarge,
                 color = MaterialTheme.colorScheme.onSurface
             )
             Text(
-                text = "لینک پخش خودت",
+                text = strings.selfLinkHint,
                 style = MaterialTheme.typography.labelSmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )

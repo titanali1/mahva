@@ -1,5 +1,6 @@
-package ir.mahva.tv.data
+package ir.takhtlive.tv.data
 
+import ir.takhtlive.tv.ui.i18n.AppLanguage
 import org.json.JSONArray
 import org.json.JSONObject
 
@@ -9,20 +10,44 @@ data class ChannelCategory(
     val title: String,
     val subtitle: String,
     val emoji: String,
-    val colorHex: String
-)
+    val colorHex: String,
+    val titleEn: String = "",
+    val titleAr: String = "",
+    val subtitleEn: String = "",
+    val subtitleAr: String = ""
+) {
+    fun titleFor(language: AppLanguage): String = when (language) {
+        AppLanguage.PERSIAN -> title
+        AppLanguage.ENGLISH -> titleEn.ifBlank { title }
+        AppLanguage.ARABIC -> titleAr.ifBlank { title }
+    }
+
+    fun subtitleFor(language: AppLanguage): String = when (language) {
+        AppLanguage.PERSIAN -> subtitle
+        AppLanguage.ENGLISH -> subtitleEn.ifBlank { subtitle }
+        AppLanguage.ARABIC -> subtitleAr.ifBlank { subtitle }
+    }
+}
 
 /** A single live TV channel. */
 data class Channel(
     val id: String,
     val name: String,
     val nameEn: String,
+    val nameAr: String = "",
     val category: String,
     val logo: String,
     val url: String,
     val quality: String,
     val custom: Boolean = false
-)
+) {
+    /** The channel name for the currently selected interface language. */
+    fun nameFor(language: AppLanguage): String = when (language) {
+        AppLanguage.PERSIAN -> name
+        AppLanguage.ENGLISH -> nameEn.ifBlank { name }
+        AppLanguage.ARABIC -> nameAr.ifBlank { name }
+    }
+}
 
 /** The whole catalog, read from `assets/channels.json`. */
 data class ChannelCatalog(
@@ -44,6 +69,7 @@ data class ChannelCatalog(
         return channels.filter {
             it.name.contains(q, ignoreCase = true) ||
                 it.nameEn.contains(q, ignoreCase = true) ||
+                it.nameAr.contains(q, ignoreCase = true) ||
                 it.category.contains(q, ignoreCase = true)
         }
     }
@@ -71,7 +97,11 @@ data class ChannelCatalog(
                         title = o.optString("title"),
                         subtitle = o.optString("subtitle"),
                         emoji = o.optString("emoji", "📺"),
-                        colorHex = o.optString("color", "#7C4DFF")
+                        colorHex = o.optString("color", "#7C4DFF"),
+                        titleEn = o.optString("titleEn"),
+                        titleAr = o.optString("titleAr"),
+                        subtitleEn = o.optString("subtitleEn"),
+                        subtitleAr = o.optString("subtitleAr")
                     )
                 )
             }
@@ -87,6 +117,7 @@ data class ChannelCatalog(
                         id = id,
                         name = o.optString("name").ifBlank { id },
                         nameEn = o.optString("nameEn"),
+                        nameAr = o.optString("nameAr"),
                         category = o.optString("category"),
                         logo = o.optString("logo"),
                         url = url,

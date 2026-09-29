@@ -121,15 +121,15 @@ jobs:
         if: steps.build_debug.outcome == 'success'
         run: |
           mkdir -p out
-          cp app/build/outputs/apk/debug/app-debug.apk "out/mahva-tv-debug.apk"
-          cp app/build/outputs/apk/release/app-release.apk "out/mahva-tv-release.apk" || true
+          cp app/build/outputs/apk/debug/app-debug.apk "out/takhtlive-debug.apk"
+          cp app/build/outputs/apk/release/app-release.apk "out/takhtlive-release.apk" || true
           ls -lh out
 
       - name: Upload APK artifacts
         if: steps.build_debug.outcome == 'success'
         uses: actions/upload-artifact@v4
         with:
-          name: mahva-tv-apk
+          name: takhtlive-apk
           path: out/*.apk
           if-no-files-found: error
           retention-days: 30
@@ -139,11 +139,11 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           tag_name: apk-latest
-          name: Mahva TV – APK (آخرین نسخه)
+          name: TakhtLive – APK (آخرین نسخه)
           body: |
-            نسخهٔ آمادهٔ نصب برنامهٔ **ماهوا** (Mahva TV).
+            نسخهٔ آمادهٔ نصب برنامهٔ **تخت لایو** (TakhtLive).
 
-            فایل `mahva-tv-release.apk` را روی گوشی اندروید نصب کنید
+            فایل `takhtlive-release.apk` را روی گوشی اندروید نصب کنید
             (برای این کار باید نصب از منابع ناشناس را در تنظیمات اجازه دهید).
 
             بخش‌ها: پرشیانا گروپ، خبری، موزیک، ورزشی

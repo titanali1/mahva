@@ -1,10 +1,11 @@
 {
-  "version": 2,
+  "version": 3,
   "updated": "2026-09-29",
   "note": "Channel list curated from iptv-org/iptv (categories) and Samhouston010/persian-tv playlists.",
   "sources": [
     "https://github.com/iptv-org/iptv",
-    "https://github.com/Samhouston010/persian-tv"
+    "https://github.com/Samhouston010/persian-tv",
+    "https://github.com/shayanline/iptv-iran"
   ],
   "categories": [
     {
@@ -12,28 +13,44 @@
       "title": "پرشیانا گروپ",
       "subtitle": "کانال‌های گروه پرشیانا",
       "emoji": "📺",
-      "color": "#7C4DFF"
+      "color": "#7C4DFF",
+      "titleEn": "Persiana Group",
+      "titleAr": "مجموعة برشيانا",
+      "subtitleEn": "Channels of the Persiana group",
+      "subtitleAr": "قنوات مجموعة برشيانا"
     },
     {
       "id": "news",
       "title": "خبری",
       "subtitle": "شبکه‌های خبری ایران و جهان",
       "emoji": "📰",
-      "color": "#00B0FF"
+      "color": "#00B0FF",
+      "titleEn": "News",
+      "titleAr": "الأخبار",
+      "subtitleEn": "Iranian and international news channels",
+      "subtitleAr": "قنوات الأخبار الإيرانية والعالمية"
     },
     {
       "id": "music",
       "title": "موزیک",
       "subtitle": "کانال‌های موسیقی و کلیپ",
       "emoji": "🎵",
-      "color": "#FF4081"
+      "color": "#FF4081",
+      "titleEn": "Music",
+      "titleAr": "الموسيقى",
+      "subtitleEn": "Music and music-video channels",
+      "subtitleAr": "قنوات الموسيقى والفيديو الموسيقي"
     },
     {
       "id": "sports",
       "title": "ورزشی",
       "subtitle": "کانال‌های ورزشی و مسابقات زنده",
       "emoji": "⚽",
-      "color": "#00E676"
+      "color": "#00E676",
+      "titleEn": "Sports",
+      "titleAr": "الرياضة",
+      "subtitleEn": "Sports channels and live matches",
+      "subtitleAr": "القنوات الرياضية والمباريات المباشرة"
     }
   ],
   "channels": [
@@ -278,7 +295,8 @@
       "category": "news",
       "logo": "https://upload.wikimedia.org/wikipedia/en/4/44/BBC_News_Persian_Logo.jpg",
       "url": "https://vs-hls-pushb-ww-live.akamaized.net/x=4/i=urn:bbc:pips:service:bbc_persian_tv/t=3840/v=pv14/b=5070016/main.m3u8",
-      "quality": "HD"
+      "quality": "HD",
+      "nameAr": "بي بي سي الفارسية"
     },
     {
       "id": "iran-international",
@@ -287,7 +305,8 @@
       "category": "news",
       "logo": "https://i.imgur.com/55RpaF3.png",
       "url": "https://hlspackager.akamaized.net/live/DB/IRAN_INTERNATIONAL/HLS/IRAN_INTERNATIONAL.m3u8",
-      "quality": "HD"
+      "quality": "HD",
+      "nameAr": "إيران إنترناشيونال"
     },
     {
       "id": "voa-persian",
@@ -296,7 +315,8 @@
       "category": "news",
       "logo": "https://i.imgur.com/TmqComb.png",
       "url": "https://voa-ingest.akamaized.net/hls/live/2033876/tvmc07/playlist.m3u8",
-      "quality": "HD"
+      "quality": "HD",
+      "nameAr": "صوت أمريكا"
     },
     {
       "id": "radio-farda",
@@ -305,7 +325,8 @@
       "category": "news",
       "logo": "https://raw.githubusercontent.com/picons/picons/master/build-source/logos/radiofarda.default.svg",
       "url": "https://rferl-ingest.akamaized.net/hls/live/2121768/tvmc01/playlist.m3u8",
-      "quality": "HD"
+      "quality": "HD",
+      "nameAr": "راديو فردا"
     },
     {
       "id": "simaye-azadi",
@@ -314,7 +335,8 @@
       "category": "news",
       "logo": "https://www.iranntv.com/images/logo.png",
       "url": "https://simaytv.akamaized.net/hls/live/a162cb6c-3be1-4e57-87dc-a75a50b3b8d9/simayhls/index.m3u8",
-      "quality": "HD"
+      "quality": "HD",
+      "nameAr": "سيمای آزادی"
     },
     {
       "id": "al-alam",
@@ -323,7 +345,8 @@
       "category": "news",
       "logo": "https://i.imgur.com/Zdi31dy.png",
       "url": "https://live2.alalam.ir/alalam.m3u8",
-      "quality": "SD"
+      "quality": "SD",
+      "nameAr": "العالم"
     },
     {
       "id": "press-tv",
@@ -332,7 +355,8 @@
       "category": "news",
       "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fb/Press_TV_logo.svg/960px-Press_TV_logo.svg.png",
       "url": "https://live.presstv.ir/hls/presstv.m3u8",
-      "quality": "HD"
+      "quality": "HD",
+      "nameAr": "برس تي في"
     },
     {
       "id": "hispan-tv",
@@ -341,7 +365,8 @@
       "category": "news",
       "logo": "https://upload.wikimedia.org/wikipedia/commons/9/9f/Hispantv_logo.jpg",
       "url": "https://cdnlive.presstv.ir/live/smil:live.smil/playlist.m3u8",
-      "quality": "HD"
+      "quality": "HD",
+      "nameAr": "هسبان تي في"
     },
     {
       "id": "setareh-tv",
@@ -350,7 +375,8 @@
       "category": "news",
       "logo": "https://cdn.jsdelivr.net/gh/Samhouston010/persian-tv@master/logos/setarehtv.png",
       "url": "https://setarehhls.wns.live/hls/stream.m3u8",
-      "quality": "HD"
+      "quality": "HD",
+      "nameAr": "ستاره"
     },
     {
       "id": "aljazeera-en",
@@ -359,7 +385,8 @@
       "category": "news",
       "logo": "https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/united-kingdom/aljazeera-uk.png",
       "url": "https://live-hls-apps-aje-fa.getaj.net/AJE/index.m3u8",
-      "quality": "HD"
+      "quality": "HD",
+      "nameAr": "الجزيرة الإنجليزية"
     },
     {
       "id": "aljazeera-ar",
@@ -368,7 +395,8 @@
       "category": "news",
       "logo": "https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/united-kingdom/aljazeera-uk.png",
       "url": "https://live-hls-apps-aja-fa.getaj.net/AJA/01.m3u8",
-      "quality": "HD"
+      "quality": "HD",
+      "nameAr": "الجزيرة"
     },
     {
       "id": "bbc-news",
@@ -377,7 +405,8 @@
       "category": "news",
       "logo": "http://schedulesdirect-api20141201-logos.s3.dualstack.us-east-1.amazonaws.com/stationLogos/s89542_dark_360w_270h.png",
       "url": "https://vs-hls-push-ww-live.akamaized.net/x=4/i=urn:bbc:pips:service:bbc_news_channel_hd/t=3840/v=pv14/b=5070016/main.m3u8",
-      "quality": "HD"
+      "quality": "HD",
+      "nameAr": "بي بي سي"
     },
     {
       "id": "sky-news",
@@ -386,7 +415,8 @@
       "category": "news",
       "logo": "https://images.pluto.tv/channels/55b285cd2665de274553d66f/colorLogoPNG.png",
       "url": "https://jmp2.uk/plu-55b285cd2665de274553d66f.m3u8",
-      "quality": "HD"
+      "quality": "HD",
+      "nameAr": "سكاي نيوز"
     },
     {
       "id": "cnn",
@@ -395,7 +425,8 @@
       "category": "news",
       "logo": "https://tvpnlogopeu.samsungcloud.tv/platform/image/sourcelogo/vc/00/02/34/GBBD8000016N_20260609T043642SQUARE.png",
       "url": "https://jmp2.uk/stvp-GBBD8000016N",
-      "quality": "HD"
+      "quality": "HD",
+      "nameAr": "سي إن إن"
     },
     {
       "id": "cnbc",
@@ -404,7 +435,8 @@
       "category": "news",
       "logo": "https://tvpnlogopeu.samsungcloud.tv/platform/image/sourcelogo/vc/00/02/34/GBBD3600001NO_20260317T034210SQUARE.png",
       "url": "https://jmp2.uk/stvp-GBBD3600001NO",
-      "quality": "HD"
+      "quality": "HD",
+      "nameAr": "سي إن بي سي"
     },
     {
       "id": "bloomberg",
@@ -413,7 +445,8 @@
       "category": "news",
       "logo": "https://images.pluto.tv/channels/54ff7ba69222cb1c2624c584/colorLogoPNG_1756948295813.png",
       "url": "https://jmp2.uk/plu-54ff7ba69222cb1c2624c584.m3u8",
-      "quality": "HD"
+      "quality": "HD",
+      "nameAr": "بلومبرغ"
     },
     {
       "id": "dw-english",
@@ -422,7 +455,8 @@
       "category": "news",
       "logo": "https://www.dw.com/images/icons/favicon-540x540.png",
       "url": "https://i.mjh.nz/.r/dw-news.m3u8",
-      "quality": "HD"
+      "quality": "HD",
+      "nameAr": "دي دبليو"
     },
     {
       "id": "france24-en",
@@ -431,7 +465,8 @@
       "category": "news",
       "logo": "https://xstreamcp-assets-msp.streamready.in/assets/LIVETV/LIVECHANNEL/LIVETV_LIVETVCHANNEL_FRANCE_24/images/LOGO_HD/image.png",
       "url": "https://live.france24.com/hls/live/2037218-b/F24_EN_HI_HLS/master_5000.m3u8",
-      "quality": "HD"
+      "quality": "HD",
+      "nameAr": "فرانس 24"
     },
     {
       "id": "euronews",
@@ -440,7 +475,8 @@
       "category": "news",
       "logo": "https://jiotvimages.cdn.jio.com/dare_images/images/Euro_News.png",
       "url": "https://jmp2.uk/plu-61de96114757070008d33cae.m3u8",
-      "quality": "HD"
+      "quality": "HD",
+      "nameAr": "يورونيوز"
     },
     {
       "id": "trt-world",
@@ -449,7 +485,8 @@
       "category": "news",
       "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/27/TRT_World.svg/960px-TRT_World.svg.png",
       "url": "https://tv-trtworld.medya.trt.com.tr/master.m3u8",
-      "quality": "HD"
+      "quality": "HD",
+      "nameAr": "تي آر تي"
     },
     {
       "id": "cna",
@@ -458,7 +495,8 @@
       "category": "news",
       "logo": "https://i.imgur.com/awIDugE.png",
       "url": "https://d2e1asnsl7br7b.cloudfront.net/7782e205e72f43aeb4a48ec97f66ebbe/index.m3u8",
-      "quality": "HD"
+      "quality": "HD",
+      "nameAr": "سي إن إيه"
     },
     {
       "id": "abc-news-au",
@@ -467,7 +505,8 @@
       "category": "news",
       "logo": "https://i.imgur.com/BrW7gk8.png",
       "url": "https://abc-news-dmd-streams-1.akamaized.net/out/v1/701126012d044971b3fa89406a440133/index.m3u8",
-      "quality": "HD"
+      "quality": "HD",
+      "nameAr": "إيه بي سي"
     },
     {
       "id": "nbc-news-now",
@@ -476,7 +515,8 @@
       "category": "news",
       "logo": "https://i.imgur.com/JZt2qh5.png",
       "url": "https://d1bl6tskrpq9ze.cloudfront.net/hls/master.m3u8?ads.xumo_channelId=99984003",
-      "quality": "HD"
+      "quality": "HD",
+      "nameAr": "إن بي سي نيوز"
     },
     {
       "id": "i24news-en",
@@ -485,7 +525,8 @@
       "category": "news",
       "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/79/LOGO_i24NEWS.png/960px-LOGO_i24NEWS.png",
       "url": "https://i24newsenglish-cdn.encoders.immergo.tv/master.m3u8",
-      "quality": "HD"
+      "quality": "HD",
+      "nameAr": "آي 24 نيوز"
     },
     {
       "id": "al-arabiya",
@@ -494,7 +535,8 @@
       "category": "news",
       "logo": "https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/united-arab-emirates/al-arabiya-ae.png",
       "url": "https://live.alarabiya.net/alarabiapublish/alarabiya.smil/playlist.m3u8",
-      "quality": "HD"
+      "quality": "HD",
+      "nameAr": "العربية"
     },
     {
       "id": "sky-news-arabia",
@@ -503,7 +545,8 @@
       "category": "news",
       "logo": "https://i.imgur.com/SvjU4h6.png",
       "url": "https://live-stream.skynewsarabia.com/c-horizontal-channel/horizontal-stream/index.m3u8",
-      "quality": "HD"
+      "quality": "HD",
+      "nameAr": "سكاي نيوز عربية"
     },
     {
       "id": "al-hadath",
@@ -512,7 +555,8 @@
       "category": "news",
       "logo": "https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/united-arab-emirates/al-arabiya-al-hadath-ae.png",
       "url": "https://av.alarabiya.net/alarabiapublish/alhadath.smil/playlist.m3u8",
-      "quality": "HD"
+      "quality": "HD",
+      "nameAr": "الحدث"
     },
     {
       "id": "nhk-world",
@@ -521,7 +565,8 @@
       "category": "news",
       "logo": "https://jiotvimages.cdn.jio.com/dare_images/images/NHK_World_Japan.png",
       "url": "https://masterpl.hls.nhkworld.jp/hls/w/live/smarttv.m3u8",
-      "quality": "HD"
+      "quality": "HD",
+      "nameAr": "إن إتش كي"
     },
     {
       "id": "cgtn",
@@ -530,7 +575,38 @@
       "category": "news",
       "logo": "https://images-1.rakuten.tv/storage/global-live-channel/translation/artwork/82a28e14-7f41-4a39-b6b9-57de69feb0ef.jpeg",
       "url": "https://amg00405-rakutentv-cgtn-rakuten-i9tar.amagi.tv/master.m3u8",
+      "quality": "HD",
+      "nameAr": "سي جي تي إن"
+    },
+    {
+      "id": "iran-national-revolution",
+      "name": "انقلاب ملی ایران",
+      "nameEn": "Iran National Revolution TV",
+      "nameAr": "ثورة إيران الوطنية",
+      "category": "news",
+      "logo": "https://raw.githubusercontent.com/shayanline/iptv-iran/main/assets/logos/IranNationalRevolutionTV.us.png",
+      "url": "https://hls.irannrtv.live/hls/stream.m3u8",
       "quality": "HD"
+    },
+    {
+      "id": "kalemeh-tv",
+      "name": "شبکه کلمه",
+      "nameEn": "Kalemeh TV",
+      "nameAr": "قناة كلمة",
+      "category": "news",
+      "logo": "https://raw.githubusercontent.com/shayanline/iptv-iran/main/assets/logos/KalemehTV.uk.png",
+      "url": "https://player.kalemeh.tv/live/ngrp:kalemeh_all/playlist.m3u8",
+      "quality": "HD"
+    },
+    {
+      "id": "israel-pars-tv",
+      "name": "اسرائیل فارسی (اسرائیل پارس)",
+      "nameEn": "Israel Pars TV",
+      "nameAr": "إسرائيل فارس",
+      "category": "news",
+      "logo": "https://raw.githubusercontent.com/shayanline/iptv-iran/main/assets/logos/IsraelParsTV.il.png",
+      "url": "https://live.pars-israel.com/tmp_hls/iptv/index.m3u8",
+      "quality": "SD"
     },
     {
       "id": "pmc-royale",

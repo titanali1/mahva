@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""Generates the Mahva launcher icons (PNG) without any third-party library.
+"""Generates the TakhtLive launcher icons (PNG) without any third-party library.
 
 Usage:  python3 tools/make_icons.py
 """

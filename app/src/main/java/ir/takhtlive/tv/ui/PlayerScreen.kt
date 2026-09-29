@@ -1,4 +1,4 @@
-package ir.mahva.tv.ui
+package ir.takhtlive.tv.ui
 
 import android.app.Activity
 import android.app.PictureInPictureParams
@@ -75,10 +75,12 @@ import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.exoplayer.source.DefaultMediaSourceFactory
 import androidx.media3.ui.AspectRatioFrameLayout
 import androidx.media3.ui.PlayerView
-import ir.mahva.tv.data.Channel
+import ir.takhtlive.tv.data.Channel
+import ir.takhtlive.tv.ui.i18n.LocalAppLanguage
+import ir.takhtlive.tv.ui.i18n.LocalAppStrings
 import kotlinx.coroutines.delay
 
-private const val USER_AGENT = "MahvaTV/1.0 (Android; ExoPlayer)"
+private const val USER_AGENT = "TakhtLiveTV/1.0 (Android; ExoPlayer)"
 private const val MAX_RETRIES = 6
 
 /**
@@ -101,6 +103,9 @@ fun PlayerScreen(
 ) {
     val context = LocalContext.current
     val activity = remember(context) { context.findActivity() }
+    val strings = LocalAppStrings.current
+    val language = LocalAppLanguage.current
+    val channelTitle = channel.nameFor(language)
 
     var errorMessage by remember(channel.id) { mutableStateOf<String?>(null) }
     var isBuffering by remember(channel.id) { mutableStateOf(true) }
@@ -110,9 +115,9 @@ fun PlayerScreen(
     var menuExpanded by remember { mutableStateOf(false) }
 
     val resizeModes = listOf(
-        AspectRatioFrameLayout.RESIZE_MODE_FIT to "اندازهٔ اصلی",
-        AspectRatioFrameLayout.RESIZE_MODE_ZOOM to "بزرگ‌نمایی بدون حاشیه",
-        AspectRatioFrameLayout.RESIZE_MODE_FILL to "کشیدن تا تمام‌صفحه"
+        AspectRatioFrameLayout.RESIZE_MODE_FIT to strings.originalSize,
+        AspectRatioFrameLayout.RESIZE_MODE_ZOOM to strings.zoomToFill,
+        AspectRatioFrameLayout.RESIZE_MODE_FILL to strings.stretchToFill
     )
 
     val exoPlayer = remember(channel.id) {
@@ -162,7 +167,7 @@ fun PlayerScreen(
             override fun onPlaybackStateChanged(playbackState: Int) {
                 isBuffering = playbackState == Player.STATE_BUFFERING
                 if (playbackState == Player.STATE_ENDED) {
-                    errorMessage = "پخش این کانال پایان یافت"
+                    errorMessage = strings.streamEnded
                 }
             }
 
@@ -174,9 +179,9 @@ fun PlayerScreen(
                     isBuffering = false
                     val code = error.errorCodeName
                     errorMessage = if (code.isBlank()) {
-                        "اتصال به این کانال برقرار نشد"
+                        strings.connectionFailed
                     } else {
-                        "اتصال به این کانال برقرار نشد ($code)"
+                        strings.connectionFailed + " ($code)"
                     }
                 }
             }
@@ -229,11 +234,11 @@ fun PlayerScreen(
     val shareChannel: () -> Unit = {
         val intent = Intent(Intent.ACTION_SEND).apply {
             type = "text/plain"
-            putExtra(Intent.EXTRA_SUBJECT, channel.name)
-            putExtra(Intent.EXTRA_TEXT, channel.name + "\n" + channel.url)
+            putExtra(Intent.EXTRA_SUBJECT, channelTitle)
+            putExtra(Intent.EXTRA_TEXT, channelTitle + "\n" + channel.url)
         }
         runCatching {
-            context.startActivity(Intent.createChooser(intent, "اشتراک‌گذاری کانال"))
+            context.startActivity(Intent.createChooser(intent, strings.shareChannel))
         }
         Unit
     }
@@ -243,7 +248,7 @@ fun PlayerScreen(
             setDataAndType(Uri.parse(channel.url), "application/x-mpegURL")
         }
         runCatching {
-            context.startActivity(Intent.createChooser(intent, "پخش با برنامهٔ دیگر"))
+            context.startActivity(Intent.createChooser(intent, strings.playWithExternal))
         }
         Unit
     }
@@ -294,7 +299,7 @@ fun PlayerScreen(
             IconButton(onClick = onBack) {
                 Icon(
                     imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                    contentDescription = "بازگشت",
+                    contentDescription = strings.back,
                     tint = Color.White
                 )
             }
@@ -302,7 +307,7 @@ fun PlayerScreen(
             Spacer(Modifier.width(10.dp))
             Column(modifier = Modifier.weight(1f)) {
                 Text(
-                    text = channel.name,
+                    text = channelTitle,
                     color = Color.White,
                     style = MaterialTheme.typography.titleMedium,
                     maxLines = 1,
@@ -325,14 +330,14 @@ fun PlayerScreen(
             IconButton(onClick = onToggleFavorite) {
                 Icon(
                     imageVector = if (isFavorite) Icons.Filled.Favorite else Icons.Filled.FavoriteBorder,
-                    contentDescription = "مورد علاقه",
+                    contentDescription = strings.favourite,
                     tint = if (isFavorite) Color(0xFFFF7BA8) else Color.White
                 )
             }
             IconButton(onClick = shareChannel) {
                 Icon(
                     imageVector = Icons.Filled.Share,
-                    contentDescription = "اشتراک‌گذاری",
+                    contentDescription = strings.share,
                     tint = Color.White
                 )
             }
@@ -340,7 +345,7 @@ fun PlayerScreen(
                 IconButton(onClick = { menuExpanded = true }) {
                     Icon(
                         imageVector = Icons.Filled.MoreVert,
-                        contentDescription = "گزینه‌های بیشتر",
+                        contentDescription = strings.moreOptions,
                         tint = Color.White
                     )
                 }
@@ -367,14 +372,14 @@ fun PlayerScreen(
                     }
                     HorizontalDivider()
                     DropdownMenuItem(
-                        text = { Text("پخش در برنامهٔ دیگر (VLC)") },
+                        text = { Text(strings.openInOtherApp) },
                         onClick = {
                             menuExpanded = false
                             openExternally()
                         }
                     )
                     DropdownMenuItem(
-                        text = { Text("تصویر در تصویر") },
+                        text = { Text(strings.pictureInPicture) },
                         onClick = {
                             menuExpanded = false
                             enterPipMode()
@@ -393,7 +398,7 @@ fun PlayerScreen(
                 CircularProgressIndicator(color = Color.White)
                 Spacer(Modifier.height(12.dp))
                 Text(
-                    text = if (attempts > 0) "تلاش دوباره برای اتصال…" else "در حال اتصال…",
+                    text = if (attempts > 0) strings.reconnecting else strings.connecting,
                     color = Color.White.copy(alpha = 0.9f),
                     style = MaterialTheme.typography.bodySmall
                 )
@@ -434,13 +439,13 @@ fun PlayerScreen(
                     }) {
                         Icon(Icons.Filled.Refresh, contentDescription = null)
                         Spacer(Modifier.width(8.dp))
-                        Text("تلاش دوباره")
+                        Text(strings.retry)
                     }
                     Spacer(Modifier.height(6.dp))
-                    TextButton(onClick = onBack) { Text("بازگشت به فهرست") }
+                    TextButton(onClick = onBack) { Text(strings.backTo) }
                     Spacer(Modifier.height(2.dp))
                     TextButton(onClick = openExternally) {
-                        Text("پخش با پخش‌کنندهٔ خارجی")
+                        Text(strings.playWithExternal)
                     }
                 }
             }
@@ -459,7 +464,7 @@ fun PlayerScreen(
             if (previousChannel != null) {
                 ZappingButton(
                     channel = previousChannel,
-                    label = "کانال قبلی",
+                    label = strings.previousChannel,
                     isRtl = true,
                     onClick = { onOpenChannel(previousChannel) }
                 )
@@ -469,7 +474,7 @@ fun PlayerScreen(
             if (nextChannel != null) {
                 ZappingButton(
                     channel = nextChannel,
-                    label = "کانال بعدی",
+                    label = strings.nextChannel,
                     isRtl = false,
                     onClick = { onOpenChannel(nextChannel) }
                 )
@@ -502,7 +507,7 @@ private fun ZappingButton(
         }
         TextButton(onClick = onClick) {
             Text(
-                text = channel.name,
+                text = channel.nameFor(LocalAppLanguage.current),
                 color = Color.White,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis

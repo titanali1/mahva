@@ -18,11 +18,11 @@ val keystoreProps = Properties().apply {
 val hasReleaseKeystore = keystoreProps.getProperty("storeFile") != null
 
 android {
-    namespace = "ir.mahva.tv"
+    namespace = "ir.takhtlive.tv"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "ir.mahva.tv"
+        applicationId = "ir.takhtlive.tv"
         minSdk = 24
         targetSdk = 35
         versionCode = 1
