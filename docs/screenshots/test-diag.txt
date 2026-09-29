@@ -22,9 +22,6 @@ capture 07-search.png -> 1233x2745
 click tag 'tab_home' -> ok
 click tag 'action_library' -> ok
 capture 08-my-channels.png -> 1233x2745
-click tag 'action_add' -> ok
-capture 09-add-channel.png -> 1233x2745
-click text 'انصراف' -> FAILED: Compose did not get idle after 147171 attempts in 60 SECONDS. Please check your measure/layout lambdas, they may be causing an infinite composition loop. Or set Espresso's master i
 click tag 'action_menu' -> ok
 capture 10-drawer.png -> 1233x2745
 click tag 'lang_en' -> ok
@@ -33,3 +30,5 @@ click tag 'theme_light' -> ok
 capture 12-light-theme.png -> 1233x2745
 click tag 'lang_ar' -> ok
 capture 13-arabic.png -> 1233x2745
+click tag 'action_add' -> ok
+capture 09-add-channel.png -> 1233x2745
