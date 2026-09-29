@@ -102,6 +102,42 @@ jobs:
           git pull --rebase --autostash origin "${GITHUB_REF_NAME}" || true
           git push origin "HEAD:${GITHUB_REF_NAME}"
 
+      # A short, human readable summary of the unit tests, committed to the repo
+      # so the result is visible without access to the job logs.
+      - name: Summarise unit tests
+        if: always()
+        run: |
+          set +e
+          mkdir -p ci-logs
+          {
+            echo "# Test summary - $(date -u '+%Y-%m-%d %H:%M UTC')"
+            echo
+            if [ -d app/build/test-results/testDebugUnitTest ]; then
+              total=0; failures=0; errors=0
+              for f in app/build/test-results/testDebugUnitTest/*.xml; do
+                [ -f "$f" ] || continue
+                line=$(head -3 "$f" | tr '\n' ' ')
+                t=$(echo "$line" | sed -n 's/.*tests="\([0-9]*\).*/\1/p')
+                fl=$(echo "$line" | sed -n 's/.*failures="\([0-9]*\).*/\1/p')
+                er=$(echo "$line" | sed -n 's/.*errors="\([0-9]*\).*/\1/p')
+                total=$((total + ${t:-0})); failures=$((failures + ${fl:-0})); errors=$((errors + ${er:-0}))
+                echo "- $(basename "$f" .xml): tests=${t:-0} failures=${fl:-0} errors=${er:-0}"
+              done
+              echo
+              echo "TOTAL: tests=$total failures=$failures errors=$errors"
+            else
+              echo "no unit test results were produced"
+            fi
+            echo
+            echo "## Screenshots"
+            ls -la docs/screenshots/*.png 2>/dev/null | awk '{print "- " $9 " (" $5 " bytes)"}'
+          } > ci-logs/tests-summary.txt
+          cat ci-logs/tests-summary.txt
+
+          # a stale error log from an earlier failed run would be misleading
+          git rm -f --ignore-unmatch -q ci-logs/errors.txt
+          git add -f ci-logs/tests-summary.txt
+
       - name: Commit screenshots back to the branch
         if: always()
         run: |
@@ -111,8 +147,8 @@ jobs:
             git config user.name "github-actions[bot]"
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
             git add -f docs/screenshots
-            git diff --cached --quiet && echo "no screenshot changes" && exit 0
-            git commit -m "Update app screenshots [skip ci]"
+            git diff --cached --quiet && echo "no changes to commit" && exit 0
+            git commit -m "Update app screenshots and test summary [skip ci]"
             git pull --rebase --autostash origin "${GITHUB_REF_NAME}" || true
             git push origin "HEAD:${GITHUB_REF_NAME}"
           fi
