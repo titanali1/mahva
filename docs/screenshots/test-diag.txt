@@ -3,25 +3,17 @@ capture 01-home.png -> 1233x2745
 click text 'پرشیانا' -> true
 section 'پرشیانا' ready: true
 capture 02-persiana.png -> 1233x2745
-click text 'خبری' -> true
-section 'خبری' ready: true
-capture 03-news.png -> 1233x2745
-click text 'موزیک' -> true
-section 'موزیک' ready: true
-capture 04-music.png -> 1233x2745
-click text 'ورزشی' -> true
-section 'ورزشی' ready: true
-capture 05-sports.png -> 1233x2745
-click text 'شبکه ورزش' -> true
-player open: true
-capture 06-player.png -> 1233x2745
-click desc 'بازگشت' -> true
-click text 'خانه' -> true
+click text 'خبری' -> false
+click text 'موزیک' -> false
+click text 'ورزشی' -> false
+click text 'شبکه ورزش' -> false
+click text 'خانه' -> false
 click desc 'جستجو' -> true
 capture 07-search.png -> 1233x2745
 click desc 'بازگشت' -> false
-click text 'خانه' -> true
+click text 'خانه' -> false
 click desc 'کانال‌های من' -> true
 capture 08-my-channels.png -> 1233x2745
 click text 'افزودن کانال جدید' -> true
 capture 09-add-channel.png -> 1233x2745
+click desc 'منو' -> false
