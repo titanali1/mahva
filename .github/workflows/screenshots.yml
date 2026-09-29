@@ -1,0 +1,105 @@
+name: Screenshots & smoke test
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - 'arena/**'
+    paths-ignore:
+      - 'docs/screenshots/**'
+      - '**.md'
+
+permissions:
+  contents: write
+
+jobs:
+  emulator:
+    name: Install + launch on emulator, capture screenshots
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: Build debug APK
+        run: |
+          chmod +x ./gradlew
+          ./gradlew --no-daemon --console=plain :app:assembleDebug
+
+      - name: Enable KVM for the emulator
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' \
+            | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+
+      - name: Boot emulator, install the app and take screenshots
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 34
+          target: google_apis
+          arch: x86_64
+          profile: pixel_5
+          disable-animations: true
+          emulator-options: -no-window -no-snapshot -no-boot-anim -gpu swiftshader_indirect
+          script: |
+            set +e
+            mkdir -p docs/screenshots
+            adb install -r app/build/outputs/apk/debug/app-debug.apk
+            adb shell am start -n ir.mahva.tv/.MainActivity
+            sleep 20
+            adb exec-out screencap -p > docs/screenshots/01-home.png
+
+            # Bottom navigation tabs (5 items, RTL: home is right-most)
+            for pair in "756:02-persiana" "540:03-news" "324:04-music" "108:05-sports"; do
+              x="${pair%%:*}"; name="${pair##*:}"
+              adb shell input tap "$x" 2182
+              sleep 8
+              adb exec-out screencap -p > "docs/screenshots/$name.png"
+            done
+
+            # Open the first channel card of the current (sports) section
+            adb shell input tap 830 700
+            sleep 14
+            adb exec-out screencap -p > docs/screenshots/06-player.png
+
+            adb shell input keyevent KEYCODE_BACK
+            sleep 3
+            adb shell input tap 972 2182
+            sleep 6
+            adb exec-out screencap -p > docs/screenshots/07-home-again.png
+
+            echo "--- crash log (if any) ---"
+            adb logcat -d -b crash | tail -40
+            echo "--- app log ---"
+            adb logcat -d | grep -i -E "mahva|AndroidRuntime" | tail -40
+            ls -la docs/screenshots
+
+      - name: Upload screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: mahva-screenshots
+          path: docs/screenshots/*.png
+          if-no-files-found: warn
+          retention-days: 30
+
+      - name: Commit screenshots back to the branch
+        if: always()
+        run: |
+          set +e
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -f docs/screenshots
+          git commit -m "Add emulator screenshots [skip ci]"
+          git push
