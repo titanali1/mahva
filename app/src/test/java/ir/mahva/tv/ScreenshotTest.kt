@@ -112,26 +112,45 @@ class ScreenshotTest {
         settle(2_000)
         diag.append("home ready: ${awaitText("دسترسی سریع")}\n")
         capture("01-home.png")
+        capture("01-home.png")
 
-        // The four sections are the bottom navigation tabs (RTL order).
+        // Each of the four sections of the app, reached from the bottom bar.
         listOf(
-            "پرشیانا" to "02-persiana.png",
-            "خبری" to "03-news.png",
-            "موزیک" to "04-music.png",
-            "ورزشی" to "05-sports.png"
-        ).forEach { (tab, file) ->
-            if (clickByText(tab)) capture(file)
+            Triple("پرشیانا", "کانال‌های گروه پرشیانا", "02-persiana.png"),
+            Triple("خبری", "شبکه‌های خبری ایران و جهان", "03-news.png"),
+            Triple("موزیک", "کانال‌های موسیقی و کلیپ", "04-music.png"),
+            Triple("ورزشی", "کانال‌های ورزشی و مسابقات زنده", "05-sports.png")
+        ).forEach { (tab, expected, file) ->
+            if (clickByText(tab)) {
+                val ready = awaitText(expected, 15_000)
+                diag.append("section '$tab' ready: $ready\n")
+                capture(file)
+                capture(file)
+            }
+        }
+
+        // Open the first channel of the current section to show the player UI.
+        val channelName = "شبکه ورزش"
+        if (clickByText(channelName)) {
+            settle(4_000)
+            capture("06-player.png")
+            clickByDescription("بازگشت")
+            settle()
         }
 
         clickByText("خانه")
-        settle()
+        awaitText("دسترسی سریع", 10_000)
 
         // Global search
         if (clickByDescription("جستجو")) {
             settle()
+            awaitText("نام کانال را بنویسید…", 10_000)
             runCatching { rule.onNode(hasSetTextAction()).performTextInput("BBC") }
-            settle(2_500)
-            capture("06-search.png")
+            settle(3_000)
+            capture("07-search.png")
+            capture("07-search.png")
+            clickByDescription("بازگشت")
+            settle()
             clickByText("خانه")
             settle()
         }
@@ -139,10 +158,12 @@ class ScreenshotTest {
         // My channels + the add-channel dialog
         if (clickByDescription("کانال‌های من")) {
             settle()
-            capture("07-my-channels.png")
+            awaitText("کانال‌های من", 10_000)
+            capture("08-my-channels.png")
             if (clickByText("افزودن کانال جدید")) {
                 settle()
-                capture("08-add-channel.png")
+                awaitText("افزودن کانال جدید", 10_000)
+                capture("09-add-channel.png")
             }
         }
 
