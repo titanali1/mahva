@@ -55,45 +55,51 @@ jobs:
           disable-animations: true
           emulator-options: -no-window -no-snapshot -no-boot-anim -gpu swiftshader_indirect
           script: |
-            set +e
             mkdir -p docs/screenshots/emulator ci-logs
-            exec > >(tee ci-logs/emulator.log) 2>&1
-            adb wait-for-device
-            echo "boot completed: $(adb shell getprop sys.boot_completed)"
+            LOG=ci-logs/emulator.log
+            : > "$LOG"
+            {
+              set +e
+              adb wait-for-device
+              echo "boot completed: $(adb shell getprop sys.boot_completed)"
+              echo "--- install ---"
+              adb install -r app/build/outputs/apk/debug/app-debug.apk || echo "INSTALL_FAILED"
+              echo "--- launch ---"
+              adb shell am start -n ir.mahva.tv/.MainActivity
+              sleep 25
+              adb shell dumpsys window displays | grep -i -E "init=|cur=" | head -5
+              adb exec-out screencap -p > docs/screenshots/emulator/01-home.png
 
-            if ! adb install -r app/build/outputs/apk/debug/app-debug.apk; then
-              echo "::error::adb install failed"
-              exit 0
-            fi
+              # Bottom navigation tabs, RTL order (home is the right-most item)
+              for pair in "756:02-persiana" "540:03-news" "324:04-music" "108:05-sports"; do
+                x="${pair%%:*}"; name="${pair##*:}"
+                adb shell input tap "$x" 2182
+                sleep 8
+                adb exec-out screencap -p > "docs/screenshots/emulator/$name.png"
+              done
 
-            adb shell am start -n ir.mahva.tv/.MainActivity
-            sleep 20
-            adb exec-out screencap -p > docs/screenshots/emulator/01-home.png
+              # Open the first channel card of the current section
+              adb shell input tap 830 700
+              sleep 15
+              adb exec-out screencap -p > docs/screenshots/emulator/06-player.png
 
-            # Bottom navigation tabs (5 items; RTL layout means home is right-most)
-            for pair in "756:02-persiana" "540:03-news" "324:04-music" "108:05-sports"; do
-              x="${pair%%:*}"; name="${pair##*:}"
-              adb shell input tap "$x" 2182
-              sleep 8
-              adb exec-out screencap -p > "docs/screenshots/emulator/$name.png"
-            done
+              adb shell input keyevent KEYCODE_BACK
+              sleep 3
+              adb shell input tap 972 2182
+              sleep 6
+              adb exec-out screencap -p > docs/screenshots/emulator/07-home-again.png
 
-            # Open the first channel card of the current section (sports)
-            adb shell input tap 830 700
-            sleep 15
-            adb exec-out screencap -p > docs/screenshots/emulator/06-player.png
-
-            adb shell input keyevent KEYCODE_BACK
-            sleep 3
-            adb shell input tap 972 2182
-            sleep 6
-            adb exec-out screencap -p > docs/screenshots/emulator/07-home-again.png
-
-            echo "--- crashes ---"
-            adb logcat -d -b crash | tail -30
-            echo "--- mahva log ---"
-            adb logcat -d | grep -i -E "mahva|AndroidRuntime|ExoPlayer" | tail -40
-            ls -la docs/screenshots/emulator
+              # Tapping a channel must not crash the app
+              echo "--- app process ---"
+              adb shell pidof ir.mahva.tv || echo "APP_NOT_RUNNING"
+              echo "--- crashes ---"
+              adb logcat -d -b crash | tail -40
+              echo "--- app log ---"
+              adb logcat -d | grep -i -E "mahva|AndroidRuntime|ExoPlayer|MediaCodec" | tail -60
+              echo "--- files ---"
+              ls -la docs/screenshots/emulator
+            } 2>&1 | tee -a "$LOG"
+            echo "emulator script finished"
 
       - name: Commit emulator screenshots and log
         if: always()
