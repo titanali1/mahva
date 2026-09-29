@@ -15,6 +15,26 @@
 
 ---
 
+## 📸 تصاویر برنامه
+
+این تصاویر خودکار از اجرای واقعی برنامه گرفته می‌شوند (تست روی JVM با Robolectric در GitHub Actions).
+
+| صفحهٔ خانه | بخش پرشیانا گروپ |
+|---|---|
+| ![صفحهٔ خانه](docs/screenshots/01-home.png) | ![پرشیانا](docs/screenshots/02-persiana.png) |
+
+| بخش خبری | بخش موزیک |
+|---|---|
+| ![خبری](docs/screenshots/03-news.png) | ![موزیک](docs/screenshots/04-music.png) |
+
+| بخش ورزشی | پخش‌کنندهٔ زنده |
+|---|---|
+| ![ورزشی](docs/screenshots/05-sports.png) | ![پخش‌کننده](docs/screenshots/06-player.png) |
+
+تصاویر اجرا روی **آدمک (Emulator) اندروید** هم در `docs/screenshots/emulator/` ذخیره می‌شوند.
+
+---
+
 ## ✨ امکانات
 
 - **چهار بخش مجزا** در نوار پایین برنامه: پرشیانا، خبری، موزیک، ورزشی (+ صفحهٔ خانه)

@@ -109,6 +109,10 @@ class ScreenshotTest {
 
     @Test
     fun captureEveryScreen() {
+        // Remove stale screenshots (older runs) so renamed files do not linger.
+        outputDir.listFiles { file -> file.isFile && file.name.endsWith(".png") }
+            ?.forEach { it.delete() }
+
         settle(2_000)
         diag.append("home ready: ${awaitText("دسترسی سریع")}\n")
         capture("01-home.png")
