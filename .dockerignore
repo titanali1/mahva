@@ -1,0 +1,12 @@
+.git
+.github
+out/
+work/
+demo/
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+*.mp4
+*.egg-info/
+.pytest_cache/

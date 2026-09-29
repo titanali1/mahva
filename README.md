@@ -40,6 +40,9 @@ pip install -r requirements.txt      # یا: pip install -e ".[web,voice]"
 python -m mahva doctor               # بررسی ffmpeg، فونت و موتور صدا
 ```
 
+> راهنمای گام‌به‌گام (ویندوز/مک/لینوکس، داکر، عیب‌یابی):
+> [`docs/setup-fa.md`](docs/setup-fa.md)
+
 > **ffmpeg لازم نیست نصب کنید.** مهوا نسخهٔ آمادهٔ ffmpeg را از طریق بستهٔ
 > `imageio-ffmpeg` همراه خود می‌آورد (اگر روی سیستم ffmpeg داشته باشید، از همان
 > استفاده می‌کند). فونت **وزیرمتن** هم در `assets/fonts` همراه پروژه است.
@@ -47,6 +50,8 @@ python -m mahva doctor               # بررسی ffmpeg، فونت و موتو�
 ---
 
 ## 🕹️ استفاده
+
+راهنمای کامل نصب و راه‌اندازی: **[`docs/setup-fa.md`](docs/setup-fa.md)**
 
 ### ۱) رابط وب (پیشنهادی)
 
@@ -161,6 +166,13 @@ renderer.render()
 ```
 
 ---
+
+## 🐳 داکر
+
+```bash
+docker build -t mahva .
+docker run --rm -p 8000:8000 -v "$PWD/out:/app/out" mahva     # رابط وب روی http://localhost:8000
+```
 
 ## 🧪 تست
 
