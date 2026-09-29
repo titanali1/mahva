@@ -165,17 +165,24 @@ class ScreenshotTest {
             settle()
         }
 
-        // My channels + the add-channel dialog
+        // My channels screen
         if (clickByTag("action_library")) {
             settle()
             awaitText("کانال‌های من", 10_000)
             capture("08-my-channels.png")
-            if (clickByText("افزودن کانال جدید")) {
-                settle()
-                awaitText("افزودن کانال جدید", 10_000)
-                capture("09-add-channel.png")
-            }
         }
+
+        // The add-channel dialog (opened from the app bar) is a separate window,
+        // so it needs the manual clock just like the drawer.
+        rule.mainClock.autoAdvance = false
+        val dialogOpen = clickByTag("action_add")
+        rule.mainClock.advanceTimeBy(1_500)
+        settle(1_500)
+        if (dialogOpen) capture("09-add-channel.png")
+        clickByText("انصراف")
+        rule.mainClock.advanceTimeBy(1_500)
+        settle(1_200)
+        rule.mainClock.autoAdvance = true
 
         File(outputDir, "test-diag.txt").writeText(diag.toString())
     }
