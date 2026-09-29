@@ -1,0 +1,21 @@
+# Test summary - 2026-09-29 19:20 UTC
+
+- TEST-ir.takhtlive.tv.CatalogTest: tests=8 failures=0 errors=0
+- TEST-ir.takhtlive.tv.ScreenshotTest: tests=2 failures=0 errors=0
+
+TOTAL: tests=10 failures=0 errors=0
+
+## Screenshots
+- docs/screenshots/01-home.png (558076 bytes)
+- docs/screenshots/02-persiana.png (198467 bytes)
+- docs/screenshots/03-news.png (243257 bytes)
+- docs/screenshots/04-music.png (237604 bytes)
+- docs/screenshots/05-sports.png (207561 bytes)
+- docs/screenshots/06-player.png (48179 bytes)
+- docs/screenshots/07-search.png (97667 bytes)
+- docs/screenshots/08-my-channels.png (136539 bytes)
+- docs/screenshots/09-add-channel.png (136539 bytes)
+- docs/screenshots/10-drawer.png (321706 bytes)
+- docs/screenshots/11-english.png (333688 bytes)
+- docs/screenshots/12-light-theme.png (330416 bytes)
+- docs/screenshots/13-arabic.png (326122 bytes)
