@@ -19,7 +19,7 @@ class PrefsStore(context: Context) {
 
     /** Returns the new favourite state. */
     fun toggleFavorite(id: String): Boolean {
-        val current = favorites()
+        val current = favorites().toMutableSet()
         val nowFavorite = !current.contains(id)
         if (nowFavorite) current.add(id) else current.remove(id)
         prefs.edit().putStringSet(KEY_FAVORITES, current).apply()

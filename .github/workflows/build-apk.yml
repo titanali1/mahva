@@ -14,7 +14,7 @@ jobs:
   build:
     name: Build installable APK
     runs-on: ubuntu-latest
-    timeout-minutes: 40
+    timeout-minutes: 45
 
     steps:
       - name: Checkout
@@ -33,19 +33,45 @@ jobs:
         run: chmod +x ./gradlew
 
       - name: Build debug APK
-        run: ./gradlew --no-daemon --stacktrace :app:assembleDebug
+        id: build_debug
+        run: |
+          set -o pipefail
+          ./gradlew --no-daemon --console=plain --stacktrace :app:assembleDebug 2>&1 | tee build-debug.log
 
       - name: Build release APK
-        run: ./gradlew --no-daemon --stacktrace :app:assembleRelease
+        id: build_release
+        if: steps.build_debug.outcome == 'success'
+        run: |
+          set -o pipefail
+          ./gradlew --no-daemon --console=plain --stacktrace :app:assembleRelease 2>&1 | tee build-release.log
+
+      # Compiler errors are surfaced as check-run annotations, which are
+      # readable through the REST API even when the raw logs are not.
+      - name: Report compiler errors
+        if: failure()
+        run: |
+          set +e
+          cat build-debug.log build-release.log 2>/dev/null \
+            | grep -E "^(e:|error:|Execution failed|\* What went wrong:|Caused by:)" \
+            | head -45 > errors.txt
+          if [ ! -s errors.txt ]; then
+            tail -c 4000 build-debug.log 2>/dev/null | head -45 > errors.txt
+          fi
+          while IFS= read -r line; do
+            clean=$(printf '%s' "$line" | tr -d '\r' | sed 's/%/%25/g' | cut -c1-900)
+            echo "::error::$clean"
+          done < errors.txt
 
       - name: Collect APKs
+        if: success()
         run: |
           mkdir -p out
-          cp app/build/outputs/apk/debug/app-debug.apk  "out/mahva-tv-debug.apk"
+          cp app/build/outputs/apk/debug/app-debug.apk "out/mahva-tv-debug.apk"
           cp app/build/outputs/apk/release/app-release.apk "out/mahva-tv-release.apk" || true
           ls -lh out
 
       - name: Upload APK artifacts
+        if: success()
         uses: actions/upload-artifact@v4
         with:
           name: mahva-tv-apk
@@ -54,7 +80,7 @@ jobs:
           retention-days: 30
 
       - name: Publish rolling "latest" release
-        if: github.ref == format('refs/heads/{0}', github.event.repository.default_branch) || github.event_name == 'workflow_dispatch' || startsWith(github.ref, 'refs/heads/arena/')
+        if: success() && github.event_name == 'push'
         uses: softprops/action-gh-release@v2
         with:
           tag_name: apk-latest
@@ -63,9 +89,9 @@ jobs:
             نسخهٔ آمادهٔ نصب برنامهٔ **ماهوا** (Mahva TV).
 
             فایل `mahva-tv-release.apk` را روی گوشی اندروید نصب کنید
-            (نصب از منابع نامعتبر را در تنظیمات اجازه دهید).
+            (برای این کار باید نصب از منابع ناشناس را در تنظیمات اجازه دهید).
 
-            کانال‌ها: پرشیانا گروپ، خبری، موزیک، ورزشی
+            بخش‌ها: پرشیانا گروپ، خبری، موزیک، ورزشی
           files: out/*.apk
           make_latest: true
           prerelease: false

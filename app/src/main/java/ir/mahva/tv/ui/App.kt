@@ -9,11 +9,8 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Newspaper
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.Search
-import androidx.compose.material.icons.filled.SportsSoccer
-import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -36,6 +33,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import ir.mahva.tv.R
@@ -264,23 +262,31 @@ fun MahvaApp() {
 
 @Composable
 private fun MahvaBottomBar(selected: String, onSelect: (String) -> Unit) {
-    val items: List<Triple<String, String, ImageVector>> = listOf(
-        Triple(HOME_TAB, "خانه", Icons.Filled.Home),
-        Triple("persiana", "پرشیانا", Icons.Filled.Star),
-        Triple("news", "خبری", Icons.Filled.Newspaper),
-        Triple("music", "موزیک", Icons.Filled.PlayArrow),
-        Triple("sports", "ورزشی", Icons.Filled.SportsSoccer)
+    val items = listOf(
+        BottomBarItem(HOME_TAB, "خانه", Icons.Filled.Home),
+        BottomBarItem("persiana", "پرشیانا", null, R.drawable.ic_tab_tv),
+        BottomBarItem("news", "خبری", null, R.drawable.ic_tab_news),
+        BottomBarItem("music", "موزیک", null, R.drawable.ic_tab_music),
+        BottomBarItem("sports", "ورزشی", null, R.drawable.ic_tab_sports)
     )
     NavigationBar(
         containerColor = MaterialTheme.colorScheme.surface,
         tonalElevation = 0.dp
     ) {
-        items.forEach { (id, label, icon) ->
+        items.forEach { item ->
             NavigationBarItem(
-                selected = selected == id,
-                onClick = { onSelect(id) },
-                icon = { Icon(icon, contentDescription = label) },
-                label = { Text(label, style = MaterialTheme.typography.labelSmall) },
+                selected = selected == item.id,
+                onClick = { onSelect(item.id) },
+                icon = {
+                    val painter = item.painterRes?.let { painterResource(it) }
+                    val imageVector = item.imageVector
+                    when {
+                        painter != null -> Icon(painter = painter, contentDescription = item.label)
+                        imageVector != null ->
+                            Icon(imageVector = imageVector, contentDescription = item.label)
+                    }
+                },
+                label = { Text(item.label, style = MaterialTheme.typography.labelSmall) },
                 colors = NavigationBarItemDefaults.colors(
                     selectedIconColor = Color.White,
                     selectedTextColor = MaterialTheme.colorScheme.primary,
@@ -292,3 +298,10 @@ private fun MahvaBottomBar(selected: String, onSelect: (String) -> Unit) {
         }
     }
 }
+
+private data class BottomBarItem(
+    val id: String,
+    val label: String,
+    val imageVector: ImageVector? = null,
+    val painterRes: Int? = null
+)
