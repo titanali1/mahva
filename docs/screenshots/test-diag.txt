@@ -19,13 +19,16 @@ click desc 'بازگشت' -> ok
 click tag 'tab_home' -> ok
 click tag 'action_search' -> ok
 capture 07-search.png -> 1233x2745
-click desc 'بازگشت' -> FAILED: Failed to inject touch input.
-Can't retrieve node at index '0' of 'ContentDescription = 'بازگشت' (ignoreCase: false)'
-There are no existing nodes for that selector.
-
-click text 'خانه' -> ok
+click tag 'tab_home' -> ok
 click tag 'action_library' -> ok
 capture 08-my-channels.png -> 1233x2745
 click text 'افزودن کانال جدید' -> ok
 capture 09-add-channel.png -> 1233x2745
-click tag 'action_menu' -> FAILED: Compose did not get idle after 148364 attempts in 60 SECONDS. Please check your measure/layout lambdas, they may be causing an infinite composition loop. Or set Espresso's master i
+click tag 'action_menu' -> ok
+capture 10-drawer.png -> 1233x2745
+click tag 'lang_en' -> ok
+capture 11-english.png -> 1233x2745
+click tag 'theme_light' -> ok
+capture 12-light-theme.png -> 1233x2745
+click tag 'lang_ar' -> ok
+capture 13-arabic.png -> 1233x2745
