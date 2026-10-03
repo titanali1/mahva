@@ -2,4 +2,4 @@ windows screenshots: 13
 files: 01-home.png, 02-persiana.png, 03-news.png, 04-music.png, 05-sports.png, 06-search.png, 07-library.png, 08-add-channel.png, 09-player.png, 10-drawer.png, 11-english.png, 12-light-theme.png, 13-arabic.png
 signature visible: true
 javascript errors: 0
-blocked network requests (offline sandbox): 4
+blocked network requests (offline sandbox): 7
