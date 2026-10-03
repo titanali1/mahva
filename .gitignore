@@ -12,3 +12,10 @@ app/build/
 keystore.properties
 *.jks
 *.keystore
+
+# Windows desktop app (Electron)
+windows/node_modules/
+windows/dist/
+windows/renderer/hls.min.js
+windows/*.log
+windows-errors.txt

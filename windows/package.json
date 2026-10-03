@@ -1,0 +1,28 @@
+{
+  "name": "takhtlive",
+  "productName": "TakhtLive",
+  "version": "1.0.0",
+  "description": "TakhtLive - live satellite TV (Persiana, news, music, sports) for Windows 11",
+  "main": "src/main.js",
+  "author": {
+    "name": "dmj74"
+  },
+  "license": "MIT",
+  "homepage": "https://github.com/titanali1/mahva",
+  "scripts": {
+    "start": "electron .",
+    "vendor": "node scripts/copy-vendor.js",
+    "test": "node --test tests/*.test.js",
+    "screenshots": "npm run vendor && node tools/screenshots.js",
+    "build": "npm run vendor && electron-builder --win --publish never",
+    "build:installer": "npm run vendor && electron-builder --win nsis --publish never",
+    "build:portable": "npm run vendor && electron-builder --win portable --publish never"
+  },
+  "devDependencies": {
+    "@sparticuz/chromium": "^153.0.0",
+    "electron": "^44.5.1",
+    "electron-builder": "^26.15.3",
+    "hls.js": "^1.7.3",
+    "puppeteer-core": "^25.12.0"
+  }
+}

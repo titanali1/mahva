@@ -1,0 +1,42 @@
+appId: ir.takhtlive.tv
+productName: TakhtLive
+copyright: Copyright © 2026 dmj74
+
+directories:
+  output: dist
+  buildResources: build
+
+files:
+  - src/**/*
+  - renderer/**/*
+  - assets/**/*
+  - package.json
+
+# Windows 11 (x64) installer + portable build
+win:
+  icon: build/icon.ico
+  requestedExecutionLevel: asInvoker
+  target:
+    - target: nsis
+      arch:
+        - x64
+    - target: portable
+      arch:
+        - x64
+
+nsis:
+  artifactName: ${productName}-Setup-${version}.${ext}
+  oneClick: false
+  perMachine: false
+  allowElevation: true
+  allowToChangeInstallationDirectory: true
+  createDesktopShortcut: true
+  createStartMenuShortcut: true
+  shortcutName: TakhtLive
+  deleteAppDataOnUninstall: false
+  uninstallDisplayName: ${productName} ${version}
+
+portable:
+  artifactName: ${productName}-${version}-portable.${ext}
+
+publish: null

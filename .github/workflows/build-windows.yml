@@ -1,0 +1,155 @@
+name: Build Windows app
+
+# Windows 11 desktop build of TakhtLive (Electron).
+#  - verifies the UI (unit tests + a real Chromium render of every screen)
+#  - builds the NSIS installer and the portable .exe on a Windows runner
+#  - publishes them to the rolling "windows-latest" release
+
+on:
+  push:
+    branches:
+      - main
+      - 'arena/**'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  # ------------------------------------------------------------------ UI check
+  ui:
+    name: Verify UI (headless Chromium)
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    defaults:
+      run:
+        working-directory: windows
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: windows/package-lock.json
+
+      - name: Sync shared assets from the Android app
+        working-directory: .
+        run: python3 tools/sync_windows_assets.py
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run unit tests
+        id: unit_tests
+        continue-on-error: true
+        run: npm test 2>&1 | tee test-windows.log
+
+      # Renders every screen with the very same HTML/CSS/JS that Electron loads
+      # and fails on any JavaScript error; the images are kept as artifacts.
+      - name: Render all screens
+        id: screenshots
+        continue-on-error: true
+        run: npm run screenshots 2>&1 | tee screenshots-windows.log
+
+      - name: Report failures as annotations
+        if: failure() || steps.unit_tests.outcome == 'failure' || steps.screenshots.outcome == 'failure'
+        working-directory: .
+        run: |
+          set +e
+          cat windows/test-windows.log windows/screenshots-windows.log 2>/dev/null \
+            | grep -E "^(not ok|# fail|Error|TypeError|AssertionError|javascript errors|renderer did not render)" \
+            | head -40 > windows-errors.txt
+          while IFS= read -r line; do
+            clean=$(printf '%s' "$line" | tr -d '\r' | sed 's/%/%25/g' | cut -c1-900)
+            echo "::error::$clean"
+          done < windows-errors.txt
+
+      - name: Windows test summary
+        if: always()
+        run: |
+          {
+            echo "## Windows app checks"
+            echo
+            echo '```'
+            tail -c 1500 test-windows.log 2>/dev/null
+            echo
+            tail -c 1500 screenshots-windows.log 2>/dev/null
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload UI screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: takhtlive-windows-screenshots
+          path: docs/screenshots/windows/
+          if-no-files-found: warn
+          retention-days: 30
+
+  # ------------------------------------------------------------- Windows build
+  build:
+    name: Build Windows installer
+    needs: ui
+    runs-on: windows-latest
+    timeout-minutes: 45
+    defaults:
+      run:
+        working-directory: windows
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: windows/package-lock.json
+
+      - name: Sync shared assets from the Android app
+        working-directory: .
+        run: python tools/sync_windows_assets.py
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Vendor runtime libraries (hls.js)
+        run: npm run vendor
+
+      - name: Build installer and portable app
+        run: npm run build
+
+      - name: List build output
+        run: dir dist
+
+      - name: Upload Windows build
+        uses: actions/upload-artifact@v4
+        with:
+          name: takhtlive-windows
+          path: windows/dist/*.exe
+          if-no-files-found: error
+          retention-days: 30
+
+      - name: Publish rolling "windows-latest" release
+        if: success() && github.event_name == 'push'
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: windows-latest
+          name: TakhtLive – Windows 11 (آخرین نسخه)
+          body: |
+            نسخهٔ دسکتاپ **تخت لایو** برای ویندوز ۱۱ (۶۴ بیتی).
+
+            - `TakhtLive-Setup-*.exe` — نصب‌کنندهٔ کامل (میان‌بر روی دسکتاپ و منوی استارت می‌سازد)
+            - `TakhtLive-*-portable.exe` — نسخهٔ بدون نصب
+
+            اگر ویندوز پیام SmartScreen نشان داد، روی **More info ▸ Run anyway** بزنید.
+
+            بخش‌ها: پرشیانا گروپ، خبری، موزیک، ورزشی — با همان ۱۰۹ کانال نسخهٔ اندروید.
+          files: windows/dist/*.exe
+          make_latest: false
+          prerelease: false
