@@ -147,7 +147,8 @@
     );
   }
 
-  const FALLBACK_LOGO = '../assets/icon-192.png';
+  // neutral tile shown when a channel logo is missing or cannot be loaded
+  const FALLBACK_LOGO = '../assets/channel-placeholder.png';
 
   function logoImg(channel, className) {
     const src = channel.logo ? channel.logo : FALLBACK_LOGO;
@@ -338,7 +339,10 @@
 
     return `
       <section class="hero">
-        <h1>${escapeHtml(t('appName'))}</h1>
+        <div class="hero__head">
+          <img class="hero__logo" src="../assets/brand-256.png" alt="" />
+          <h1>${escapeHtml(t('appName'))}</h1>
+        </div>
         <p>${escapeHtml(t('heroSubtitle'))}</p>
         <span class="badge">${escapeHtml(t('liveChannels', state.channels.length))}</span>
       </section>
@@ -466,7 +470,7 @@
     $('player-title').textContent = channelName(channel);
     const category = state.categories.find((c) => c.id === channel.category);
     $('player-category').textContent = category ? categoryTitle(category) : '';
-    $('player-logo').src = channel.logo || '../assets/icon-192.png';
+    $('player-logo').src = channel.logo || FALLBACK_LOGO;
     updatePlayerFavorite();
     updateZapping();
 

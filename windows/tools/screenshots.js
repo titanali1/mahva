@@ -7,6 +7,10 @@
  * the very same markup/CSS/JS that Electron loads is validated on any machine,
  * including Linux CI where Electron cannot show a window.
  *
+ * Set SHOTS_KEEP_LOGOS=1 to keep the remote channel logos (used on CI runners,
+ * which do have internet access); otherwise the bundled placeholder is shown so
+ * the images are not full of broken images on offline machines.
+ *
  *   node tools/screenshots.js
  */
 
@@ -63,10 +67,16 @@ async function makeFixture() {
   const parsed = require(path.join(ROOT, 'src', 'catalog.js')).parseCatalog(catalog);
 
   // the fallback bridge (no Electron) reads this global instead of IPC; a real
-  // file keeps the app's Content-Security-Policy (script-src 'self') happy
+  // file keeps the app's Content-Security-Policy (script-src 'self') happy.
+  // The sandbox has no internet, so the channel logos of the catalog are
+  // replaced here by the bundled placeholder to keep the shots representative.
+  const offline = {
+    categories: parsed.categories,
+    channels: parsed.channels.map((channel) => Object.assign({}, channel, { logo: '' })),
+  };
   fs.writeFileSync(
     path.join(dir, 'src', 'test-catalog.js'),
-    `window.TAKHT_CATALOG = ${JSON.stringify(parsed)};\nwindow.TAKHT_FIXTURE = true;\n`
+    `window.TAKHT_CATALOG = ${JSON.stringify(process.env.SHOTS_KEEP_LOGOS ? parsed : offline)};\nwindow.TAKHT_FIXTURE = true;\n`
   );
   const html = fs.readFileSync(path.join(ROOT, 'renderer', 'index.html'), 'utf8')
     .replace('<script src="../src/i18n.js"></script>',

@@ -56,7 +56,9 @@ jobs:
         id: screenshots
         run: |
           set -o pipefail
-          npm run screenshots 2>&1 | tee screenshots-windows.log
+          # the runner has internet access, so keep the real channel logos in the
+          # screenshots that get committed back to the branch
+          SHOTS_KEEP_LOGOS=1 npm run screenshots 2>&1 | tee screenshots-windows.log
 
       - name: Report failures as annotations
         if: failure()

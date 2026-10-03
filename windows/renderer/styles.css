@@ -155,8 +155,23 @@ button { font-family: inherit; color: inherit; }
   color: #fff;
   margin-bottom: 14px;
 }
-.drawer__hero-title { display: flex; align-items: center; gap: 8px; font-size: 19px; font-weight: 700; }
-.drawer__hero-icon { font-size: 15px; }
+.drawer__hero-title { display: flex; align-items: center; gap: 10px; font-size: 19px; font-weight: 700; }
+.drawer__hero-logo {
+  width: 38px;
+  height: 38px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.14);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.28);
+}
+
+.hero__head { display: flex; align-items: center; gap: 12px; }
+.hero__logo {
+  width: 56px;
+  height: 56px;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.16);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
+}
 .drawer__hero-sub { margin: 6px 0 0; font-size: 12px; opacity: 0.94; line-height: 1.6; }
 
 .drawer__label {
