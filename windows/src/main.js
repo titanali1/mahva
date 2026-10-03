@@ -2,9 +2,9 @@
  * TakhtLive – Windows desktop app (Electron main process).
  *
  * Windows 11 integration:
- *  - native window controls overlay + rounded corners (titleBarStyle: hidden)
- *  - Mica background material when the system supports it
- *  - follow the system theme ("system" setting)
+ *  - native window controls overlay + rounded corners (titleBarStyle: hidden),
+ *    always on the physical right even in RTL layouts
+ *  - follows the system theme when the "system" setting is selected
  */
 
 'use strict';
@@ -52,15 +52,6 @@ function applyThemeToWindow(mode) {
   if (!mainWindow) return;
   const dark = mode === 'dark' || (mode === 'system' && nativeTheme.shouldUseDarkColors);
   mainWindow.setBackgroundColor(dark ? '#0B0B14' : '#F7F6FC');
-
-  // Mica is a Windows 11 feature; silently ignored elsewhere or on older builds.
-  if (isWindows && typeof mainWindow.setBackgroundMaterial === 'function') {
-    try {
-      mainWindow.setBackgroundMaterial(mode === 'light' ? 'mica' : 'mica');
-    } catch (err) {
-      /* keep the solid background */
-    }
-  }
 
   const overlay = {
     color: dark ? '#0B0B14' : '#F7F6FC',

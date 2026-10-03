@@ -92,8 +92,10 @@ button { font-family: inherit; color: inherit; }
   justify-content: space-between;
   background: var(--bg);
   border-bottom: 1px solid var(--border);
-  padding-inline-start: 10px;
-  padding-inline-end: 150px;      /* room for the Windows 11 window controls */
+  /* physical, not logical: Windows always puts its window controls on the
+     right, also when the interface is in RTL (Persian/Arabic) */
+  padding-left: 10px;
+  padding-right: 150px;
   -webkit-app-region: drag;
   flex: 0 0 auto;
   user-select: none;
