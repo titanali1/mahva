@@ -1,8 +1,8 @@
-# Windows app summary - 2026-10-03 17:23 UTC
+# Windows app summary - 2026-10-03 17:27 UTC
 
 ## Unit tests
 ```
-  duration_ms: 0.521238
+  duration_ms: 0.567302
   type: 'test'
   ...
 1..9
@@ -13,7 +13,7 @@
 # cancelled 0
 # skipped 0
 # todo 0
-# duration_ms 78.665126
+# duration_ms 77.608475
 ```
 ## UI render (headless Chromium)
 ```
@@ -27,16 +27,16 @@ javascript errors: 0
 blocked network requests (offline sandbox): 7
 ```
 screenshots:
-- docs/screenshots/windows/01-home.png (251269 bytes)
-- docs/screenshots/windows/02-persiana.png (122358 bytes)
-- docs/screenshots/windows/03-news.png (149355 bytes)
-- docs/screenshots/windows/04-music.png (140126 bytes)
-- docs/screenshots/windows/05-sports.png (146967 bytes)
-- docs/screenshots/windows/06-search.png (69220 bytes)
-- docs/screenshots/windows/07-library.png (99730 bytes)
-- docs/screenshots/windows/08-add-channel.png (116316 bytes)
+- docs/screenshots/windows/01-home.png (251275 bytes)
+- docs/screenshots/windows/02-persiana.png (122359 bytes)
+- docs/screenshots/windows/03-news.png (149777 bytes)
+- docs/screenshots/windows/04-music.png (140130 bytes)
+- docs/screenshots/windows/05-sports.png (147004 bytes)
+- docs/screenshots/windows/06-search.png (69219 bytes)
+- docs/screenshots/windows/07-library.png (99736 bytes)
+- docs/screenshots/windows/08-add-channel.png (116329 bytes)
 - docs/screenshots/windows/09-player.png (27859 bytes)
-- docs/screenshots/windows/10-drawer.png (218909 bytes)
+- docs/screenshots/windows/10-drawer.png (218916 bytes)
 - docs/screenshots/windows/11-english.png (230485 bytes)
 - docs/screenshots/windows/12-light-theme.png (231164 bytes)
-- docs/screenshots/windows/13-arabic.png (218988 bytes)
+- docs/screenshots/windows/13-arabic.png (218998 bytes)
