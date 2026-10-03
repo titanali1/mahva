@@ -1,4 +1,4 @@
-# Test summary - 2026-09-29 19:37 UTC
+# Test summary - 2026-10-03 17:25 UTC
 
 - TEST-ir.takhtlive.tv.CatalogTest: tests=8 failures=0 errors=0
 - TEST-ir.takhtlive.tv.ScreenshotTest: tests=2 failures=0 errors=0
@@ -6,11 +6,11 @@
 TOTAL: tests=10 failures=0 errors=0
 
 ## Screenshots
-- docs/screenshots/01-home.png (578790 bytes)
-- docs/screenshots/02-persiana.png (198467 bytes)
+- docs/screenshots/01-home.png (558076 bytes)
+- docs/screenshots/02-persiana.png (197679 bytes)
 - docs/screenshots/03-news.png (243257 bytes)
-- docs/screenshots/04-music.png (231483 bytes)
-- docs/screenshots/05-sports.png (214482 bytes)
+- docs/screenshots/04-music.png (231842 bytes)
+- docs/screenshots/05-sports.png (207561 bytes)
 - docs/screenshots/06-player.png (48179 bytes)
 - docs/screenshots/07-search.png (97667 bytes)
 - docs/screenshots/08-my-channels.png (136539 bytes)
