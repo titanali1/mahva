@@ -1,7 +1,8 @@
 name: Build Windows app
 
 # Windows 11 desktop build of TakhtLive (Electron).
-#  - verifies the UI (unit tests + a real Chromium render of every screen)
+#  - verifies the UI (unit tests + a real Chromium render of every screen) and
+#    commits the freshly rendered screenshots back to the branch
 #  - builds the NSIS installer and the portable .exe on a Windows runner
 #  - publishes them to the rolling "windows-latest" release
 
@@ -45,18 +46,20 @@ jobs:
 
       - name: Run unit tests
         id: unit_tests
-        continue-on-error: true
-        run: npm test 2>&1 | tee test-windows.log
+        run: |
+          set -o pipefail
+          npm test 2>&1 | tee test-windows.log
 
       # Renders every screen with the very same HTML/CSS/JS that Electron loads
-      # and fails on any JavaScript error; the images are kept as artifacts.
+      # and fails on any JavaScript error.
       - name: Render all screens
         id: screenshots
-        continue-on-error: true
-        run: npm run screenshots 2>&1 | tee screenshots-windows.log
+        run: |
+          set -o pipefail
+          npm run screenshots 2>&1 | tee screenshots-windows.log
 
       - name: Report failures as annotations
-        if: failure() || steps.unit_tests.outcome == 'failure' || steps.screenshots.outcome == 'failure'
+        if: failure()
         working-directory: .
         run: |
           set +e
@@ -68,18 +71,29 @@ jobs:
             echo "::error::$clean"
           done < windows-errors.txt
 
+      # A short summary, committed to the repo so the result stays readable
+      # without access to the raw job logs.
       - name: Windows test summary
         if: always()
+        working-directory: .
         run: |
+          set +e
+          mkdir -p ci-logs
           {
-            echo "## Windows app checks"
+            echo "# Windows app summary - $(date -u '+%Y-%m-%d %H:%M UTC')"
             echo
+            echo "## Unit tests"
             echo '```'
-            tail -c 1500 test-windows.log 2>/dev/null
-            echo
-            tail -c 1500 screenshots-windows.log 2>/dev/null
+            tail -n 12 windows/test-windows.log 2>/dev/null
             echo '```'
-          } >> "$GITHUB_STEP_SUMMARY"
+            echo "## UI render (headless Chromium)"
+            echo '```'
+            tail -n 8 windows/screenshots-windows.log 2>/dev/null
+            echo '```'
+            echo "screenshots:"
+            ls -la docs/screenshots/windows/*.png 2>/dev/null | awk '{print "- " $9 " (" $5 " bytes)"}'
+          } > ci-logs/windows-summary.txt
+          cat ci-logs/windows-summary.txt
 
       - name: Upload UI screenshots
         if: always()
@@ -89,6 +103,21 @@ jobs:
           path: docs/screenshots/windows/
           if-no-files-found: warn
           retention-days: 30
+
+      # The runner has full internet access, so the committed screenshots show
+      # the real channel logos (a sandboxed machine falls back to the app icon).
+      - name: Commit the rendered screenshots
+        if: steps.screenshots.outcome == 'success'
+        working-directory: .
+        run: |
+          set +e
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -f docs/screenshots/windows ci-logs/windows-summary.txt
+          git diff --cached --quiet && echo "no changes to commit" && exit 0
+          git commit -m "Update Windows screenshots [skip ci]"
+          git pull --rebase --autostash origin "${GITHUB_REF_NAME}" || true
+          git push origin "HEAD:${GITHUB_REF_NAME}"
 
   # ------------------------------------------------------------- Windows build
   build:
