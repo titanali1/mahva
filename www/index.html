@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#f7f7fb" />
+    <meta name="description" content="مهوا؛ همراه هوشمند گفت‌وگو، ایده‌پردازی و یادگیری شما." />
+    <meta name="color-scheme" content="light dark" />
+    <title>مهوا | دستیار هوشمند</title>
+    <link rel="manifest" href="./manifest.webmanifest" />
+    <link rel="icon" href="./icons/icon-192.png" type="image/png" />
+    <link rel="apple-touch-icon" href="./icons/icon-192.png" />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <svg class="icon-library" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <symbol id="i-spark" viewBox="0 0 24 24">
+        <path d="M12 2.5 14.4 9.6 21.5 12l-7.1 2.4L12 21.5l-2.4-7.1L2.5 12l7.1-2.4L12 2.5Z" fill="currentColor" />
+        <path d="m19 2 .8 2.2L22 5l-2.2.8L19 8l-.8-2.2L16 5l2.2-.8L19 2Z" fill="currentColor" />
+      </symbol>
+      <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" /></symbol>
+      <symbol id="i-message" viewBox="0 0 24 24"><path d="M20 11.5a7.5 7.5 0 0 1-7.5 7.5H6l-3 2v-9.5A7.5 7.5 0 0 1 10.5 4h2A7.5 7.5 0 0 1 20 11.5Z" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linejoin="round" /></symbol>
+      <symbol id="i-settings" viewBox="0 0 24 24"><path d="M12 8.75a3.25 3.25 0 1 0 0 6.5 3.25 3.25 0 0 0 0-6.5Z" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="m19.4 13.2 1.1.85-1.1 1.9-1.3-.5a7.4 7.4 0 0 1-1.5.9l-.2 1.4h-2.2l-.3-1.4a7.2 7.2 0 0 1-1.7 0l-.8 1.2-1.9-1.1.5-1.3a7.6 7.6 0 0 1-.9-1.5l-1.4-.2v-2.2l1.4-.3a7.2 7.2 0 0 1 0-1.7l-1.2-.8 1.1-1.9 1.3.5a7.6 7.6 0 0 1 1.5-.9l.2-1.4h2.2l.3 1.4a7.2 7.2 0 0 1 1.7 0l.8-1.2 1.9 1.1-.5 1.3a7.6 7.6 0 0 1 .9 1.5l1.4.2v2.2l-1.4.3a7.2 7.2 0 0 1 0 1.7Z" fill="none" stroke="currentColor" stroke-width="1.45" stroke-linejoin="round" transform="translate(-1.2 -1.2) scale(.99)" /></symbol>
+      <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" /></symbol>
+      <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3.6" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42m11.3 11.3 1.42 1.42M2 12h2m16 0h2M4.93 19.07l1.42-1.42m11.3-11.3 1.42-1.42" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></symbol>
+      <symbol id="i-moon" viewBox="0 0 24 24"><path d="M20 15.2A8.4 8.4 0 0 1 8.8 4a8.5 8.5 0 1 0 11.2 11.2Z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></symbol>
+      <symbol id="i-send" viewBox="0 0 24 24"><path d="m21 3-7.4 18-3.8-7.8L2 9.4 21 3Z" fill="currentColor"/><path d="M9.8 13.2 21 3" fill="none" stroke="white" stroke-width="1.35" stroke-linecap="round"/></symbol>
+      <symbol id="i-copy" viewBox="0 0 24 24"><rect x="8" y="8" width="12" height="12" rx="2" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M16 8V5a1.5 1.5 0 0 0-1.5-1.5h-9A1.5 1.5 0 0 0 4 5v9A1.5 1.5 0 0 0 5.5 15.5H8" fill="none" stroke="currentColor" stroke-width="1.6"/></symbol>
+      <symbol id="i-download" viewBox="0 0 24 24"><path d="M12 3v11m0 0 4-4m-4 4-4-4M4 17v3h16v-3" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+      <symbol id="i-close" viewBox="0 0 24 24"><path d="m6 6 12 12M18 6 6 18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
+      <symbol id="i-lock" viewBox="0 0 24 24"><rect x="4" y="10" width="16" height="11" rx="2" fill="none" stroke="currentColor" stroke-width="1.65"/><path d="M8 10V7a4 4 0 0 1 8 0v3m-4 5v2" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round"/></symbol>
+    </svg>
+
+    <div class="app-shell">
+      <aside class="sidebar" id="sidebar" aria-label="فهرست گفت‌وگوها">
+        <div class="brand-lockup">
+          <div class="brand-mark" aria-hidden="true"><svg><use href="#i-spark"></use></svg></div>
+          <div class="brand-copy">
+            <span class="brand-name">مهوا</span>
+            <span class="brand-caption">همراه فکرهای بزرگ</span>
+          </div>
+          <button class="icon-button sidebar-close" id="sidebarClose" type="button" aria-label="بستن فهرست">
+            <svg><use href="#i-close"></use></svg>
+          </button>
+        </div>
+
+        <button class="new-chat-button" id="newChatButton" type="button">
+          <svg><use href="#i-plus"></use></svg>
+          <span>گفت‌وگوی تازه</span>
+          <kbd>Ctrl K</kbd>
+        </button>
+
+        <div class="sidebar-section-heading">
+          <span>گفت‌وگوهای اخیر</span>
+          <span class="section-dot" aria-hidden="true"></span>
+        </div>
+        <nav class="chat-list" id="chatList" aria-label="گفت‌وگوهای اخیر"></nav>
+
+        <div class="sidebar-bottom">
+          <div class="privacy-hint">
+            <span class="privacy-icon"><svg><use href="#i-lock"></use></svg></span>
+            <span>گفت‌وگوها روی همین دستگاه ذخیره می‌شوند.</span>
+          </div>
+          <button class="settings-link" id="openSettingsButton" type="button">
+            <span class="settings-link-icon"><svg><use href="#i-settings"></use></svg></span>
+            <span class="settings-link-copy"><strong>تنظیمات اتصال</strong><small id="sidebarConnectionText">اتصال مدل هوش مصنوعی</small></span>
+            <svg class="settings-chevron"><use href="#i-plus"></use></svg>
+          </button>
+        </div>
+      </aside>
+
+      <button class="sidebar-backdrop" id="sidebarBackdrop" type="button" aria-label="بستن فهرست" tabindex="-1"></button>
+
+      <main class="workspace">
+        <header class="topbar">
+          <div class="topbar-start">
+            <button class="icon-button mobile-menu-button" id="mobileMenuButton" type="button" aria-label="باز کردن فهرست">
+              <svg><use href="#i-menu"></use></svg>
+            </button>
+            <div class="mobile-brand brand-mark" aria-hidden="true"><svg><use href="#i-spark"></use></svg></div>
+            <div class="title-block">
+              <h1 id="conversationTitle">گفت‌وگوی تازه</h1>
+              <span class="connection-status" id="connectionStatus"><i></i><span>حالت نمایشی</span></span>
+            </div>
+          </div>
+          <div class="topbar-actions">
+            <button class="icon-button install-button" id="installButton" type="button" aria-label="نصب مهوا" title="نصب مهوا" hidden>
+              <svg><use href="#i-download"></use></svg>
+            </button>
+            <button class="icon-button theme-button" id="themeToggle" type="button" aria-label="تغییر پوسته" title="تغییر پوسته">
+              <svg class="sun-icon"><use href="#i-sun"></use></svg>
+              <svg class="moon-icon"><use href="#i-moon"></use></svg>
+            </button>
+            <button class="icon-button topbar-settings" id="topbarSettingsButton" type="button" aria-label="تنظیمات" title="تنظیمات">
+              <svg><use href="#i-settings"></use></svg>
+            </button>
+          </div>
+        </header>
+
+        <section class="conversation-area" aria-label="متن گفت‌وگو">
+          <div class="conversation-scroll" id="conversationScroll">
+            <section class="welcome-panel" id="welcomePanel">
+              <div class="welcome-orbit orbit-one"></div>
+              <div class="welcome-orbit orbit-two"></div>
+              <div class="welcome-emblem"><svg><use href="#i-spark"></use></svg><span></span></div>
+              <span class="welcome-eyebrow"><i></i> دستیار هوشمند شخصی شما</span>
+              <h2>سلام، من <span>مهوا</span> هستم.</h2>
+              <p class="welcome-description">اینجا می‌توانیم با هم فکر کنیم، یاد بگیریم و ایده‌ها را به نتیجه برسانیم. از کجا شروع کنیم؟</p>
+              <div class="suggestion-grid" aria-label="پیشنهاد برای شروع">
+                <button class="suggestion-card" type="button" data-prompt="برای شروع یک ایده‌ی خلاقانه برای کسب‌وکار کوچک پیشنهاد بده.">
+                  <span class="suggestion-icon idea-icon">✳</span>
+                  <span><strong>ایده‌پردازی کنیم</strong><small>یک ایده‌ی تازه پیدا کنیم</small></span>
+                  <span class="suggestion-arrow">←</span>
+                </button>
+                <button class="suggestion-card" type="button" data-prompt="این موضوع را ساده و مرحله‌به‌مرحله برایم توضیح بده: ">
+                  <span class="suggestion-icon learn-icon">◌</span>
+                  <span><strong>چیزی یاد بگیرم</strong><small>یک موضوع را ساده بفهمم</small></span>
+                  <span class="suggestion-arrow">←</span>
+                </button>
+                <button class="suggestion-card" type="button" data-prompt="برای این هفته یک برنامه‌ی عملی و واقع‌بینانه طراحی کن.">
+                  <span class="suggestion-icon plan-icon">▤</span>
+                  <span><strong>برنامه‌ریزی کنم</strong><small>قدم بعدی‌ام را مشخص کنم</small></span>
+                  <span class="suggestion-arrow">←</span>
+                </button>
+                <button class="suggestion-card" type="button" data-prompt="این متن را خلاصه و نکته‌های کلیدی آن را فهرست کن: ">
+                  <span class="suggestion-icon write-icon">✎</span>
+                  <span><strong>با نوشته‌ها کار کنم</strong><small>خلاصه، بازنویسی یا ویرایش</small></span>
+                  <span class="suggestion-arrow">←</span>
+                </button>
+              </div>
+              <p class="offline-note"><svg><use href="#i-lock"></use></svg> برای پاسخ هوشمند آنلاین، اتصال مدل را از بخش تنظیمات فعال کنید.</p>
+            </section>
+            <div class="message-list" id="messageList" aria-live="polite" aria-relevant="additions text" hidden></div>
+            <div class="typing-indicator" id="typingIndicator" aria-label="مهوا در حال پاسخ‌دادن است" hidden>
+              <span class="assistant-avatar"><svg><use href="#i-spark"></use></svg></span>
+              <div class="typing-bubble"><span></span><span></span><span></span></div>
+              <span class="typing-label">مهوا در حال فکر کردن است</span>
+            </div>
+          </div>
+        </section>
+
+        <footer class="composer-zone">
+          <form class="composer" id="composerForm">
+            <textarea id="promptInput" rows="1" maxlength="12000" placeholder="پیامت را برای مهوا بنویس..." aria-label="پیام شما"></textarea>
+            <div class="composer-bottom">
+              <span class="composer-hint"><kbd>Enter</kbd> برای ارسال <span class="hint-divider">·</span> <kbd>Shift + Enter</kbd> برای خط جدید</span>
+              <button class="send-button" id="sendButton" type="submit" aria-label="ارسال پیام" title="ارسال پیام">
+                <svg><use href="#i-send"></use></svg>
+              </button>
+            </div>
+          </form>
+          <p class="disclaimer">مهوا ممکن است اشتباه کند؛ پاسخ‌های مهم را بررسی کنید.</p>
+        </footer>
+      </main>
+    </div>
+
+    <dialog class="settings-dialog" id="settingsDialog" aria-labelledby="settingsTitle">
+      <div class="dialog-heading">
+        <div>
+          <span class="dialog-eyebrow">شخصی‌سازی</span>
+          <h2 id="settingsTitle">تنظیمات اتصال</h2>
+        </div>
+        <button class="icon-button dialog-close" id="closeSettingsButton" type="button" aria-label="بستن تنظیمات"><svg><use href="#i-close"></use></svg></button>
+      </div>
+      <p class="dialog-intro">برای دریافت پاسخ از یک مدل هوش مصنوعی، مشخصات API سازگار با قالب OpenAI را وارد کنید.</p>
+      <form id="settingsForm">
+        <label class="field-label" for="apiUrl">نشانی کامل Chat Completions</label>
+        <input class="settings-input" id="apiUrl" type="url" inputmode="url" autocomplete="url" placeholder="https://api.openai.com/v1/chat/completions" />
+        <div class="field-help">نشانی باید با https:// یا http:// شروع شود.</div>
+
+        <label class="field-label" for="apiModel">نام مدل</label>
+        <input class="settings-input" id="apiModel" type="text" autocomplete="off" placeholder="gpt-4o-mini" />
+
+        <label class="field-label" for="apiKey">کلید API</label>
+        <div class="secret-field">
+          <input class="settings-input" id="apiKey" type="password" autocomplete="off" placeholder="کلید API شما" />
+          <button class="secret-toggle" id="toggleKeyVisibility" type="button" aria-label="نمایش یا پنهان‌کردن کلید">نمایش</button>
+        </div>
+        <div class="secure-callout">
+          <span class="secure-callout-icon"><svg><use href="#i-lock"></use></svg></span>
+          <p>کلید و گفت‌وگوها در حافظه‌ی مرورگر همین دستگاه ذخیره می‌شوند و رمزگذاری جداگانه ندارند. پیام‌ها فقط هنگام استفاده از مدل آنلاین، مستقیماً به نشانی API انتخابی فرستاده می‌شوند؛ مهوا سرور واسط ندارد.</p>
+        </div>
+        <button class="danger-text-button" id="clearLocalDataButton" type="button">پاک‌کردن گفت‌وگوها و کلید ذخیره‌شده</button>
+        <div class="settings-error" id="settingsError" role="alert" hidden></div>
+        <div class="dialog-actions">
+          <button class="text-button" id="cancelSettingsButton" type="button">انصراف</button>
+          <button class="primary-button" type="submit">ذخیره تنظیمات</button>
+        </div>
+      </form>
+      <p class="settings-footnote">برای استفاده از API ممکن است ارائه‌دهنده‌ی مدل هزینه دریافت کند.</p>
+    </dialog>
+
+    <div class="toast-region" id="toastRegion" role="status" aria-live="polite"></div>
+    <script src="./app.js" defer></script>
+  </body>
+</html>

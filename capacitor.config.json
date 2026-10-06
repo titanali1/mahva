@@ -1,0 +1,12 @@
+{
+  "appId": "com.mahva.assistant",
+  "appName": "مهوا",
+  "webDir": "www",
+  "backgroundColor": "#f7f7fb",
+  "server": {
+    "androidScheme": "https"
+  },
+  "android": {
+    "allowMixedContent": false
+  }
+}

@@ -1,0 +1,16 @@
+node_modules/
+.npm/
+
+# Local Android SDK paths and generated build outputs
+local.properties
+android/.gradle/
+android/**/build/
+*.apk
+*.aab
+*.jks
+*.keystore
+
+# Editor and OS files
+.DS_Store
+.idea/
+.vscode/
