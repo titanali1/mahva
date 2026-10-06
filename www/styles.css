@@ -214,6 +214,25 @@ button:focus-visible, input:focus-visible, textarea:focus-visible {
 .connection-status i { width: 6px; height: 6px; border-radius: 50%; background: #c9a767; box-shadow: 0 0 0 3px color-mix(in srgb, #c9a767 12%, transparent); }
 .connection-status.connected i { background: #61b496; box-shadow: 0 0 0 3px color-mix(in srgb, #61b496 14%, transparent); }
 .topbar-actions { display: flex; align-items: center; gap: 8px; }
+.official-chatgpt-button {
+  display: inline-flex;
+  height: 35px;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  padding: 0 11px;
+  border: 1px solid color-mix(in srgb, var(--accent) 20%, var(--line));
+  border-radius: 11px;
+  color: var(--accent-strong);
+  background: var(--accent-faint);
+  font-size: 10px;
+  font-weight: 750;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background .18s ease, border-color .18s ease, transform .18s ease;
+}
+.official-chatgpt-button:hover { border-color: color-mix(in srgb, var(--accent) 45%, var(--line)); background: var(--accent-soft); transform: translateY(-1px); }
+.official-chatgpt-button svg { width: 15px; height: 15px; }
 .icon-button {
   display: inline-grid;
   flex: 0 0 auto;
@@ -457,6 +476,7 @@ button:focus-visible, input:focus-visible, textarea:focus-visible {
   .mobile-brand svg { width: 18px; height: 18px; }
   .title-block h1 { max-width: min(42vw, 210px); font-size: 12px; }
   .topbar-actions { gap: 2px; }
+  .official-chatgpt-button { height: 34px; padding: 0 8px; font-size: 9px; }
   .topbar-actions .icon-button { width: 34px; height: 34px; }
   .conversation-scroll { padding: 15px 17px 12px; }
   .welcome-panel { min-height: 460px; padding: 8px 0 18px; }
@@ -482,6 +502,10 @@ button:focus-visible, input:focus-visible, textarea:focus-visible {
   .title-block h1 { max-width: 37vw; font-size: 11px; }
   .connection-status { font-size: 8px; }
   .topbar-actions .icon-button { width: 31px; height: 31px; }
+  .official-chatgpt-button { width: 31px; height: 31px; padding: 0; border-radius: 10px; }
+  .official-chatgpt-button svg { display: none; }
+  .official-chatgpt-button span { font-size: 0; }
+  .official-chatgpt-button span::after { content: "GPT"; font-size: 8px; }
   .conversation-scroll { padding-right: 13px; padding-left: 13px; }
   .welcome-panel { min-height: 420px; }
   .welcome-panel h2 { font-size: 27px; }
@@ -495,6 +519,11 @@ button:focus-visible, input:focus-visible, textarea:focus-visible {
   .offline-note { max-width: 300px; font-size: 8px; line-height: 1.8; }
   .composer-hint { font-size: 8px; gap: 3px; }
   .composer-hint kbd { font-size: 7px; }
+}
+@media (max-width: 360px) {
+  .title-block { max-width: 76px; }
+  .title-block h1 { max-width: 76px; }
+  .connection-status { display: none; }
 }
 @media (max-height: 690px) and (min-width: 761px) {
   .conversation-scroll { padding-top: 9px; }

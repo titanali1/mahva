@@ -370,6 +370,30 @@ function closeSettings() {
   if (elements.settingsDialog.open) elements.settingsDialog.close();
 }
 
+async function openOfficialChatGPT() {
+  const chatgptUrl = 'https://chatgpt.com/';
+  const capacitor = window.Capacitor;
+  if (capacitor?.isNativePlatform?.() && typeof capacitor.registerPlugin === 'function') {
+    try {
+      const appLauncher = capacitor.registerPlugin('AppLauncher');
+      const installedApp = await appLauncher.canOpenUrl({ url: 'com.openai.chatgpt' });
+      if (installedApp.value) {
+        await appLauncher.openUrl({ url: 'com.openai.chatgpt' });
+        return;
+      }
+      await appLauncher.openUrl({ url: chatgptUrl });
+      return;
+    } catch {
+      showToast('بازکردن ChatGPT رسمی ممکن نشد. اتصال یا تنظیمات اندروید را بررسی کنید.', true);
+      return;
+    }
+  }
+
+  const externalWindow = window.open(chatgptUrl, '_blank');
+  if (externalWindow) externalWindow.opener = null;
+  else window.location.assign(chatgptUrl);
+}
+
 async function copyText(text) {
   try {
     if (navigator.clipboard?.writeText) {
@@ -393,6 +417,7 @@ async function copyText(text) {
 $('#newChatButton').addEventListener('click', createChat);
 $('#openSettingsButton').addEventListener('click', openSettings);
 $('#topbarSettingsButton').addEventListener('click', openSettings);
+$('#officialChatGPTButton').addEventListener('click', openOfficialChatGPT);
 $('#mobileMenuButton').addEventListener('click', () => document.body.classList.add('menu-open'));
 $('#sidebarClose').addEventListener('click', closeMobileSidebar);
 $('#sidebarBackdrop').addEventListener('click', closeMobileSidebar);
