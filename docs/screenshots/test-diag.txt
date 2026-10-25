@@ -1,7 +1,7 @@
 home ready: true
 capture 01-home.png -> 1233x2745
 click tag 'tab_persiana' -> ok
-section 'tab_persiana' ready: true
+section 'tab_persiana' ready: false
 capture 02-persiana.png -> 1233x2745
 click tag 'tab_news' -> ok
 section 'tab_news' ready: true
