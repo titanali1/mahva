@@ -136,6 +136,9 @@ fun PlayerScreen(
 
         val mediaSourceFactory = DefaultMediaSourceFactory(context)
             .setDataSourceFactory(dataSourceFactory)
+            // Retry flaky HTTP requests a few times before reporting an error;
+            // the server failover below then moves on to a backup stream.
+            .setLoadErrorHandlingPolicy(DefaultLoadErrorHandlingPolicy(3))
 
         val loadControl = DefaultLoadControl.Builder()
             .setBufferDurationsMs(6_000, 45_000, 1_500, 3_000)
@@ -144,9 +147,6 @@ fun PlayerScreen(
         ExoPlayer.Builder(context)
             .setMediaSourceFactory(mediaSourceFactory)
             .setLoadControl(loadControl)
-            // Retry flaky HTTP requests a few times before reporting an error;
-            // the server failover below then moves on to a backup stream.
-            .setLoadErrorHandlingPolicy(DefaultLoadErrorHandlingPolicy(3))
             .setHandleAudioBecomingNoisy(true)
             .build()
             .apply {
