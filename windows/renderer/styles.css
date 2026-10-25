@@ -162,6 +162,7 @@ button { font-family: inherit; color: inherit; }
   border-radius: 12px;
   background: rgba(255, 255, 255, 0.14);
   box-shadow: 0 4px 14px rgba(0, 0, 0, 0.28);
+  object-fit: cover;
 }
 
 .hero__head { display: flex; align-items: center; gap: 12px; }
@@ -171,6 +172,7 @@ button { font-family: inherit; color: inherit; }
   border-radius: 18px;
   background: rgba(255, 255, 255, 0.16);
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
+  object-fit: cover;
 }
 .drawer__hero-sub { margin: 6px 0 0; font-size: 12px; opacity: 0.94; line-height: 1.6; }
 

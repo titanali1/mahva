@@ -2,7 +2,8 @@
 # -*- coding: utf-8 -*-
 """Builds every TakhtLive icon from the master artwork.
 
-Source of truth:  brand/takhtlive-mark.png  (1024x1024, square logo artwork)
+Source of truth:  brand/takhtlive-mark.png  (square logo artwork, usually with
+                                             the wordmark under the emblem)
 
 Generated:
   Android
@@ -18,8 +19,15 @@ Generated:
     windows/assets/brand-256.png                                   badge for the UI
     windows/assets/channel-placeholder.png                        missing-logo placeholder
     windows/assets/favicon-32.png                                  window icon
+  Generated artwork
+    brand/takhtlive-emblem.png                   emblem alone (no wordmark)
   Documentation
-    docs/logo.png                                (README header)
+    docs/logo.png                                (README header, full artwork)
+
+The launcher/window icons only contain the emblem: the wordmark of the master
+artwork would be unreadable at 48dp, so it is detected (the first block of
+content above the empty gap) and placed on a square gradient background that
+matches the artwork, with the same generous margins as a store icon.
 
 Only the standard library is used (zlib for PNG), so it runs anywhere Python 3 does.
 
@@ -351,14 +359,146 @@ def paste_centered(canvas_size, mark_size, mark):
     return canvas
 
 
+CONTENT_LUMA = 170        # a pixel brighter than this is "artwork"
+CONTENT_LUMA_FALLBACKS = (140, 110)   # used when the artwork is very dark
+ALPHA_ZERO = 55           # luminance below this is background
+ALPHA_FULL = 165          # luminance above this is solid artwork
+EMBLEM_FILL = 0.80        # emblem size relative to the square icon canvas
+ICON_TOP = (26, 30, 37)   # sampled from the master artwork background
+ICON_BOTTOM = (11, 14, 20)
+
+
+def _luma(r, g, b):
+    return (r * 299 + g * 587 + b * 114) // 1000
+
+
+def _content_blocks(width, height, pixels, gap=6):
+    """Splits the artwork into vertical blocks of content (emblem, wordmark …)."""
+    has_content = []
+    for y in range(height):
+        row_has = False
+        for x in range(width):
+            i = (y * width + x) * 4
+            if _luma(pixels[i], pixels[i + 1], pixels[i + 2]) > CONTENT_LUMA:
+                row_has = True
+                break
+        has_content.append(row_has)
+
+    blocks, start, empty = [], None, 0
+    for y, row_has in enumerate(has_content):
+        if row_has:
+            if start is None:
+                start = y
+            empty = 0
+        elif start is not None:
+            empty += 1
+            if empty >= gap:
+                blocks.append((start, y - empty))
+                start = None
+    if start is not None:
+        blocks.append((start, height - 1))
+    return blocks
+
+
+def _content_bounds(width, pixels, y0, y1):
+    """Horizontal bounds of the artwork pixels inside the rows y0..y1."""
+    left, right = width, -1
+    for y in range(y0, y1 + 1):
+        for x in range(width):
+            i = (y * width + x) * 4
+            if _luma(pixels[i], pixels[i + 1], pixels[i + 2]) > CONTENT_LUMA:
+                left = min(left, x)
+                right = max(right, x)
+    if right < 0:
+        return 0, width - 1
+    return left, right
+
+
+def emblem_square(width, height, pixels):
+    """Crops the emblem (the first block of content) onto a square canvas.
+
+    The master artwork is usually "emblem + wordmark". Icons need the emblem
+    only, centred on a background that matches the artwork, so the result looks
+    like a proper store icon at every size.
+    """
+    blocks = []
+    for threshold in (CONTENT_LUMA,) + CONTENT_LUMA_FALLBACKS:
+        # A high threshold ignores the soft frame/background of the artwork and
+        # only keeps the emblem; darker artworks fall back to lower values.
+        global _
+        saved = globals()["CONTENT_LUMA"]
+        globals()["CONTENT_LUMA"] = threshold
+        blocks = _content_blocks(width, height, pixels)
+        globals()["CONTENT_LUMA"] = saved
+        if len(blocks) >= 2:
+            break
+    if not blocks:
+        size = min(width, height)
+        return size, resize(width, height, pixels, size, size)[2]
+
+    y0, y1 = blocks[0]
+    x0, x1 = _content_bounds(width, pixels, y0, y1)
+    pad = max(6, int(round(max(x1 - x0, y1 - y0) * 0.04)))
+    x0, y0 = max(0, x0 - pad), max(0, y0 - pad)
+    x1, y1 = min(width - 1, x1 + pad), min(height - 1, y1 + pad)
+    mark_w, mark_h = x1 - x0 + 1, y1 - y0 + 1
+
+    size = int(round(max(mark_w, mark_h) / EMBLEM_FILL))
+    canvas = bytearray(size * size * 4)
+    for y in range(size):
+        t = y / max(1, size - 1)
+        r = int(round(ICON_TOP[0] + (ICON_BOTTOM[0] - ICON_TOP[0]) * t))
+        g = int(round(ICON_TOP[1] + (ICON_BOTTOM[1] - ICON_TOP[1]) * t))
+        b = int(round(ICON_TOP[2] + (ICON_BOTTOM[2] - ICON_TOP[2]) * t))
+        for x in range(size):
+            i = (y * size + x) * 4
+            canvas[i], canvas[i + 1], canvas[i + 2], canvas[i + 3] = r, g, b, 255
+
+    # Composite the emblem onto the canvas, centred. Brightness acts as alpha so
+    # the dark "plate" and the soft glow of the artwork blend into the gradient
+    # instead of being pasted as a visible rectangle.
+    ox = (size - mark_w) // 2
+    oy = (size - mark_h) // 2
+    span = float(ALPHA_FULL - ALPHA_ZERO)
+    for y in range(mark_h):
+        src_row = (y0 + y) * width
+        dst_row = (oy + y) * size + ox
+        for x in range(mark_w):
+            si = (src_row + x0 + x) * 4
+            di = (dst_row + x) * 4
+            r, g, b = pixels[si], pixels[si + 1], pixels[si + 2]
+            alpha = (_luma(r, g, b) - ALPHA_ZERO) / span
+            if alpha <= 0.0:
+                continue
+            if alpha > 1.0:
+                alpha = 1.0
+            inv = 1.0 - alpha
+            canvas[di] = int(round(r * alpha + canvas[di] * inv))
+            canvas[di + 1] = int(round(g * alpha + canvas[di + 1] * inv))
+            canvas[di + 2] = int(round(b * alpha + canvas[di + 2] * inv))
+            canvas[di + 3] = 255
+    return size, canvas
+
+
 def build():
     if not os.path.exists(SOURCE):
         sys.exit("missing master artwork: %s" % SOURCE)
-    width, height, source = decode_png(SOURCE)
+    master_w, master_h, master = decode_png(SOURCE)
+    width, height, source = master_w, master_h, master
     if width != height:
         sys.exit("the artwork must be square (got %dx%d)" % (width, height))
 
     written = []
+
+    # Icons are built from the emblem alone; the wordmark would be unreadable
+    # at 48dp. The full artwork is kept for the README header.
+    icon_width, icon_pixels = emblem_square(width, height, source)
+    icon_source = icon_pixels
+    emblem_path = os.path.join(ROOT, "brand", "takhtlive-emblem.png")
+    os.makedirs(os.path.dirname(emblem_path), exist_ok=True)
+    written.append((emblem_path, encode_png(emblem_path, icon_width, icon_width, icon_source)))
+    width = height = icon_width
+    source = icon_source
 
     def emit(path, size, pixels):
         os.makedirs(os.path.dirname(path), exist_ok=True)
@@ -416,7 +556,8 @@ def build():
     written.append((ico_path, write_ico(ico_path, ico_images)))
 
     # ------------------------------------------------------------------- docs
-    _, _, scaled = resize(width, height, source, 512, 512)
+    # README header keeps the full artwork (emblem + wordmark).
+    _, _, scaled = resize(master_w, master_h, master, 512, 512)
     emit(os.path.join(DOCS, "logo.png"), 512, scaled)
 
     print("built %d icon files from %s (%dx%d)" % (len(written), os.path.relpath(SOURCE, ROOT), width, height))
