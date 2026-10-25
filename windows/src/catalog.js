@@ -60,10 +60,23 @@ function parseCatalog(json) {
       category: c.category,
       logo: c.logo || '',
       url: c.url,
+      mirrors: Array.isArray(c.mirrors) ? c.mirrors.filter((m) => typeof m === 'string' && m.startsWith('http')) : [],
       quality: c.quality || 'HD',
       custom: false,
     }));
   return { categories, channels };
+}
+
+/**
+ * Every server that can play a channel: the main url first, then the backups.
+ * The player walks through this list before it reports an error.
+ */
+function channelUrls(channel) {
+  if (!channel) return [];
+  const urls = [channel.url].concat(channel.mirrors || []);
+  return urls
+    .map((url) => (typeof url === 'string' ? url.trim() : ''))
+    .filter((url, index, all) => url.length > 0 && all.indexOf(url) === index);
 }
 
 /** Adds the user defined channels in front of the built in ones. */
@@ -88,6 +101,7 @@ function withCustomChannels(catalog, custom) {
 }
 
 module.exports = {
+  channelUrls,
   channelName,
   channelSubtitle,
   categoryTitle,

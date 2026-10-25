@@ -1,23 +1,25 @@
 {
-  "version": 3,
-  "updated": "2026-09-29",
-  "note": "Channel list curated from iptv-org/iptv (categories) and Samhouston010/persian-tv playlists.",
+  "version": 4,
+  "updated": "2026-10-26",
+  "note": "Channel list curated from iptv-org/iptv, Samhouston010/persian-tv, itsyebekhe/nexa and AdeelWajid/iptv_validated_list. Channels with 'mirrors' are played from a backup server automatically when the main server fails.",
   "sources": [
     "https://github.com/iptv-org/iptv",
     "https://github.com/Samhouston010/persian-tv",
-    "https://github.com/shayanline/iptv-iran"
+    "https://github.com/shayanline/iptv-iran",
+    "https://github.com/itsyebekhe/nexa",
+    "https://github.com/AdeelWajid/iptv_validated_list"
   ],
   "categories": [
     {
       "id": "persiana",
       "title": "پرشیانا گروپ",
-      "subtitle": "کانال‌های گروه پرشیانا",
+      "subtitle": "کانال‌های پرشیانا و سرگرمی فارسی",
       "emoji": "📺",
       "color": "#7C4DFF",
       "titleEn": "Persiana Group",
       "titleAr": "مجموعة برشيانا",
-      "subtitleEn": "Channels of the Persiana group",
-      "subtitleAr": "قنوات مجموعة برشيانا"
+      "subtitleEn": "Persiana group and Persian entertainment channels",
+      "subtitleAr": "قنوات برشيانا والترفيه الفارسي"
     },
     {
       "id": "news",
@@ -54,6 +56,161 @@
     }
   ],
   "channels": [
+    {
+      "id": "persiana-emirates",
+      "name": "پرشیانا امارات",
+      "nameEn": "Persiana Emirates",
+      "nameAr": "برشيانا الإمارات",
+      "category": "persiana",
+      "logo": "",
+      "url": "https://pemirateshls.persiana.live/hls/stream.m3u8",
+      "quality": "HD"
+    },
+    {
+      "id": "ava-series",
+      "name": "آوا سریال",
+      "nameEn": "AVA Series",
+      "nameAr": "آفا سيريز",
+      "category": "persiana",
+      "logo": "",
+      "url": "https://avaserieshls.wns.live/hls/stream.m3u8",
+      "quality": "HD"
+    },
+    {
+      "id": "cafe-film",
+      "name": "کافه فیلم",
+      "nameEn": "Cafe Film",
+      "nameAr": "كافيه فيلم",
+      "category": "persiana",
+      "logo": "",
+      "url": "https://cafefhls.wns.live/hls/stream.m3u8",
+      "quality": "HD"
+    },
+    {
+      "id": "afra-film",
+      "name": "افرا فیلم",
+      "nameEn": "Afra Film",
+      "nameAr": "أفرا فيلم",
+      "category": "persiana",
+      "logo": "",
+      "url": "https://afrafhls.wns.live/hls/stream.m3u8",
+      "mirrors": [
+        "https://afrashls.wns.live/hls/stream.m3u8"
+      ],
+      "quality": "HD"
+    },
+    {
+      "id": "classic-tv",
+      "name": "کلاسیک تی‌وی",
+      "nameEn": "Classic TV",
+      "nameAr": "كلاسيك تي في",
+      "category": "persiana",
+      "logo": "",
+      "url": "https://clshls.wns.live/hls/stream.m3u8",
+      "quality": "HD"
+    },
+    {
+      "id": "khalij-tv",
+      "name": "خلیج تی‌وی",
+      "nameEn": "Khalij TV",
+      "nameAr": "خليج تي في",
+      "category": "persiana",
+      "logo": "",
+      "url": "https://khalijhls.wns.live/hls/stream.m3u8",
+      "quality": "HD"
+    },
+    {
+      "id": "zed-tv",
+      "name": "ضد تی‌وی",
+      "nameEn": "Zed TV",
+      "nameAr": "زد تي في",
+      "category": "news",
+      "logo": "",
+      "url": "https://zedhls.wns.live/hls/stream.m3u8",
+      "quality": "HD"
+    },
+    {
+      "id": "iran-farda",
+      "name": "ایران فردا",
+      "nameEn": "Iran e Farda",
+      "nameAr": "إيران فردا",
+      "category": "news",
+      "logo": "",
+      "url": "https://iranefardalive.com/stream/live.m3u8",
+      "quality": "SD"
+    },
+    {
+      "id": "iran-press",
+      "name": "ایران پرس",
+      "nameEn": "Iran Press",
+      "nameAr": "إيران برس",
+      "category": "news",
+      "logo": "",
+      "url": "https://live.presstv.ir/hls/presstv_5_482/index.m3u8",
+      "quality": "SD"
+    },
+    {
+      "id": "irinn-news",
+      "name": "شبکه خبر (ایرین‌نیوز)",
+      "nameEn": "IRINN News",
+      "nameAr": "قناة الأخبار الإيرانية",
+      "category": "news",
+      "logo": "",
+      "url": "https://ncdn.telewebion.ir/irinn2/live/playlist.m3u8",
+      "mirrors": [
+        "https://ncdn.telewebion.net/irinn2/live/playlist.m3u8"
+      ],
+      "quality": "HD"
+    },
+    {
+      "id": "tapesh-tv",
+      "name": "تپش",
+      "nameEn": "Tapesh TV",
+      "nameAr": "تابش",
+      "category": "music",
+      "logo": "",
+      "url": "https://hls.tapeshtv.live/hls/stream.m3u8",
+      "quality": "HD"
+    },
+    {
+      "id": "telewebion-sport-1",
+      "name": "تلوبیون اسپرت ۱",
+      "nameEn": "Telewebion Sport 1",
+      "nameAr": "تليوبيون سبورت ١",
+      "category": "sports",
+      "logo": "",
+      "url": "https://ncdn.telewebion.ir/sport1/live/playlist.m3u8",
+      "mirrors": [
+        "https://ncdn.telewebion.net/sport1/live/playlist.m3u8"
+      ],
+      "quality": "HD"
+    },
+    {
+      "id": "telewebion-sport-2",
+      "name": "تلوبیون اسپرت ۲",
+      "nameEn": "Telewebion Sport 2",
+      "nameAr": "تليوبيون سبورت ٢",
+      "category": "sports",
+      "logo": "",
+      "url": "https://ncdn.telewebion.ir/sport2/live/playlist.m3u8",
+      "mirrors": [
+        "https://ncdn.telewebion.net/sport2/live/playlist.m3u8"
+      ],
+      "quality": "HD"
+    },
+    {
+      "id": "telewebion-sport-3",
+      "name": "تلوبیون اسپرت ۳",
+      "nameEn": "Telewebion Sport 3",
+      "nameAr": "تليوبيون سبورت ٣",
+      "category": "sports",
+      "logo": "",
+      "url": "https://ncdn.telewebion.ir/sport3/live/playlist.m3u8",
+      "mirrors": [
+        "https://ncdn.telewebion.net/sport3/live/playlist.m3u8"
+      ],
+      "quality": "HD"
+    },
     {
       "id": "persiana-family",
       "name": "پرشیانا فمیلی",
@@ -142,7 +299,10 @@
       "category": "persiana",
       "logo": "https://cdn.jsdelivr.net/gh/Samhouston010/persian-tv@master/logos/persiana/medical.png",
       "url": "https://phd2hls.persiana.live/hls/stream.m3u8",
-      "quality": "HD"
+      "quality": "HD",
+      "mirrors": [
+        "https://tfnhls.wns.live/hls/stream.m3u8"
+      ]
     },
     {
       "id": "persiana-docs",
@@ -178,7 +338,10 @@
       "category": "persiana",
       "logo": "https://cdn.jsdelivr.net/gh/Samhouston010/persian-tv@master/logos/persiana/music.png",
       "url": "https://musichls.persiana.live/hls/stream.m3u8",
-      "quality": "HD"
+      "quality": "HD",
+      "mirrors": [
+        "https://itthls.wns.live/hls/stream.m3u8"
+      ]
     },
     {
       "id": "persiana-nostalgia",
@@ -214,7 +377,10 @@
       "category": "persiana",
       "logo": "https://cdn.jsdelivr.net/gh/Samhouston010/persian-tv@master/logos/persiana/travel.png",
       "url": "https://ptravelhls.persiana.live/hls/stream.m3u8",
-      "quality": "HD"
+      "quality": "HD",
+      "mirrors": [
+        "https://mardomhls.wns.live/hls/stream.m3u8"
+      ]
     },
     {
       "id": "persiana-podcast",
@@ -296,7 +462,11 @@
       "logo": "https://upload.wikimedia.org/wikipedia/en/4/44/BBC_News_Persian_Logo.jpg",
       "url": "https://vs-hls-pushb-ww-live.akamaized.net/x=4/i=urn:bbc:pips:service:bbc_persian_tv/t=3840/v=pv14/b=5070016/main.m3u8",
       "quality": "HD",
-      "nameAr": "بي بي سي الفارسية"
+      "nameAr": "بي بي سي الفارسية",
+      "mirrors": [
+        "https://vs-hls-pushb-ww-live.akamaized.net/x=4/i=urn:bbc:pips:service:bbc_persian_tv/pc_hd_abr_v2.m3u8",
+        "https://vs-hls-pushb-ww-live.akamaized.net/x=4/i=urn:bbc:pips:service:bbc_persian_tv/mobile_wifi_main_hd_abr_v2.m3u8"
+      ]
     },
     {
       "id": "iran-international",
@@ -306,7 +476,10 @@
       "logo": "https://i.imgur.com/55RpaF3.png",
       "url": "https://hlspackager.akamaized.net/live/DB/IRAN_INTERNATIONAL/HLS/IRAN_INTERNATIONAL.m3u8",
       "quality": "HD",
-      "nameAr": "إيران إنترناشيونال"
+      "nameAr": "إيران إنترناشيونال",
+      "mirrors": [
+        "https://dev-live.livetvstream.co.uk/LS-63503-4/index.m3u8"
+      ]
     },
     {
       "id": "voa-persian",
@@ -316,7 +489,10 @@
       "logo": "https://i.imgur.com/TmqComb.png",
       "url": "https://voa-ingest.akamaized.net/hls/live/2033876/tvmc07/playlist.m3u8",
       "quality": "HD",
-      "nameAr": "صوت أمريكا"
+      "nameAr": "صوت أمريكا",
+      "mirrors": [
+        "https://voaphls.wns.live/hls/stream.m3u8"
+      ]
     },
     {
       "id": "radio-farda",
@@ -326,7 +502,10 @@
       "logo": "https://raw.githubusercontent.com/picons/picons/master/build-source/logos/radiofarda.default.svg",
       "url": "https://rferl-ingest.akamaized.net/hls/live/2121768/tvmc01/playlist.m3u8",
       "quality": "HD",
-      "nameAr": "راديو فردا"
+      "nameAr": "راديو فردا",
+      "mirrors": [
+        "https://rferl-ingest.akamaized.net/hls/live/2121768/tvmc01/master.m3u8"
+      ]
     },
     {
       "id": "simaye-azadi",
@@ -356,7 +535,10 @@
       "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fb/Press_TV_logo.svg/960px-Press_TV_logo.svg.png",
       "url": "https://live.presstv.ir/hls/presstv.m3u8",
       "quality": "HD",
-      "nameAr": "برس تي في"
+      "nameAr": "برس تي في",
+      "mirrors": [
+        "https://live.presstv.co.uk/hls/presstv.m3u8"
+      ]
     },
     {
       "id": "hispan-tv",
@@ -596,7 +778,10 @@
       "category": "news",
       "logo": "https://raw.githubusercontent.com/shayanline/iptv-iran/main/assets/logos/KalemehTV.uk.png",
       "url": "https://player.kalemeh.tv/live/ngrp:kalemeh_all/playlist.m3u8",
-      "quality": "HD"
+      "quality": "HD",
+      "mirrors": [
+        "https://klmhls.wns.live/hls/stream.m3u8"
+      ]
     },
     {
       "id": "israel-pars-tv",
@@ -624,7 +809,10 @@
       "category": "music",
       "logo": "https://raw.githubusercontent.com/picons/picons/master/build-source/logos/pmc.default.svg",
       "url": "https://pmchls.wns.live/hls/stream.m3u8",
-      "quality": "HD"
+      "quality": "HD",
+      "mirrors": [
+        "https://pmcrohls.wns.live/hls/stream.m3u8"
+      ]
     },
     {
       "id": "radio-javan",
@@ -651,7 +839,10 @@
       "category": "music",
       "logo": "https://i.imgur.com/YteKXJy.png",
       "url": "https://hls.navahang.live/hls/stream.m3u8",
-      "quality": "HD"
+      "quality": "HD",
+      "mirrors": [
+        "https://navahanghls.wns.live/hls/stream.m3u8"
+      ]
     },
     {
       "id": "sun-music",
@@ -858,7 +1049,10 @@
       "category": "sports",
       "logo": "https://upload.wikimedia.org/wikipedia/fa/thumb/f/f5/Iribvarzesh2022.png/960px-Iribvarzesh2022.png",
       "url": "https://ncdn.telewebion.ir/varzesh/live/playlist.m3u8",
-      "quality": "HD"
+      "quality": "HD",
+      "mirrors": [
+        "https://ncdn.telewebion.net/varzesh/live/playlist.m3u8"
+      ]
     },
     {
       "id": "bein-xtra",

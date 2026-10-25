@@ -39,8 +39,22 @@ data class Channel(
     val logo: String,
     val url: String,
     val quality: String,
-    val custom: Boolean = false
+    val custom: Boolean = false,
+    /** Backup servers for the same channel (see tools/catalog_overlay.py). */
+    val mirrors: List<String> = emptyList()
 ) {
+    /**
+     * Every server that can play this channel, the main one first.
+     *
+     * Live streams drop out all the time, so the player walks through this
+     * list and switches to the next server before it shows an error.
+     */
+    val playUrls: List<String>
+        get() = (listOf(url) + mirrors)
+            .map { it.trim() }
+            .filter { it.isNotEmpty() }
+            .distinct()
+
     /** The channel name for the currently selected interface language. */
     fun nameFor(language: AppLanguage): String = when (language) {
         AppLanguage.PERSIAN -> name
@@ -112,6 +126,14 @@ data class ChannelCatalog(
                 val url = o.optString("url").trim()
                 if (url.isBlank()) continue
                 val id = o.optString("id").ifBlank { "ch-$i" }
+                val mirrorsJson = o.optJSONArray("mirrors")
+                val mirrors = ArrayList<String>()
+                if (mirrorsJson != null) {
+                    for (j in 0 until mirrorsJson.length()) {
+                        val mirror = mirrorsJson.optString(j).trim()
+                        if (mirror.isNotEmpty()) mirrors.add(mirror)
+                    }
+                }
                 channels.add(
                     Channel(
                         id = id,
@@ -121,7 +143,8 @@ data class ChannelCatalog(
                         category = o.optString("category"),
                         logo = o.optString("logo"),
                         url = url,
-                        quality = o.optString("quality", "HD")
+                        quality = o.optString("quality", "HD"),
+                        mirrors = mirrors
                     )
                 )
             }

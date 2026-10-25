@@ -64,7 +64,7 @@
     theme: 'dark',
     version: '1.0.0',
     view: { name: 'home', categoryId: null, query: '' },
-    player: { channelId: null, mode: 'fit', attempts: 0 },
+    player: { channelId: null, mode: 'fit', attempts: 0, serverIndex: 0 },
     pendingCategory: 'custom',
   };
 
@@ -136,6 +136,19 @@
 
   const channelsOf = (categoryId) => state.channels.filter((c) => c.category === categoryId);
   const channelById = (id) => state.channels.find((c) => c.id === id) || null;
+
+  /**
+   * Every server that can play a channel: the primary url first, then the
+   * backup servers (`mirrors`) from the catalog. The player switches to the
+   * next entry when the current server keeps failing, so a channel survives a
+   * dead CDN.
+   */
+  function channelUrls(channel) {
+    if (!channel) return [];
+    return [channel.url].concat(channel.mirrors || [])
+      .map((url) => (typeof url === 'string' ? url.trim() : ''))
+      .filter((url, index, all) => url.length > 0 && all.indexOf(url) === index);
+  }
 
   function search(query) {
     const q = (query || '').trim().toLowerCase();
@@ -247,17 +260,37 @@
     const nav = $('drawer-sections');
     const currentSection = state.view.name === 'category' ? state.view.categoryId : (state.view.name === 'home' ? 'home' : '');
 
-    const homeItem = `<button class="drawer__item ${currentSection === 'home' ? 'is-active' : ''}"
-        data-section="home"><span class="drawer__icon">${iconFor('home', 19)}</span><span>${escapeHtml(t('tabHome'))}</span></button>`;
+    const card = (id, accent, icon, title, subtitle, badge, active) => {
+      const background = active
+        ? `linear-gradient(135deg, ${accent}, ${accent}99)`
+        : `linear-gradient(135deg, ${accent}3d, ${accent}12)`;
+      return `<button class="drawer__card ${active ? 'is-active' : ''}"
+          data-section="${escapeAttr(id)}" style="background: ${escapeAttr(background)}">
+          <span class="drawer__card-icon">${icon}</span>
+          <span class="drawer__card-text">
+            <span class="drawer__card-title">${escapeHtml(title)}</span>
+            <span class="drawer__card-sub">${escapeHtml(subtitle)}</span>
+          </span>
+          ${badge ? `<span class="drawer__card-count">${escapeHtml(badge)}</span>` : ''}
+        </button>`;
+    };
+
+    const homeItem = card(
+      'home', '#2F80ED', iconFor('home', 20), t('tabHome'), t('quickAccess'), '',
+      currentSection === 'home'
+    );
 
     const sectionItems = categoriesWithCustom().map((category) => {
       const count = channelsOf(category.id).length;
-      return `<button class="drawer__item ${currentSection === category.id ? 'is-active' : ''}"
-          data-section="${escapeAttr(category.id)}">
-          <span class="drawer__icon">${categoryIcon(category, 19)}</span>
-          <span>${escapeHtml(categoryTitle(category))}</span>
-          <span class="drawer__count">${escapeHtml(t('channels', count))}</span>
-        </button>`;
+      return card(
+        category.id,
+        category.color || '#7C4DFF',
+        categoryIcon(category, 20),
+        categoryTitle(category),
+        categorySubtitle(category),
+        String(count),
+        currentSection === category.id
+      );
     }).join('');
 
     nav.innerHTML = homeItem + sectionItems;
@@ -464,6 +497,7 @@
     if (!channel) return;
     state.player.channelId = channelId;
     state.player.attempts = 0;
+    state.player.serverIndex = 0;
     state.player.mode = 'fit';
 
     $('player').classList.remove('hidden');
@@ -486,29 +520,48 @@
     showPlayerStatus(t('connecting'));
     video.classList.remove('zoom', 'stretch');
 
+    const urls = channelUrls(channel);
+    if (!urls.length) {
+      showPlayerError(t('connectionFailed'));
+      return;
+    }
+    const index = state.player.serverIndex % urls.length;
+    const streamUrl = urls[index];
+    // Show which backup is in use once the main server has failed.
+    const status = index > 0
+      ? `${t('connecting')} · ${index + 1}/${urls.length}`
+      : t('connecting');
+    showPlayerStatus(status);
+
     if (hls) { try { hls.destroy(); } catch (err) { /* ignore */ } hls = null; }
 
     if (window.Hls && window.Hls.isSupported()) {
       hls = new window.Hls({
         lowLatencyMode: false,
         liveDurationInfinity: true,
-        manifestLoadingMaxRetry: 4,
-        levelLoadingMaxRetry: 4,
-        fragLoadingMaxRetry: 6,
+        // generous retries: flaky live servers usually recover within seconds
+        manifestLoadingMaxRetry: 6,
         manifestLoadingRetryDelay: 800,
+        levelLoadingMaxRetry: 6,
+        levelLoadingRetryDelay: 800,
+        fragLoadingMaxRetry: 8,
+        fragLoadingRetryDelay: 600,
+        fragLoadingMaxRetryTimeout: 12000,
+        maxBufferLength: 20,
+        backBufferLength: 30,
       });
       hls.on(window.Hls.Events.ERROR, (_evt, data) => {
         if (!data || !data.fatal) return;
         handlePlaybackProblem(data.details || data.type);
       });
-      hls.loadSource(channel.url);
+      hls.loadSource(streamUrl);
       hls.attachMedia(video);
       hls.on(window.Hls.Events.MANIFEST_PARSED, () => {
         video.play().catch(() => { /* autoplay might need a click */ });
       });
     } else {
       // Safari-style fallback (also used when hls.js is unavailable)
-      video.src = channel.url;
+      video.src = streamUrl;
       video.play().catch(() => { /* ignore */ });
     }
 
@@ -522,6 +575,10 @@
   function handlePlaybackProblem(details) {
     if (state.player.attempts < MAX_RETRIES) {
       state.player.attempts += 1;
+      // Rotate to the next backup server before retrying the same one.
+      const channel = channelById(state.player.channelId);
+      const servers = channelUrls(channel).length;
+      if (servers > 1) state.player.serverIndex = (state.player.serverIndex + 1) % servers;
       showPlayerStatus(t('reconnecting'));
       setTimeout(() => {
         const channel = channelById(state.player.channelId);

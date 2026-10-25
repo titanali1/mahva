@@ -73,6 +73,7 @@ import androidx.media3.datasource.DefaultHttpDataSource
 import androidx.media3.exoplayer.DefaultLoadControl
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.exoplayer.source.DefaultMediaSourceFactory
+import androidx.media3.exoplayer.upstream.DefaultLoadErrorHandlingPolicy
 import androidx.media3.ui.AspectRatioFrameLayout
 import androidx.media3.ui.PlayerView
 import ir.takhtlive.tv.data.Channel
@@ -111,6 +112,8 @@ fun PlayerScreen(
     var isBuffering by remember(channel.id) { mutableStateOf(true) }
     var attempts by remember(channel.id) { mutableIntStateOf(0) }
     var retryKey by remember(channel.id) { mutableIntStateOf(0) }
+    // Index into channel.playUrls: 0 is the main server, the rest are backups.
+    var serverIndex by remember(channel.id) { mutableIntStateOf(0) }
     var resizeModeIndex by remember(channel.id) { mutableIntStateOf(0) }
     var menuExpanded by remember { mutableStateOf(false) }
 
@@ -119,6 +122,10 @@ fun PlayerScreen(
         AspectRatioFrameLayout.RESIZE_MODE_ZOOM to strings.zoomToFill,
         AspectRatioFrameLayout.RESIZE_MODE_FILL to strings.stretchToFill
     )
+
+    val playUrls = remember(channel.id) {
+        channel.playUrls.ifEmpty { listOf(channel.url) }
+    }
 
     val exoPlayer = remember(channel.id) {
         val dataSourceFactory = DefaultHttpDataSource.Factory()
@@ -137,10 +144,13 @@ fun PlayerScreen(
         ExoPlayer.Builder(context)
             .setMediaSourceFactory(mediaSourceFactory)
             .setLoadControl(loadControl)
+            // Retry flaky HTTP requests a few times before reporting an error;
+            // the server failover below then moves on to a backup stream.
+            .setLoadErrorHandlingPolicy(DefaultLoadErrorHandlingPolicy(3))
             .setHandleAudioBecomingNoisy(true)
             .build()
             .apply {
-                setMediaItem(MediaItem.fromUri(channel.url))
+                setMediaItem(MediaItem.fromUri(playUrls.first()))
                 prepare()
                 playWhenReady = true
             }
@@ -166,6 +176,10 @@ fun PlayerScreen(
         val listener = object : Player.Listener {
             override fun onPlaybackStateChanged(playbackState: Int) {
                 isBuffering = playbackState == Player.STATE_BUFFERING
+                if (playbackState == Player.STATE_READY) {
+                    // Playback is healthy again: give the next dropout its retries.
+                    attempts = 0
+                }
                 if (playbackState == Player.STATE_ENDED) {
                     errorMessage = strings.streamEnded
                 }
@@ -174,6 +188,10 @@ fun PlayerScreen(
             override fun onPlayerError(error: PlaybackException) {
                 if (attempts < MAX_RETRIES) {
                     attempts += 1
+                    // Try the next available server (main stream -> mirrors).
+                    if (playUrls.size > 1) {
+                        serverIndex = (serverIndex + 1) % playUrls.size
+                    }
                     retryKey += 1
                 } else {
                     isBuffering = false
@@ -190,12 +208,16 @@ fun PlayerScreen(
         onDispose { exoPlayer.removeListener(listener) }
     }
 
-    // Reconnect with a growing delay.
+    // Reconnect with a growing delay, switching to a backup server when the
+    // current one keeps failing.
     LaunchedEffect(retryKey) {
         if (retryKey == 0) return@LaunchedEffect
         errorMessage = null
         isBuffering = true
         delay((1_000L * attempts).coerceAtMost(6_000L))
+        runCatching {
+            exoPlayer.setMediaItem(MediaItem.fromUri(playUrls[serverIndex]))
+        }
         exoPlayer.prepare()
         exoPlayer.playWhenReady = true
     }
@@ -434,6 +456,8 @@ fun PlayerScreen(
                     Spacer(Modifier.height(18.dp))
                     Button(onClick = {
                         attempts = 0
+                        // Start the manual retry from the main server again.
+                        serverIndex = 0
                         errorMessage = null
                         retryKey += 1
                     }) {

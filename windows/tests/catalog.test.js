@@ -29,6 +29,47 @@ test('every channel has a https/http HLS url and a known section', () => {
   assert.strictEqual(unique.size, parsed.channels.length, 'channel ids must be unique');
 });
 
+test('backup servers (mirrors) are valid and never repeat the main url', () => {
+  const parsed = catalogLib.parseCatalog(JSON.parse(fs.readFileSync(channelsJson, 'utf8')));
+  const withMirrors = parsed.channels.filter((c) => (c.mirrors || []).length > 0);
+  assert.ok(withMirrors.length >= 10, `expected mirrored channels, got ${withMirrors.length}`);
+  for (const channel of withMirrors) {
+    for (const mirror of channel.mirrors) {
+      assert.ok(/^https?:\/\//.test(mirror), `${channel.id} has an invalid mirror: ${mirror}`);
+      assert.notStrictEqual(mirror, channel.url, `${channel.id} repeats its main url as a mirror`);
+    }
+  }
+});
+
+test('channelUrls walks the main server first and then the backups', () => {
+  const urls = catalogLib.channelUrls({
+    url: 'https://main.example/live.m3u8',
+    mirrors: ['https://backup.example/live.m3u8', 'https://main.example/live.m3u8', ''],
+  });
+  assert.deepStrictEqual(urls, [
+    'https://main.example/live.m3u8',
+    'https://backup.example/live.m3u8',
+  ]);
+  assert.deepStrictEqual(catalogLib.channelUrls(null), []);
+  assert.deepStrictEqual(catalogLib.channelUrls({ url: 'https://only.example/a.m3u8' }), [
+    'https://only.example/a.m3u8',
+  ]);
+});
+
+test('the newly added Persian channels live inside the four sections', () => {
+  const parsed = catalogLib.parseCatalog(JSON.parse(fs.readFileSync(channelsJson, 'utf8')));
+  assert.deepStrictEqual(parsed.categories.map((c) => c.id), ['persiana', 'news', 'music', 'sports']);
+  const zed = parsed.channels.find((c) => c.id === 'zed-tv');
+  assert.ok(zed, 'Zed TV (ضد تی‌وی) is missing');
+  assert.strictEqual(zed.category, 'news');
+  for (const id of ['telewebion-sport-1', 'telewebion-sport-2', 'telewebion-sport-3']) {
+    const channel = parsed.channels.find((c) => c.id === id);
+    assert.ok(channel, `${id} is missing`);
+    assert.strictEqual(channel.category, 'sports');
+  }
+  assert.ok(parsed.channels.length >= 120, `expected at least 120 channels, got ${parsed.channels.length}`);
+});
+
 test('the three interface languages are complete', () => {
   const { STRINGS } = require('../src/i18n');
   const languages = Object.keys(STRINGS);

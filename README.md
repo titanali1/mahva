@@ -10,12 +10,12 @@
 
 | بخش | تعداد کانال | نمونه‌ها |
 |---|---|---|
-| 📺 **پرشیانا گروپ** | ۲۶ | پرشیانا فمیلی، سریال، سینما، ایرانی، کره، کمدی، موزیک، فست، Nostalgia، MBC Persia |
-| 📰 **خبری** | ۳۲ | BBC فارسی، ایران اینترنشنال، صدای آمریکا، رادیو فردا، **انقلاب ملی ایران**، **شبکه کلمه**، **اسرائیل فارسی**، الجزیره، CNN، DW |
-| 🎵 **موزیک** | ۲۷ | PMC، رادیو جوان، آونگ، Vevo، MTV، XITE، Now 80s، Trace Urban، Deluxe |
-| ⚽ **ورزشی** | ۲۴ | شبکه ورزش، beIN SPORTS، FIFA+، DAZN، رد بُل، تنیس چنل، گلف چنل، Fight Network |
+| 📺 **پرشیانا گروپ** | ۳۲ | پرشیانا فمیلی، سریال، سینما، ایرانی، کره، کمدی، موزیک، فست، Nostalgia، MBC Persia، **پرشیانا امارات**، **کافه فیلم**، **آوا سریال**، **خلیج تی‌وی** |
+| 📰 **خبری** | ۳۶ | **ضد تی‌وی (Zed TV)**، BBC فارسی، ایران اینترنشنال، صدای آمریکا، رادیو فردا، **ایران فردا**، **ایران پرس**، **شبکه خبر**، انقلاب ملی ایران، شبکه کلمه، اسرائیل فارسی، الجزیره، CNN، DW |
+| 🎵 **موزیک** | ۲۸ | PMC، رادیو جوان، آونگ، نواهنگ، **تپش**، Vevo، MTV، XITE، Now 80s، Trace Urban، Deluxe |
+| ⚽ **ورزشی** | ۲۷ | شبکه ورزش، **تلوبیون اسپرت ۱/۲/۳**، beIN SPORTS، FIFA+، DAZN، رد بُل، تنیس چنل، گلف چنل، Fight Network |
 
-**مجموع: ۱۰۹ کانال زنده**
+**مجموع: ۱۲۳ کانال زنده** — ۱۷ کانال دارای **سرور پشتیبان** (پخش خودکار از سرور دوم در صورت قطعی سرور اصلی)
 
 فهرست کامل کانال‌ها: [docs/CHANNELS.md](docs/CHANNELS.md)
 
@@ -51,14 +51,14 @@
 
 ## 🖥️ نسخهٔ ویندوز ۱۱
 
-همین برنامه برای **ویندوز ۱۱** (دسکتاپ، ۶۴ بیتی) هم ساخته شده است — با همان **۱۰۹ کانال**، همان چهار بخش
+همین برنامه برای **ویندوز ۱۱** (دسکتاپ، ۶۴ بیتی) هم ساخته شده است — با همان **۱۲۳ کانال**، همان چهار بخش
 (پرشیانا گروپ، خبری، موزیک، ورزشی)، همان سه زبان (فارسی/انگلیسی/عربی)، سه تم (تیره/روشن/سیستم) و امضای
 `dmj74`. نسخهٔ ویندوز با **Electron** و **hls.js** ساخته می‌شود و از فایل `windows/assets/channels.json`
 استفاده می‌کند که همان فهرست کانال‌های نسخهٔ اندروید است.
 
 ### 📥 نصب نسخهٔ ویندوز
 
-1. به صفحهٔ انتشار بروید: <https://github.com/titanali1/takhtlive/releases/tag/windows-latest>
+1. به صفحهٔ انتشار بروید: <https://github.com/titanali1/mahva/releases/tag/windows-latest>
 2. فایل **`TakhtLive-Setup-1.0.0.exe`** (نصب‌کننده) یا **`TakhtLive-1.0.0-portable.exe`** (بدون نصب) را دانلود کنید.
 3. فایل را اجرا کنید. اگر ویندوز پیام SmartScreen داد: **More info ▸ Run anyway**.
 
@@ -96,9 +96,9 @@ Electron بارگذاری می‌کند):
 نیازمندی: **Node.js 22** (ویندوز، لینوکس یا مک). ساخت فایل نصب فقط روی ویندوز انجام می‌شود.
 
 ```bash
-git clone https://github.com/titanali1/takhtlive.git
-cd takhtlive
-python3 tools/sync_windows_assets.py   # کانال‌ها، فونت وزیرمتن و آیکون از نسخهٔ اندروید
+git clone https://github.com/titanali1/mahva.git
+cd mahva
+python3 tools/sync_windows_assets.py   # کپی فهرست کانال‌ها و فونت وزیرمتن از نسخهٔ اندروید
 cd windows
 npm install
 npm start                              # اجرای برنامه روی همین سیستم
@@ -129,12 +129,14 @@ python3 tools/make_logo_assets.py
 - **چهار بخش مجزا** در نوار پایین برنامه: پرشیانا، خبری، موزیک، ورزشی (+ صفحهٔ خانه)
 - **پخش زندهٔ HLS** با ExoPlayer/Media3 و کیفیت تطبیقی
 - **اتصال دوبارهٔ خودکار (Auto-Reconnect)**: اگر استریم قطع شود، برنامه خودش تا ۶ بار تلاش می‌کند و فقط در صورت شکست پیام خطا نشان می‌دهد
+- **سرورهای پشتیبان (Mirror / Failover)**: هر کانال می‌تواند چند سرور داشته باشد؛ اگر سرور اصلی از کار بیفتد، پخش‌کننده خودکار سرور بعدی همان کانال را امتحان می‌کند و بین سرورها می‌چرخد
+- **منوی کشویی جذاب و رنگی**: هر بخش یک کارت گرادیانی با آیکون، توضیح و شمارندهٔ کانال؛ بخش فعال برجسته می‌شود
 - **جابه‌جایی سریع کانال (Zapping)**: دکمه‌های «کانال بعدی/قبلی» روی تصویر
 - **مورد علاقه‌ها و اخیراً دیده‌شده‌ها** (ذخیره‌شده روی دستگاه)
 - **جستجوی سراسری** در همهٔ بخش‌ها + جستجو در هر بخش
 - **افزودن کانال دلخواه**: هر لینک `m3u8` را با نام دلخواه به هر بخش اضافه کنید
 - **تصویر در تصویر (PiP)**، تغییر نسبت تصویر، اشتراک‌گذاری کانال و **پخش با VLC/پخش‌کنندهٔ خارجی**
-- **منوی همبرگری (کشویی)** با دسترسی به همهٔ بخش‌ها، جستجو، کانال‌های من و **تنظیمات**
+- **منوی همبرگری (کشویی)** با کارت‌های گرادیانی بخش‌ها، دسترسی به جستجو، کانال‌های من و **تنظیمات**
 - **سه زبان: فارسی، انگلیسی، عربی** — از داخل منو، بدون بستن برنامه عوض می‌شود (راست‌به‌چپ/چپ‌به‌راست خودکار)
 - **تم تیره، روشن و سیستم** — از داخل منو قابل تغییر
 - **امضای dmj74** در پایین برنامه، منوی کشویی و انتهای فهرست‌ها
@@ -146,7 +148,7 @@ python3 tools/make_logo_assets.py
 ## 📥 نصب سریع (بدون دانش برنامه‌نویسی)
 
 1. به بخش **Releases** مخزن بروید:  
-   <https://github.com/titanali1/takhtlive/releases/latest>
+   <https://github.com/titanali1/mahva/releases/tag/apk-latest>
 2. فایل **`takhtlive-release.apk`** را دانلود کنید.
 3. روی گوشی اندروید، فایل APK را باز کنید و اگر پیام «نصب از منابع ناشناس» آمد، اجازه دهید.
 4. تمام! برنامه نصب می‌شود و می‌توانید کانال‌ها را تماشا کنید.
@@ -159,8 +161,8 @@ python3 tools/make_logo_assets.py
 نیازمندی‌ها: **JDK 17** و **Android SDK (API 35)**.
 
 ```bash
-git clone https://github.com/titanali1/takhtlive.git
-cd takhtlive
+git clone https://github.com/titanali1/mahva.git
+cd mahva
 ./gradlew :app:assembleDebug     # خروجی: app/build/outputs/apk/debug/app-debug.apk
 ./gradlew :app:assembleRelease   # خروجی: app/build/outputs/apk/release/app-release.apk
 ```
@@ -190,7 +192,9 @@ app/src/main/
 └── res/                          فونت وزیرمتن، آیکون‌ها، تم
 brand/takhtlive-mark.png          لوگوی اصلی برنامه (تصویر مادر)
 tools/make_logo_assets.py         ساخت همهٔ آیکون‌ها از لوگو (اندروید + ویندوز + README)
+tools/catalog_overlay.py          سرورهای پشتیبان (mirrors) و کانال‌های فارسی اضافه
 tools/curate_channels.py          ساخت channels.json از پلی‌لیست‌های عمومی
+tools/make_channels_doc.py        ساخت docs/CHANNELS.md از channels.json
 tools/sync_windows_assets.py      همگام‌سازی کانال‌ها/فونت با نسخهٔ ویندوز
 
 windows/                          نسخهٔ دسکتاپ ویندوز ۱۱ (Electron)
@@ -214,8 +218,19 @@ windows/                          نسخهٔ دسکتاپ ویندوز ۱۱ (Ele
   "category": "news",          // persiana | news | music | sports | custom
   "logo": "https://example.com/logo.png",
   "url": "https://example.com/live/stream.m3u8",
+  "mirrors": ["https://backup.example.com/live/stream.m3u8"],
   "quality": "HD"
 }
+```
+
+فیلد `mirrors` اختیاری است: آدرس سرورهای پشتیبان **همان کانال**. پخش‌کننده اول `url` را امتحان
+می‌کند و اگر شکست خورد، به‌ترتیب سراغ `mirrors` می‌رود. این فهرست در `tools/catalog_overlay.py`
+نگهداری می‌شود، بنابراین با اجرای دوبارهٔ `tools/curate_channels.py` از بین نمی‌رود.
+
+```bash
+python3 tools/catalog_overlay.py     # افزودن/به‌روزرسانی سرورهای پشتیبان و کانال‌های فارسی
+python3 tools/make_channels_doc.py   # به‌روزرسانی docs/CHANNELS.md
+python3 tools/sync_windows_assets.py # کپی فهرست و فونت‌ها برای نسخهٔ ویندوز
 ```
 
 اپلیکیشن کانال‌های دستهٔ `custom` (کانال‌های افزوده‌شده توسط کاربر) را از حافظهٔ دستگاه می‌خواند،
@@ -227,6 +242,8 @@ windows/                          نسخهٔ دسکتاپ ویندوز ۱۱ (Ele
 
 - [iptv-org/iptv](https://github.com/iptv-org/iptv) — دسته‌بندی‌های News، Music، Sports، Movies
 - [Samhouston010/persian-tv](https://github.com/Samhouston010/persian-tv) — کانال‌های پرشیانا، خبری و موزیک فارسی
+- [itsyebekhe/nexa](https://github.com/itsyebekhe/nexa) — سرورهای جایگزین (پشتیبان) کانال‌های فارسی
+- [AdeelWajid/iptv_validated_list](https://github.com/AdeelWajid/iptv_validated_list) — کانال‌های تست‌شدهٔ فارسی (از جمله ضد تی‌وی)
 
 لوگوها از مخزن‌های عمومی (jnkie/iptv logos، persian-tv، ویکی‌مدیا) بارگذاری می‌شوند.
 فونت: [Vazirmatn](https://github.com/rastikerdar/vazirmatn) (مجوز OFL).

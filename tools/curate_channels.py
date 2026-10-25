@@ -188,6 +188,13 @@ with open(out, 'w', encoding='utf-8') as f:
     json.dump(doc, f, ensure_ascii=False, indent=2)
     f.write('\n')
 
+# Backup servers + extra Persian channels live in tools/catalog_overlay.py, so
+# re-curating the upstream playlists never drops them.
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import catalog_overlay  # noqa: E402  (local helper, imported after the build)
+doc = catalog_overlay.apply_file(out)
+channels = doc['channels']
+
 from collections import Counter
 print('wrote', out)
 print('counts:', Counter(c['category'] for c in channels))
