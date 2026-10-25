@@ -1,19 +1,19 @@
-# Windows app summary - 2026-10-03 17:49 UTC
+# Windows app summary - 2026-10-25 23:05 UTC
 
 ## Unit tests
 ```
-  duration_ms: 0.830907
+  duration_ms: 0.262048
   type: 'test'
   ...
-1..9
-# tests 9
+1..12
+# tests 12
 # suites 0
-# pass 9
+# pass 12
 # fail 0
 # cancelled 0
 # skipped 0
 # todo 0
-# duration_ms 104.72387
+# duration_ms 56.642498
 ```
 ## UI render (headless Chromium)
 ```
@@ -24,19 +24,19 @@ windows screenshots: 13
 files: 01-home.png, 02-persiana.png, 03-news.png, 04-music.png, 05-sports.png, 06-search.png, 07-library.png, 08-add-channel.png, 09-player.png, 10-drawer.png, 11-english.png, 12-light-theme.png, 13-arabic.png
 signature visible: true
 javascript errors: 0
-blocked network requests (offline sandbox): 7
+blocked network requests (offline sandbox): 9
 ```
 screenshots:
-- docs/screenshots/windows/01-home.png (271319 bytes)
-- docs/screenshots/windows/02-persiana.png (129304 bytes)
-- docs/screenshots/windows/03-news.png (156722 bytes)
-- docs/screenshots/windows/04-music.png (144216 bytes)
-- docs/screenshots/windows/05-sports.png (153548 bytes)
-- docs/screenshots/windows/06-search.png (75690 bytes)
-- docs/screenshots/windows/07-library.png (105831 bytes)
-- docs/screenshots/windows/08-add-channel.png (120254 bytes)
-- docs/screenshots/windows/09-player.png (27855 bytes)
-- docs/screenshots/windows/10-drawer.png (238712 bytes)
-- docs/screenshots/windows/11-english.png (252245 bytes)
-- docs/screenshots/windows/12-light-theme.png (251817 bytes)
-- docs/screenshots/windows/13-arabic.png (239383 bytes)
+- docs/screenshots/windows/01-home.png (304187 bytes)
+- docs/screenshots/windows/02-persiana.png (174233 bytes)
+- docs/screenshots/windows/03-news.png (193944 bytes)
+- docs/screenshots/windows/04-music.png (191302 bytes)
+- docs/screenshots/windows/05-sports.png (194219 bytes)
+- docs/screenshots/windows/06-search.png (125284 bytes)
+- docs/screenshots/windows/07-library.png (159452 bytes)
+- docs/screenshots/windows/08-add-channel.png (156209 bytes)
+- docs/screenshots/windows/09-player.png (31946 bytes)
+- docs/screenshots/windows/10-drawer.png (282042 bytes)
+- docs/screenshots/windows/11-english.png (292652 bytes)
+- docs/screenshots/windows/12-light-theme.png (296522 bytes)
+- docs/screenshots/windows/13-arabic.png (283089 bytes)
