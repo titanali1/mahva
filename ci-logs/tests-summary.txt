@@ -1,4 +1,4 @@
-# Test summary - 2026-10-25 23:14 UTC
+# Test summary - 2026-10-25 23:31 UTC
 
 - TEST-ir.takhtlive.tv.CatalogTest: tests=8 failures=0 errors=0
 - TEST-ir.takhtlive.tv.ScreenshotTest: tests=2 failures=0 errors=0
@@ -6,15 +6,15 @@
 TOTAL: tests=10 failures=0 errors=0
 
 ## Screenshots
-- docs/screenshots/01-home.png (615652 bytes)
-- docs/screenshots/02-persiana.png (205797 bytes)
-- docs/screenshots/03-news.png (214874 bytes)
-- docs/screenshots/04-music.png (239577 bytes)
-- docs/screenshots/05-sports.png (218385 bytes)
+- docs/screenshots/01-home.png (594855 bytes)
+- docs/screenshots/02-persiana.png (197853 bytes)
+- docs/screenshots/03-news.png (207359 bytes)
+- docs/screenshots/04-music.png (233222 bytes)
+- docs/screenshots/05-sports.png (210087 bytes)
 - docs/screenshots/06-player.png (52454 bytes)
-- docs/screenshots/07-search.png (111886 bytes)
-- docs/screenshots/08-my-channels.png (151046 bytes)
-- docs/screenshots/10-drawer.png (756099 bytes)
-- docs/screenshots/11-english.png (759031 bytes)
-- docs/screenshots/12-light-theme.png (706332 bytes)
-- docs/screenshots/13-arabic.png (731491 bytes)
+- docs/screenshots/07-search.png (103889 bytes)
+- docs/screenshots/08-my-channels.png (143353 bytes)
+- docs/screenshots/10-drawer.png (738528 bytes)
+- docs/screenshots/11-english.png (742479 bytes)
+- docs/screenshots/12-light-theme.png (690140 bytes)
+- docs/screenshots/13-arabic.png (716021 bytes)
