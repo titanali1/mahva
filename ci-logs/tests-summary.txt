@@ -1,9 +1,6 @@
-# Test summary - 2026-10-03 17:53 UTC
+# Test summary - 2026-10-25 23:07 UTC
 
-- TEST-ir.takhtlive.tv.CatalogTest: tests=8 failures=0 errors=0
-- TEST-ir.takhtlive.tv.ScreenshotTest: tests=2 failures=0 errors=0
-
-TOTAL: tests=10 failures=0 errors=0
+no unit test results were produced
 
 ## Screenshots
 - docs/screenshots/01-home.png (618194 bytes)
